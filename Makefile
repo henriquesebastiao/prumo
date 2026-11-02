@@ -3,9 +3,11 @@ SHELL := /bin/bash
 
 COMPOSE_DEV := docker compose -f docker-compose.dev.yml
 API := cd backend && uv run
+WEB := cd frontend && pnpm
 
 .PHONY: help dev db-up db-down check lint typecheck test format \
-	lint-backend typecheck-backend test-backend openapi openapi-check \
+	lint-backend typecheck-backend test-backend lint-frontend typecheck-frontend test-frontend \
+	openapi openapi-check \
 	migration migrate user
 
 help: ## List available commands
@@ -39,15 +41,16 @@ user: ## Create a user (interactive)
 
 check: lint typecheck test openapi-check ## Lint, typecheck, tests and OpenAPI snapshot (everything CI runs)
 
-lint: lint-backend ## ruff, import-linter, ESLint, Stylelint
+lint: lint-backend lint-frontend ## ruff, import-linter, ESLint, Stylelint, Prettier
 
-typecheck: typecheck-backend ## mypy and vue-tsc
+typecheck: typecheck-backend typecheck-frontend ## mypy and vue-tsc
 
-test: test-backend ## Backend and frontend tests
+test: test-backend test-frontend ## Backend and frontend tests
 
 format: ## Format the code
 	$(API) ruff format .
 	$(API) ruff check --fix .
+	$(WEB) format
 
 lint-backend:
 	$(API) ruff check .
@@ -60,11 +63,24 @@ typecheck-backend:
 test-backend: db-up
 	$(API) pytest
 
+lint-frontend:
+	$(WEB) lint
+
+typecheck-frontend:
+	$(WEB) typecheck
+
+test-frontend:
+	$(WEB) test
+
 # ------------------------------------------------------------------ contract
 
-openapi: ## Export openapi/openapi.json
+openapi: ## Export openapi/openapi.json and regenerate the TypeScript types
 	$(API) prumo openapi ../openapi/openapi.json
+	$(WEB) gen:api
 
-openapi-check: ## Fail if the OpenAPI snapshot is out of date
+openapi-check: ## Fail if the OpenAPI snapshot or the TypeScript types are out of date
 	@$(API) prumo openapi - | diff -q - ../openapi/openapi.json > /dev/null \
 		|| (echo "openapi/openapi.json is out of date: run make openapi" && exit 1)
+	@cd frontend && pnpm exec openapi-typescript ../openapi/openapi.json --default-non-nullable false \
+		| pnpm exec prettier --stdin-filepath schema.d.ts | diff -q - src/lib/api/schema.d.ts > /dev/null \
+		|| (echo "frontend/src/lib/api/schema.d.ts is out of date: run make openapi" && exit 1)
