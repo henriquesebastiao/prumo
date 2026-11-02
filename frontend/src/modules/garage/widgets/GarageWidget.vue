@@ -135,6 +135,16 @@ function rowSubtitle(vehicle: GarageSummary['vehicles'][number]): string {
   width: 100px;
 }
 
+@media (width < 600px) {
+  .widget__bar {
+    width: 64px;
+  }
+
+  .widget__value {
+    min-width: 0;
+  }
+}
+
 .widget__value {
   min-width: 64px;
   text-align: right;
