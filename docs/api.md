@@ -22,20 +22,23 @@ Content-Type: application/json
 ```
 
 - `client: "app"`: responde `200` com `{ "token": "…", "expires_at": "…", "user": { … } }`. O app envia `Authorization: Bearer <token>` nas próximas requisições.
-- `client: "web"`: responde `200` com `{ "user": { … } }` e define o cookie `prumo_session`. Em requisições que alteram dados (`POST`, `PATCH`, `PUT`, `DELETE`), a web envia `X-Prumo-Client: web`.
+- `client: "web"`: responde `200` com `{ "token": null, "expires_at": "…", "user": { … } }` e define o cookie `prumo_session` (`HttpOnly`, `SameSite=Lax`, caminho `/api`). Em requisições que alteram dados (`POST`, `PATCH`, `PUT`, `DELETE`), a web envia `X-Prumo-Client: web`; sem ele, `403 auth.client_header_required`.
+- `remember` (opcional, padrão `true`, só web): `false` cria uma sessão curta (`PRUMO_SESSION_HOURS_WEB_TRANSIENT`, 12 h) com cookie que termina ao fechar o navegador (D19).
+- `device_name` é opcional; na web, o servidor deriva um nome do User-Agent ("Firefox · Linux").
+- O nome de usuário não diferencia maiúsculas.
 
 | Rota | Descrição |
 |---|---|
 | `POST /auth/login` | Cria sessão (web ou app) |
 | `POST /auth/logout` | Revoga a sessão atual |
-| `GET /auth/sessions` | Lista sessões ativas do usuário (dispositivo, cliente, último uso) |
+| `GET /auth/sessions` | Lista sessões ativas do usuário (dispositivo, cliente, último uso, `current`), em `{ "items": [...] }` |
 | `DELETE /auth/sessions/{id}` | Revoga uma sessão |
 | `GET /me` | Usuário atual |
 | `PATCH /me` | Atualiza nome de exibição |
 | `PUT /me/password` | Troca a senha (exige a atual; revoga as outras sessões) |
 | `GET /me/preferences`, `PATCH /me/preferences` | Tema, idioma, fuso, moeda, módulos ativos e ordem |
 
-Validade padrão: 30 dias para web, 180 dias para app (configurável). Login com falhas repetidas responde `429`.
+Validade padrão: 30 dias para web, 180 dias para app (configurável). Login com falhas repetidas responde `429` com `Retry-After` (5 falhas em 15 minutos bloqueiam usuário + IP por 15 minutos; D24). Usuário ou senha errados respondem o mesmo `401 auth.invalid_credentials`.
 
 ## Convenções de dados
 
@@ -61,6 +64,7 @@ GET /api/v1/finance/transactions?limit=50&offset=0&sort=-occurred_on&account_id=
 ```
 
 - `limit` padrão 50, máximo 200.
+- Coleções pequenas, sem paginação (`/modules`, `/auth/sessions`), respondem `{ "items": [ … ] }` (D23).
 - `sort` aceita um campo permitido pelo endpoint, com `-` para ordem decrescente.
 - Filtros são query params documentados em cada endpoint.
 
@@ -95,7 +99,8 @@ Erros de validação incluem os campos:
 
 | Status | Uso |
 |---|---|
-| 401 | Não autenticado ou sessão expirada (`auth.required`, `auth.session_expired`) |
+| 401 | Não autenticado ou sessão expirada (`auth.required`, `auth.session_expired`, `auth.invalid_credentials`) |
+| 403 | Mutação por cookie sem `X-Prumo-Client: web` (`auth.client_header_required`) |
 | 404 | Recurso inexistente **ou de outro usuário** (`not_found`) |
 | 409 | Conflito de unicidade (`finance.category_exists`) |
 | 422 | Validação de entrada ou violação de regra de negócio |
@@ -108,8 +113,12 @@ Todas abaixo de `/api/v1`. Resumo; o detalhe está no OpenAPI.
 ### Sistema
 | Rota | Descrição |
 |---|---|
-| `GET /modules` | Módulos instalados, com estado ativo e ordem para o usuário |
-| `GET /dashboard` | Resumos dos módulos ativos (Início) |
+| `GET /modules` | Módulos instalados na ordem do usuário: `{ "items": [{ "id", "version", "enabled", "position" }] }` |
+| `GET /dashboard` | `{ "modules": [ … ] }`: resumo de cada módulo ativo, na ordem do usuário (Início) |
+
+Cada resumo do dashboard é um schema do módulo que herda de `ModuleSummary` e fixa `module: Literal["<id>"]`; no OpenAPI, a lista é uma união discriminada por `module` (`oneOf` + `discriminator`). Sem módulos com resumo, os itens usam o schema base `ModuleSummary`.
+
+As preferências (`/me/preferences`) têm `theme` (`system` | `light` | `dark`), `locale` (`pt-BR`), `timezone` (IANA), `currency` (ISO 4217) e `enabled_modules` (ids, em ordem). No `PATCH`, `enabled_modules` lista os ativos na ordem desejada; os instalados que ficarem de fora são desativados. Nenhum desses campos aceita `null`.
 
 ### Veículos (`/garage`)
 | Rota | Descrição |
@@ -174,7 +183,8 @@ Exemplo do bloco de informações rápidas no detalhe do veículo:
 ## OpenAPI e clientes gerados
 
 - `operation_id` estável no formato `{tag}_{nome_da_funcao}` (ex.: `garage_list_vehicles`), configurado via `generate_unique_id_function`. Renomear uma função de rota muda o contrato.
-- `make openapi` grava `openapi/openapi.json` e regenera `frontend/src/lib/api/schema.d.ts` (openapi-typescript). Um teste falha se o snapshot estiver desatualizado.
+- `make openapi` grava `openapi/openapi.json` (via `prumo openapi`) e regenera `frontend/src/lib/api/schema.d.ts` (openapi-typescript). O `make check` e o CI falham se o snapshot ou os tipos estiverem desatualizados.
+- Todos os erros 4xx/5xx documentados usam o schema `ErrorResponse`, inclusive os 422 automáticos de validação.
 - O app Android gera ou escreve seus modelos a partir do mesmo arquivo (decisão do repositório `prumo-android`).
 
 ## Preparação para o Android (Fase 5)

@@ -93,6 +93,66 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Contexto:** projeto open source e self-hosted.
 **Decisão:** a definir antes da versão 0.1.
 
+## D16 — Ícones Lucide atrás de `<PIcon>`
+**Status:** aceita · 2026-11
+**Contexto:** o design v1 desenha cerca de 45 ícones próprios, no estilo do Lucide (grade 24, traço 2), mas módulos futuros vão precisar de muitos outros.
+**Decisão:** Lucide (`@lucide/vue`), importado apenas em `src/ui/icons.ts`, que mapeia nomes semânticos (`car`, `wallet`, `fuel`…) para os componentes. Telas usam só `<PIcon name>`; o ESLint proíbe importar Lucide fora de `src/ui/`.
+**Consequências:** os ícones não são idênticos aos do design, só parecidos. Trocar o conjunto é editar um arquivo.
+
+## D17 — Gráficos próprios, sem biblioteca
+**Status:** aceita · 2026-11
+**Contexto:** o design só usa formas simples (barras com média, barras agrupadas, rosca, barra empilhada, anéis).
+**Decisão:** `<PChart>` implementado em CSS e SVG, com tokens e tons, descrição acessível e lista de valores para leitores de tela.
+**Consequências:** nenhuma dependência pesada e fidelidade total ao design. Se surgir um gráfico complexo (séries temporais com zoom, por exemplo), uma biblioteca pode entrar atrás do mesmo componente.
+
+## D18 — Figtree hospedada pela aplicação
+**Status:** aceita · 2026-11
+**Contexto:** o design usa Figtree (Google Fonts); o Prumo não deve depender de serviços de terceiros em tempo de execução.
+**Decisão:** `@fontsource-variable/figtree`, empacotada no build pelo Vite.
+**Consequências:** a fonte vai junto com a SPA; nenhuma requisição externa.
+
+## D19 — "Manter conectado" na web
+**Status:** aceita · 2026-11
+**Contexto:** o design de login tem a opção "Manter conectado neste dispositivo"; a API previa sessão web fixa de 30 dias.
+**Decisão:** campo aditivo `remember` no login (padrão `true`). Marcado: sessão de `PRUMO_SESSION_DAYS_WEB` dias e cookie persistente. Desmarcado: sessão de `PRUMO_SESSION_HOURS_WEB_TRANSIENT` horas (12) e cookie de sessão do navegador. O app ignora o campo.
+**Consequências:** nenhuma mudança incompatível; um computador compartilhado não fica conectado por um mês.
+
+## D20 — Preferência de módulos guardada como ordem + desativados
+**Status:** aceita · 2026-11
+**Contexto:** guardando só a lista de módulos ativos, um módulo instalado depois nasceria desativado para os usuários existentes.
+**Decisão:** o banco guarda `module_order` e `disabled_modules`; a API continua expondo `enabled_modules` (lista ordenada). Módulos que não estão na ordem salva aparecem no fim, ativos.
+**Consequências:** instalar um módulo o mostra a todos; desativar continua sendo escolha de cada usuário.
+
+## D21 — `CurrentUser` fica em `system`, não em `core`
+**Status:** aceita · 2026-11
+**Contexto:** a arquitetura previa `SessionDep` e `CurrentUser` em `core/deps.py`, mas o usuário e as sessões são modelos de `system`, e `core` não pode importar `system`.
+**Decisão:** `SessionDep` em `prumo.core.deps`; `CurrentUser` e `CurrentAuth` em `prumo.system.auth.deps`. O registro de módulos e o barramento de eventos são instâncias em `core` preenchidas por `prumo.main.bootstrap()`, que também injeta a checagem de módulo ativo no barramento.
+**Consequências:** módulos importam `CurrentUser` de `prumo.system.auth.deps` (permitido). O import-linter garante a direção.
+
+## D22 — Conflitos do design v1 com os docs na Fase 0
+**Status:** aceita · 2026-11
+**Contexto:** o design de login e configurações tem elementos sem base no domínio.
+**Decisão:** login só por usuário (sem e-mail; a recuperação continua pelo terminal); sem foto de perfil (avatar com iniciais); usuário visível mas não editável; tema guardado na conta (preferência do servidor), com o texto da tela ajustado; sem busca global por enquanto; "Sair" na cor de texto, como aparece no design. No celular, barra inferior com FAB (como no design) em vez de gaveta.
+**Consequências:** cada item pode voltar como mudança aditiva da API quando for desejado. As divergências dos módulos estão listadas em `docs/frontend.md` e são decididas na fase de cada um.
+
+## D23 — Formatos pequenos da API
+**Status:** aceita · 2026-11
+**Contexto:** algumas coleções são pequenas e não paginam; o login atende dois tipos de cliente.
+**Decisão:** coleções sem paginação (`/modules`, `/auth/sessions`) respondem `{ "items": [...] }`, extensível de forma aditiva. O login tem um schema único, `LoginResponse`, com `token` anulável (só vem para `client: "app"`) e `expires_at`. Mutação por cookie sem `X-Prumo-Client: web` responde `403 auth.client_header_required`.
+**Consequências:** clientes gerados têm tipos simples; nenhuma união por tipo de cliente.
+
+## D24 — Limite de tentativas de login no banco
+**Status:** aceita · 2026-11
+**Contexto:** o limite precisa valer para todos os workers e reinícios da API.
+**Decisão:** tabela `login_attempts` (usuário normalizado, IP, sucesso, horário). Cinco falhas dentro de 15 minutos, sem sucesso depois delas, bloqueiam o par usuário + IP por 15 minutos a partir da última falha (`429 auth.rate_limited` com `Retry-After`). Linhas com mais de um dia são apagadas a cada login. Usuário inexistente gasta o mesmo tempo de verificação de senha.
+**Consequências:** sem Redis nem estado em memória. O IP vem do nginx (`X-Forwarded-For`, confiado pelo Uvicorn).
+
+## D25 — Versões de ferramentas fora do mais recente
+**Status:** aceita · 2026-11
+**Contexto:** algumas versões estáveis mais novas ainda não funcionam com o resto do ecossistema.
+**Decisão:** TypeScript 6.0 (o 7.0 é o port nativo, e o `typescript-eslint` ainda exige < 6.1). Testes de backend usam `httpx2`, que o Starlette 1.10 passou a recomendar no `TestClient` no lugar do `httpx`.
+**Consequências:** revisar quando o `typescript-eslint` aceitar o TypeScript 7.
+
 ---
 
 ## Modelo

@@ -29,7 +29,9 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 
 - `make dev`: PostgreSQL no Docker + API com reload + Vite
 - `make check`: lint + typecheck + testes (backend e frontend) + verificação do snapshot OpenAPI. Rode antes de considerar qualquer tarefa pronta
-- `make test`, `make lint`, `make typecheck`
+- `make test`, `make lint`, `make typecheck`, `make format`
+- `make db-up` / `make db-down`: bancos de desenvolvimento e de testes
+- `make screenshots`: Playwright captura as telas e monta comparativos com a versão ativa de `design/` em `frontend/e2e/output/compare/`
 - `make migration m="descricao"`: gera migration Alembic (revise sempre o arquivo gerado)
 - `make migrate`: aplica as migrations
 - `make openapi`: exporta `openapi/openapi.json` e regenera os tipos TypeScript do frontend
@@ -40,7 +42,7 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 
 ### Arquitetura
 - O frontend web é apenas um cliente da API, exatamente como o Android será. Toda regra de negócio, validação de domínio e valor derivado (próxima troca de óleo, consumo, saldos, faturas, progresso de leitura) fica no backend.
-- Módulos ficam em `backend/src/prumo/modules/<id>/` e `frontend/src/modules/<id>/`. IDs atuais: `garage` (Veículos), `finance` (Finanças), `reading` (Livros).
+- Módulos ficam em `backend/src/prumo/modules/<id>/` e `frontend/src/modules/<id>/`. IDs atuais, na ordem padrão da navegação: `finance` (Finanças), `garage` (Veículos), `reading` (Livros).
 - Um módulo importa de `core` e `system`, nunca de outro módulo (exceto o `events.py` público dele). O `import-linter` verifica isso no `make lint`.
 - Routers são finos: HTTP, dependências, status code. Regras de negócio ficam em `service.py`.
 - Tabelas de módulo usam o id como prefixo: `garage_fuelings`, `finance_accounts`, `reading_books`.
@@ -62,7 +64,7 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 - Telas usam apenas componentes de `frontend/src/ui/` e tokens semânticos de `frontend/src/design/`. Nenhuma cor, fonte, sombra ou raio literal fora de `src/design/`.
 - O CSS das telas só cuida de layout (grid, flex, gap com tokens de espaço). Aparência é responsabilidade de `src/ui/`.
 - Todo texto visível vem do i18n (`pt-BR` por padrão). Nada de string fixa em componente.
-- Ícones só via `<PIcon>`, gráficos só via `<PChart>`.
+- Ícones só via `<PIcon>` (Lucide, mapeado em `src/ui/icons.ts`), gráficos só via `<PChart>`, texto estilizado via `<PText>`.
 - Todo componente novo de `src/ui/` entra na vitrine `/dev/ui`, nos dois temas.
 
 ### Qualidade

@@ -52,11 +52,13 @@ O backup é um dump do PostgreSQL (`make backup`); veja [docs/desenvolvimento.md
 
 ## Desenvolvimento
 
-Requisitos: Docker, [uv](https://docs.astral.sh/uv/), Node.js LTS com pnpm e make.
+Requisitos: Docker, [uv](https://docs.astral.sh/uv/), Node.js 26 (LTS) com pnpm 12 e make.
 
 ```bash
 cp .env.example .env
+(cd backend && uv sync) && (cd frontend && pnpm install)
 make dev        # banco no Docker, API com reload e frontend com Vite
+make user       # cria o primeiro usuário
 make check      # lint, tipos e testes
 ```
 

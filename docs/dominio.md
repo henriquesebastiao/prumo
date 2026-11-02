@@ -10,12 +10,14 @@ Convenções de todas as entidades: `id` (UUID v7), `created_at`, `updated_at`; 
 
 **Session**: `token_hash`, `client` (`web` | `app`), `device_name`, `last_used_at`, `expires_at`, `revoked_at`.
 
-**Preferences** (1:1 com User): `theme` (`system` | `light` | `dark`), `locale` (`pt-BR`), `timezone` (padrão da instância), `currency` (padrão `BRL`), `enabled_modules` (lista ordenada de ids; padrão: todos os instalados).
+**Preferences** (1:1 com User): `theme` (`system` | `light` | `dark`), `locale` (`pt-BR`), `timezone` (padrão da instância), `currency` (padrão `BRL`), `enabled_modules` (lista ordenada de ids; padrão: todos os instalados). Internamente guarda a ordem e os desativados, para que um módulo instalado depois apareça ativo (D20).
 
 Regras:
 - S1. Não há cadastro público. Usuários são criados pela CLI; ao criar, executa-se o `on_user_created` de cada módulo.
 - S2. Usuários não compartilham dados entre si.
 - S3. "Hoje", "este mês" e "data de um registro" são sempre calculados no fuso da preferência do usuário.
+- S4. `username` é único sem diferenciar maiúsculas (guardado em minúsculas): 2 a 32 caracteres entre letras, números, `.`, `_` e `-`. Senha de 8 a 128 caracteres.
+- S5. Trocar a senha exige a atual e encerra as outras sessões do usuário.
 
 ## Veículos (`garage`)
 

@@ -53,6 +53,18 @@ def list_habits(session: SessionDep, user: CurrentUser, page: PageDep) -> Page[H
 ```
 
 ```python
+# summary.py (opcional): o tipo de retorno define o schema do resumo no OpenAPI
+class HabitsSummary(ModuleSummary):          # from prumo.core.modules import ModuleSummary
+    module: Literal["habits"] = "habits"     # discriminador da união do dashboard
+    done_today: int
+
+def build_summary(session: Session, user: User) -> HabitsSummary:
+    ...
+```
+
+Imports usados acima: `SessionDep` de `prumo.core.deps`, `CurrentUser` de `prumo.system.auth.deps`, `PageDep`, `PageParams`, `Page` e `paginate` de `prumo.core.pagination`, `NotFoundError` de `prumo.core.errors`, `User` de `prumo.system.users.models`.
+
+```python
 # __init__.py
 module = PrumoModule(
     id="habits",
@@ -68,7 +80,7 @@ Depois:
 2. Adicione o módulo ao contrato do `import-linter`.
 3. `make migration m="add habits module"` e revise o arquivo.
 4. Testes em `tests/modules/habits/`: regras de serviço, endpoints, e acesso de outro usuário retornando 404.
-5. Se o módulo tiver resumo no Início, adicione o schema dele à união discriminada do dashboard.
+5. Se o módulo tiver resumo no Início, basta o `summary` com o tipo de retorno anotado: a união discriminada do dashboard é montada a partir dos módulos instalados.
 6. `make openapi`.
 
 ## 3. Frontend
@@ -92,7 +104,8 @@ export default defineModule({
   nav: { labelKey: 'habits.nav', route: 'habits.home' },
   routes,
   dashboardWidget: () => import('./widgets/HabitsWidget.vue'),
-  quickActions: [],
+  descriptionKey: 'habits.description',
+  quickActions: [],             // { id, labelKey, icon, shortcut?, pinned?, component }
   messages: { 'pt-BR': () => import('./locales/pt-BR.json') },
 })
 ```
@@ -100,7 +113,7 @@ export default defineModule({
 Depois:
 
 1. Adicione o módulo a `src/modules/index.ts`.
-2. Crie o token `--color-module-habits` em `src/design/` (nos dois temas).
+2. Crie os tokens `--color-module-habits`, `-container`, `-on-container`, `-soft` e `-softer` em `src/design/themes/light.css` e `dark.css`, e o bloco `[data-tone='habits']` em `src/design/tones.css` (veja "Cores por módulo" em `docs/frontend.md`).
 3. Telas só com componentes de `src/ui/`. Se faltar um componente genérico, crie em `src/ui/` e coloque na vitrine `/dev/ui`; se for específico do módulo, crie em `modules/habits/components/` compondo componentes de `src/ui/`.
 4. Todos os textos em `locales/pt-BR.json`, incluindo as traduções dos códigos de erro `habits.*`.
 

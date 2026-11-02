@@ -26,7 +26,7 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 
 ### Frontend
 - [x] Projeto Vue 3 + TS + Vite com ESLint, Prettier, Stylelint e Vitest
-- [ ] Tokens extraídos de `design/v1/` (temas claro e escuro) e seção "Design system atual" de `docs/frontend.md` preenchida
+- [x] Tokens extraídos de `design/v1/` (temas claro e escuro) e seção "Design system atual" de `docs/frontend.md` preenchida
 - [x] Componentes base em `src/ui/` e vitrine `/dev/ui`
 - [x] Cliente da API tipado, gerado do OpenAPI
 - [x] i18n `pt-BR` e formatadores (moeda, km, litros, datas)
