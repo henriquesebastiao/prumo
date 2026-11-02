@@ -36,3 +36,6 @@ data/
 !.vscode/extensions.json
 .DS_Store
 *.swp
+
+# Last claude session command
+claude-session.md
