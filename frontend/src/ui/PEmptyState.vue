@@ -3,15 +3,21 @@ import type { IconName } from './icons'
 import PTile from './PTile.vue'
 import type { Tone } from './types'
 
-withDefaults(defineProps<{ title: string; description?: string; icon?: IconName; tone?: Tone }>(), {
-  description: undefined,
-  icon: undefined,
-  tone: 'neutral',
-})
+withDefaults(
+  defineProps<{
+    title: string
+    description?: string
+    icon?: IconName
+    tone?: Tone
+    /** `card`: the empty state is itself a card (first-use screens). */
+    variant?: 'plain' | 'card'
+  }>(),
+  { description: undefined, icon: undefined, tone: 'neutral', variant: 'plain' },
+)
 </script>
 
 <template>
-  <div class="p-empty">
+  <div class="p-empty" :class="`p-empty--${variant}`">
     <PTile v-if="icon" :icon="icon" :tone="tone" size="xl" />
     <h3 class="p-empty__title">{{ title }}</h3>
     <p v-if="description" class="p-empty__description">{{ description }}</p>
@@ -29,11 +35,15 @@ withDefaults(defineProps<{ title: string; description?: string; icon?: IconName;
   text-align: center;
 }
 
-.p-empty :deep(.p-tile) {
-  margin-bottom: var(--space-2-5);
+.p-empty--card {
+  min-width: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .p-empty__title {
+  margin-top: var(--space-1-5);
   font-size: var(--text-xl);
   font-weight: var(--weight-bold);
 }

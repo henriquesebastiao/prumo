@@ -31,37 +31,34 @@ const networkError = ApiError.network(new Error('offline'))
 
     <PText as="h2" variant="h2">Primeiro uso — estados vazios</PText>
     <div class="states-demo__grid">
-      <PCard>
-        <PEmptyState
-          icon="car"
-          tone="garage"
-          title="Nenhum veículo ainda"
-          description="Cadastre seu carro ou moto para acompanhar km, abastecimentos e trocas de óleo."
-        >
-          <PButton variant="primary" icon="add">Cadastrar veículo</PButton>
-        </PEmptyState>
-      </PCard>
-      <PCard>
-        <PEmptyState
-          icon="wallet"
-          tone="finance"
-          title="Comece pelas suas contas"
-          description="Adicione suas contas e a carteira com o saldo de hoje. As transações vêm depois."
-        >
-          <PButton variant="primary" icon="add">Adicionar conta</PButton>
-          <PButton>Usar categorias sugeridas</PButton>
-        </PEmptyState>
-      </PCard>
-      <PCard>
-        <PEmptyState
-          icon="book"
-          tone="reading"
-          title="Sua estante está vazia"
-          description="Adicione o livro que está lendo agora e acompanhe o progresso página a página."
-        >
-          <PButton variant="primary" icon="add">Adicionar livro</PButton>
-        </PEmptyState>
-      </PCard>
+      <PEmptyState
+        variant="card"
+        icon="car"
+        tone="garage"
+        title="Nenhum veículo ainda"
+        description="Cadastre seu carro ou moto para acompanhar km, abastecimentos e trocas de óleo."
+      >
+        <PButton variant="primary" icon="add">Cadastrar veículo</PButton>
+      </PEmptyState>
+      <PEmptyState
+        variant="card"
+        icon="wallet"
+        tone="finance"
+        title="Comece pelas suas contas"
+        description="Adicione suas contas e a carteira com o saldo de hoje. As transações vêm depois."
+      >
+        <PButton variant="primary" icon="add">Adicionar conta</PButton>
+        <PButton>Usar categorias sugeridas</PButton>
+      </PEmptyState>
+      <PEmptyState
+        variant="card"
+        icon="book"
+        tone="reading"
+        title="Sua estante está vazia"
+        description="Adicione o livro que está lendo agora e acompanhe o progresso página a página."
+      >
+        <PButton variant="primary" icon="add">Adicionar livro</PButton>
+      </PEmptyState>
     </div>
 
     <div class="states-demo__grid">

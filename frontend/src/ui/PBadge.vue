@@ -41,7 +41,7 @@ withDefaults(
   color: var(--color-text-secondary);
 }
 
-.p-badge--solid {
+.p-badge.p-badge--solid {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
 }
@@ -58,7 +58,7 @@ withDefaults(
   border-color: var(--color-border-strong);
 }
 
-.p-badge--tag {
+.p-badge.p-badge--tag {
   padding: var(--space-1) var(--space-3);
   background: var(--color-surface-tint);
   color: var(--color-text);

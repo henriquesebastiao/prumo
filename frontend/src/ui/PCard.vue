@@ -20,7 +20,7 @@ withDefaults(
     /** `flat`: no shadow, thin border (a card inside a card). */
     variant?: 'default' | 'flat'
     density?: 'default' | 'tight' | 'loose'
-    padding?: 'sm' | 'md' | 'lg'
+    padding?: 'xs' | 'sm' | 'md' | 'lg'
   }>(),
   {
     title: undefined,
@@ -83,6 +83,10 @@ withDefaults(
 
 .p-card--loose {
   gap: var(--space-5);
+}
+
+.p-card--pad-xs {
+  padding: var(--space-2-5);
 }
 
 .p-card--pad-sm {

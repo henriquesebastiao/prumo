@@ -14,6 +14,8 @@ defineProps<{
         label: string
         icon?: IconName
         to?: RouteLocationRaw
+        /** Plain link, for anchors inside the page (`#perfil`). */
+        href?: string
         current?: boolean
         danger?: boolean
         onClick?: () => void
@@ -27,12 +29,16 @@ defineProps<{
     <template v-for="(item, index) in items" :key="item.type === 'separator' ? index : item.key">
       <span v-if="item.type === 'separator'" class="p-nav-list__separator" />
       <component
-        :is="item.to ? RouterLink : 'button'"
+        :is="item.to ? RouterLink : item.href ? 'a' : 'button'"
         v-else
         :to="item.to"
-        :type="item.to ? undefined : 'button'"
+        :href="item.href"
+        :type="item.to || item.href ? undefined : 'button'"
         class="p-nav-list__item"
-        :class="{ 'p-nav-list__item--danger': item.danger }"
+        :class="{
+          'p-nav-list__item--danger': item.danger,
+          'p-nav-list__item--current': item.current,
+        }"
         :aria-current="item.current ? 'true' : undefined"
         @click="item.onClick?.()"
       >
@@ -67,7 +73,7 @@ defineProps<{
 }
 
 .p-nav-list__item:hover,
-.p-nav-list__item[aria-current='true'] {
+.p-nav-list__item--current {
   background: var(--color-surface-tint);
 }
 

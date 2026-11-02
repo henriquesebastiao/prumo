@@ -1,8 +1,17 @@
 <script setup lang="ts">
+import { computed, useAttrs } from 'vue'
+
 import type { IconName } from './icons'
 import PIcon from './PIcon.vue'
 
 defineOptions({ inheritAttrs: false })
+
+/** Layout attributes (class, style) go to the wrapper; aria and events go to the button. */
+const attrs = useAttrs()
+const rootAttrs = computed(() => ({ class: attrs.class, style: attrs.style }))
+const buttonAttrs = computed(() =>
+  Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class' && key !== 'style')),
+)
 
 withDefaults(
   defineProps<{
@@ -16,12 +25,12 @@ withDefaults(
 </script>
 
 <template>
-  <div class="p-fab" :class="`p-fab--${variant}`">
+  <div class="p-fab" :class="`p-fab--${variant}`" v-bind="rootAttrs">
     <button
       type="button"
       class="p-fab__button"
       :aria-label="variant === 'floating' ? label : undefined"
-      v-bind="$attrs"
+      v-bind="buttonAttrs"
     >
       <PIcon :name="icon" />
     </button>

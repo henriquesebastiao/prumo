@@ -45,7 +45,7 @@ const items = computed<MenuEntry[]>(() => [
   })),
   { type: 'separator' },
   { label: t('nav.settings'), icon: 'settings', to: { name: 'settings' } },
-  { label: t('auth.logout'), icon: 'logout', danger: true, onSelect: () => void logout() },
+  { label: t('auth.logout'), icon: 'logout', onSelect: () => void logout() },
 ])
 </script>
 

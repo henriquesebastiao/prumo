@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useSessionStore } from '@/app/stores/session'
-import { PNavList, PPageHeader } from '@/ui'
+import { PCard, PNavList, PPageHeader } from '@/ui'
 
 import AppearanceSection from './AppearanceSection.vue'
 import ModulesSection from './ModulesSection.vue'
@@ -33,7 +33,7 @@ const navItems = computed(() => [
     key: section.hash,
     label: t(section.label),
     icon: section.icon,
-    to: { name: 'settings', hash: section.hash },
+    href: section.hash,
     current: route.hash ? route.hash === section.hash : index === 0,
   })),
   { type: 'separator' as const },
@@ -41,7 +41,6 @@ const navItems = computed(() => [
     key: 'logout',
     label: t('auth.logout'),
     icon: 'logout' as const,
-    danger: true,
     onClick: () => void logout(),
   },
 ])
@@ -50,9 +49,9 @@ const navItems = computed(() => [
 <template>
   <PPageHeader :overline="t('settings.overline')" :title="t('settings.title')" />
   <div class="settings">
-    <div class="settings__nav">
+    <PCard as="div" padding="xs" class="settings__nav">
       <PNavList :label="t('settings.sections')" :items="navItems" />
-    </div>
+    </PCard>
     <div class="settings__sections">
       <ProfileSection id="perfil" />
       <AppearanceSection id="aparencia" />

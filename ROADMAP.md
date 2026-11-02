@@ -25,15 +25,15 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] `operation_id` estáveis, exportação do OpenAPI e teste de snapshot
 
 ### Frontend
-- [ ] Projeto Vue 3 + TS + Vite com ESLint, Prettier, Stylelint e Vitest
+- [x] Projeto Vue 3 + TS + Vite com ESLint, Prettier, Stylelint e Vitest
 - [ ] Tokens extraídos de `design/v1/` (temas claro e escuro) e seção "Design system atual" de `docs/frontend.md` preenchida
-- [ ] Componentes base em `src/ui/` e vitrine `/dev/ui`
+- [x] Componentes base em `src/ui/` e vitrine `/dev/ui`
 - [x] Cliente da API tipado, gerado do OpenAPI
-- [ ] i18n `pt-BR` e formatadores (moeda, km, litros, datas)
-- [ ] Registro de módulos (rotas, navegação, widgets do Início, ações rápidas, traduções)
-- [ ] AppShell (navegação, alternância de tema, menu do usuário), Login, Início vazio e Configurações (perfil, tema, módulos, sessões, senha)
-- [ ] Estados de carregando, vazio e erro
-- [ ] Comparação por screenshot (Playwright) com `design/v1/`
+- [x] i18n `pt-BR` e formatadores (moeda, km, litros, datas)
+- [x] Registro de módulos (rotas, navegação, widgets do Início, ações rápidas, traduções)
+- [x] AppShell (navegação, alternância de tema, menu do usuário), Login, Início vazio e Configurações (perfil, tema, módulos, sessões, senha)
+- [x] Estados de carregando, vazio e erro
+- [x] Comparação por screenshot (Playwright) com `design/v1/`
 
 ## Fase 1 — Veículos (`garage`)
 

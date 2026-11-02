@@ -9,7 +9,8 @@ import { dayPeriod, weekdayDate } from '@/lib/format'
 import { useMediaQuery } from '@/lib/media'
 import { installedModules } from '@/modules'
 import { useDashboard } from '@/system/api'
-import { PButton, PCard, PEmptyState, PPageHeader, PQueryState } from '@/ui'
+import UserMenu from '@/layouts/UserMenu.vue'
+import { PButton, PEmptyState, PPageHeader, PQueryState } from '@/ui'
 
 const { t } = useI18n()
 const session = useSessionStore()
@@ -51,7 +52,9 @@ function retry() {
 </script>
 
 <template>
-  <PPageHeader :overline="overline" :title="greeting" :size="compact ? 'sm' : 'md'" />
+  <PPageHeader :overline="overline" :title="greeting" :size="compact ? 'sm' : 'md'">
+    <UserMenu v-if="compact" />
+  </PPageHeader>
 
   <div v-if="pinned.length" class="home__chips" role="group" :aria-label="t('quickActions.region')">
     <PButton
@@ -73,24 +76,24 @@ function retry() {
     @retry="retry"
   >
     <template #empty>
-      <PCard>
-        <PEmptyState
-          v-if="installedModules.length === 0"
-          icon="modules"
-          :title="t('home.noModules.title')"
-          :description="t('home.noModules.description')"
-        />
-        <PEmptyState
-          v-else
-          icon="modules"
-          :title="t('home.allDisabled.title')"
-          :description="t('home.allDisabled.description')"
-        >
-          <PButton variant="primary" :to="{ name: 'settings', hash: '#modulos' }">{{
-            t('home.allDisabled.action')
-          }}</PButton>
-        </PEmptyState>
-      </PCard>
+      <PEmptyState
+        v-if="installedModules.length === 0"
+        variant="card"
+        icon="modules"
+        :title="t('home.noModules.title')"
+        :description="t('home.noModules.description')"
+      />
+      <PEmptyState
+        v-else
+        variant="card"
+        icon="modules"
+        :title="t('home.allDisabled.title')"
+        :description="t('home.allDisabled.description')"
+      >
+        <PButton variant="primary" :to="{ name: 'settings', hash: '#modulos' }">{{
+          t('home.allDisabled.action')
+        }}</PButton>
+      </PEmptyState>
     </template>
     <div class="home__grid">
       <component

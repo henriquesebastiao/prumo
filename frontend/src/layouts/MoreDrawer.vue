@@ -38,7 +38,7 @@ async function logout() {
         <PIcon name="sliders" class="more__icon" />
         {{ t('nav.settings') }}
       </RouterLink>
-      <button type="button" class="more__item more__item--danger" @click="logout">
+      <button type="button" class="more__item" @click="logout">
         <PIcon name="logout" class="more__icon" />
         {{ t('auth.logout') }}
       </button>
