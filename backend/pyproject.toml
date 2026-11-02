@@ -1,0 +1,88 @@
+[project]
+name = "prumo"
+version = "0.0.0"
+description = "Prumo API: self-hosted, modular personal organization"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.20.1",
+    "argon2-cffi>=25.1.0",
+    "fastapi>=0.162.0",
+    "psycopg[binary]>=3.3.6",
+    "pydantic>=2.14.2",
+    "pydantic-settings>=2.16.2",
+    "sqlalchemy>=2.1.6",
+    "uvicorn>=0.54.0",
+]
+
+[project.scripts]
+prumo = "prumo.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.16.0",
+    "import-linter>=2.15",
+    "mypy>=2.4.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+    "time-machine>=3.6.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF", "DTZ", "N", "C4", "RET", "PT", "FAST"]
+
+[tool.ruff.lint.pep8-naming]
+classmethod-decorators = ["declared_attr"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["prumo"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests", "migrations"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --import-mode=importlib"
+
+[tool.importlinter]
+root_package = "prumo"
+
+[[tool.importlinter.contracts]]
+name = "core is infrastructure: it knows nothing about system or modules"
+type = "forbidden"
+source_modules = ["prumo.core"]
+forbidden_modules = ["prumo.system", "prumo.modules", "prumo.main", "prumo.cli", "prumo.openapi"]
+
+[[tool.importlinter.contracts]]
+name = "system does not know concrete modules"
+type = "forbidden"
+source_modules = ["prumo.system"]
+forbidden_modules = ["prumo.modules", "prumo.main", "prumo.cli", "prumo.openapi"]
+
+[[tool.importlinter.contracts]]
+name = "modules do not import the application entry points"
+type = "forbidden"
+source_modules = ["prumo.modules"]
+forbidden_modules = ["prumo.main", "prumo.cli", "prumo.openapi"]
+
+[[tool.importlinter.contracts]]
+name = "modules are independent, except for each other's public events"
+type = "independence"
+modules = ["prumo.modules.*"]
+ignore_imports = ["prumo.modules.** -> prumo.modules.*.events"]
+unmatched_ignore_imports_alerting = "none"

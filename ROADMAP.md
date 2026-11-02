@@ -13,16 +13,16 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [ ] CI: lint, typecheck, testes com PostgreSQL, verificação do snapshot OpenAPI e build
 
 ### Backend
-- [ ] Configuração (pydantic-settings, prefixo `PRUMO_`), engine e sessão, Alembic
-- [ ] Base de modelos: UUID v7, `created_at`/`updated_at`, mixin de dono (`user_id`)
-- [ ] Erros padronizados, paginação, `GET /api/health`
-- [ ] Contrato `PrumoModule`, registro de módulos, `GET /api/v1/modules` e agregador `GET /api/v1/dashboard`
-- [ ] Barramento de eventos em processo (mínimo, testado com um módulo falso)
-- [ ] `import-linter` com o contrato de isolamento entre módulos
-- [ ] Usuários e CLI (`prumo users create`, `prumo users set-password`)
-- [ ] Autenticação por sessão: login web (cookie) e app (bearer), logout, `me`, listar e revogar sessões, limite de tentativas
-- [ ] Preferências do usuário (tema, idioma, fuso, moeda, módulos ativos e ordem)
-- [ ] `operation_id` estáveis, exportação do OpenAPI e teste de snapshot
+- [x] Configuração (pydantic-settings, prefixo `PRUMO_`), engine e sessão, Alembic
+- [x] Base de modelos: UUID v7, `created_at`/`updated_at`, mixin de dono (`user_id`)
+- [x] Erros padronizados, paginação, `GET /api/health`
+- [x] Contrato `PrumoModule`, registro de módulos, `GET /api/v1/modules` e agregador `GET /api/v1/dashboard`
+- [x] Barramento de eventos em processo (mínimo, testado com um módulo falso)
+- [x] `import-linter` com o contrato de isolamento entre módulos
+- [x] Usuários e CLI (`prumo users create`, `prumo users set-password`)
+- [x] Autenticação por sessão: login web (cookie) e app (bearer), logout, `me`, listar e revogar sessões, limite de tentativas
+- [x] Preferências do usuário (tema, idioma, fuso, moeda, módulos ativos e ordem)
+- [x] `operation_id` estáveis, exportação do OpenAPI e teste de snapshot
 
 ### Frontend
 - [ ] Projeto Vue 3 + TS + Vite com ESLint, Prettier, Stylelint e Vitest
