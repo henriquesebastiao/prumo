@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useField } from './field'
+import PIcon from './PIcon.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -23,6 +24,7 @@ const field = useField(props)
     class="p-control"
     :class="{ 'p-control--invalid': field.invalid.value, 'p-control--disabled': disabled }"
   >
+    <PIcon :name="type === 'time' ? 'clock' : 'calendar'" size="sm" class="p-control__icon" />
     <input
       :id="field.id.value"
       v-model="model"

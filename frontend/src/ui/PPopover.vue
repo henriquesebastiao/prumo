@@ -1,17 +1,35 @@
 <script setup lang="ts">
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     side?: 'top' | 'right' | 'bottom' | 'left'
     align?: 'start' | 'center' | 'end'
     label?: string
     portal?: boolean
     width?: string
+    /** Selector of the element focused when it opens (default: the first focusable). */
+    initialFocus?: string
   }>(),
-  { side: 'bottom', align: 'start', label: undefined, portal: true, width: '340px' },
+  {
+    side: 'bottom',
+    align: 'start',
+    label: undefined,
+    portal: true,
+    width: '340px',
+    initialFocus: undefined,
+  },
 )
 const open = defineModel<boolean>('open', { default: false })
+
+function onOpenAutoFocus(event: Event) {
+  if (!props.initialFocus) return
+  event.preventDefault()
+  const content = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+  requestAnimationFrame(() =>
+    (content ?? document).querySelector<HTMLElement>(props.initialFocus!)?.focus(),
+  )
+}
 </script>
 
 <template>
@@ -26,6 +44,7 @@ const open = defineModel<boolean>('open', { default: false })
         :collision-padding="16"
         :aria-label="label"
         :style="{ width }"
+        @open-auto-focus="onOpenAutoFocus"
       >
         <slot />
       </PopoverContent>
@@ -33,7 +52,8 @@ const open = defineModel<boolean>('open', { default: false })
   </PopoverRoot>
 </template>
 
-<style scoped>
+<style>
+/* Not scoped: the content is teleported by Reka, which does not forward the scope id. */
 .p-popover {
   z-index: 50;
   display: flex;

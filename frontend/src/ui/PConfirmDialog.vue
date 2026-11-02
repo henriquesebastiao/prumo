@@ -32,6 +32,7 @@ const { t } = useI18n()
     size="s"
     :icon="icon"
     :tone="tone"
+    layout="stacked"
     :inline="inline"
   >
     <template #footer>

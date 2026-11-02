@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import { DialogContent, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'reka-ui'
 
-defineProps<{ title: string }>()
+const props = defineProps<{
+  title: string
+  /** Selector of the element focused when it opens (default: the first focusable). */
+  initialFocus?: string
+}>()
 const open = defineModel<boolean>('open', { default: false })
+
+function onOpenAutoFocus(event: Event) {
+  if (!props.initialFocus) return
+  event.preventDefault()
+  requestAnimationFrame(() =>
+    document.querySelector<HTMLElement>(`.p-drawer ${props.initialFocus}`)?.focus(),
+  )
+}
 </script>
 
 <template>
   <DialogRoot v-model:open="open">
     <DialogPortal>
       <DialogOverlay class="p-drawer__overlay" />
-      <DialogContent class="p-drawer">
+      <DialogContent class="p-drawer" @open-auto-focus="onOpenAutoFocus">
         <span class="p-drawer__grip" aria-hidden="true" />
         <DialogTitle class="p-drawer__title">{{ title }}</DialogTitle>
         <slot />
@@ -18,7 +30,8 @@ const open = defineModel<boolean>('open', { default: false })
   </DialogRoot>
 </template>
 
-<style scoped>
+<style>
+/* Not scoped: the content is teleported by Reka, which does not forward the scope id. */
 .p-drawer__overlay {
   position: fixed;
   z-index: 40;

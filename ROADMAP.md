@@ -49,11 +49,13 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] "Vem aí" e "Atividade recente" no dashboard (D28)
 
 ### Frontend
-- [ ] Lista de veículos, cadastro e edição
-- [ ] Detalhe com informações rápidas e histórico em abas
-- [ ] Formulários: atualizar km, manutenção, troca de óleo, abastecimento
-- [ ] Widget do Início e ações rápidas
-- [ ] Revisão visual contra `design/v1/`
+- [x] Lista de veículos, cadastro e edição
+- [x] Detalhe com informações rápidas e histórico em abas
+- [x] Formulários: atualizar km, manutenção, troca de óleo, abastecimento
+- [x] Widget do Início e ações rápidas
+- [x] Revisão visual contra `design/v1/`
+- [x] Abas Abastecimentos, Manutenções, Trocas de óleo e Oficinas; detalhe da manutenção
+- [x] "Vem aí" e "Atividade recente" no Início
 
 ## Fase 2 — Finanças (`finance`)
 - [ ] Contas e saldos

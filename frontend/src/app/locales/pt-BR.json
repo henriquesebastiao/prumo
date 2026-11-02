@@ -79,7 +79,13 @@
       "description": "Ative um módulo para ver o resumo dele no Início.",
       "action": "Escolher módulos"
     },
-    "loadFailed": "Não foi possível carregar o Início"
+    "loadFailed": "Não foi possível carregar o Início",
+    "upcoming": {
+      "title": "Vem aí"
+    },
+    "activity": {
+      "title": "Atividade recente"
+    }
   },
   "settings": {
     "overline": "Instância pessoal",
@@ -165,6 +171,15 @@
       "invalid_username": "Use de 2 a 32 letras, números, ponto, hífen ou sublinhado.",
       "invalid_name": "O nome precisa ter de 1 a 80 caracteres.",
       "username_taken": "Esse usuário já existe."
+    },
+    "garage": {
+      "odometer_inconsistent": "O km não combina com outro registro. Confira o valor.",
+      "last_reading": "O veículo precisa manter pelo menos uma leitura de km.",
+      "reading_not_manual": "Esta leitura veio de um abastecimento ou manutenção: exclua o registro de origem.",
+      "workshop_in_use": "Esta oficina tem manutenções e não pode ser excluída.",
+      "workshop_exists": "Já existe uma oficina com esse nome.",
+      "oil_fields_require_oil_change": "Os dados de óleo só valem para trocas de óleo.",
+      "fuel_type_required": "Escolha o combustível."
     }
   },
   "fieldErrors": {
@@ -184,6 +199,9 @@
     "literal_error": "Escolha uma das opções.",
     "invalid_timezone": "Fuso horário desconhecido.",
     "unknown_module": "Módulo desconhecido.",
-    "duplicate_items": "Itens repetidos."
+    "duplicate_items": "Itens repetidos.",
+    "garage": {
+      "oil_fields_require_oil_change": "Só para trocas de óleo."
+    }
   }
 }

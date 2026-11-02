@@ -251,3 +251,75 @@ export function dayPeriod(value: DateInput = new Date()): DayPeriod {
   if (hour >= 12 && hour < 18) return 'afternoon'
   return 'evening'
 }
+
+// ------------------------------------------------------------------ form date-times
+
+function zoneOffsetMs(instant: number, timeZone: string): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(new Date(instant))
+  const get = (type: string) => Number(parts.find((part) => part.type === type)?.value)
+  const asUtc = Date.UTC(
+    get('year'),
+    get('month') - 1,
+    get('day'),
+    get('hour'),
+    get('minute'),
+    get('second'),
+  )
+  return asUtc - Math.floor(instant / 1000) * 1000
+}
+
+/** Local day (`YYYY-MM-DD`) and time (`HH:MM`) in the user's time zone → ISO instant in UTC. */
+export function zonedToIso(day: string, clock: string, timeZone = config.timeZone): string {
+  const [year, month, date] = day.split('-').map(Number)
+  const [hour, minute] = clock.split(':').map(Number)
+  const wall = Date.UTC(year ?? 1970, (month ?? 1) - 1, date ?? 1, hour ?? 0, minute ?? 0)
+  let instant = wall - zoneOffsetMs(wall, timeZone)
+  instant = wall - zoneOffsetMs(instant, timeZone) // second pass: daylight-saving boundaries
+  return new Date(instant).toISOString().replace('.000Z', 'Z')
+}
+
+/** ISO instant → local `{ day, time }` in the user's time zone (to fill forms). */
+export function isoToZoned(
+  value: string | Date,
+  timeZone = config.timeZone,
+): { day: string; time: string } {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).formatToParts(typeof value === 'string' ? new Date(value) : value)
+  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? '00'
+  return {
+    day: `${get('year')}-${get('month')}-${get('day')}`,
+    time: `${get('hour')}:${get('minute')}`,
+  }
+}
+
+/** Whole days from today to a plain date (negative when past), in the user's time zone. */
+export function daysUntil(day: string, now: Date = new Date()): number {
+  const today = calendarDay(now)
+  const toUtc = (value: string) => {
+    const [y, m, d] = value.split('-').map(Number)
+    return Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1)
+  }
+  return Math.round((toUtc(day) - toUtc(today)) / 86_400_000)
+}
+
+/** `novembro` (lowercase month name, for "Combustível em novembro"). */
+export function monthName(value: string | Date): string {
+  const { date: d, plain } = toDate(value)
+  return dateFormatter('monthName', { month: 'long' }, plain).format(d)
+}

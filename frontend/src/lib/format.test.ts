@@ -99,3 +99,15 @@ describe('dates', () => {
     expect(dayPeriod('2026-11-17T23:00:00Z')).toBe('evening') // 20:00
   })
 })
+
+describe('form date-times', () => {
+  it('converts local day and time to UTC and back', async () => {
+    const { zonedToIso, isoToZoned, daysUntil } = await import('./format')
+    expect(zonedToIso('2026-11-17', '14:30')).toBe('2026-11-17T17:30:00Z')
+    expect(zonedToIso('2026-11-17', '14:30', 'Asia/Tokyo')).toBe('2026-11-17T05:30:00Z')
+    expect(zonedToIso('2026-07-01', '12:00', 'Europe/Lisbon')).toBe('2026-07-01T11:00:00Z')
+    expect(isoToZoned('2026-11-17T02:30:00Z')).toEqual({ day: '2026-11-16', time: '23:30' })
+    expect(daysUntil('2026-11-25', new Date('2026-11-17T17:30:00Z'))).toBe(8)
+    expect(daysUntil('2026-11-16', new Date('2026-11-17T17:30:00Z'))).toBe(-1)
+  })
+})

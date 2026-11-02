@@ -197,6 +197,7 @@ const networkError = ApiError.network(new Error('offline'))
     <ShowcaseSection title="Tipografia · Figtree">
       <PText variant="h1">Boa tarde, Henrique</PText>
       <PText variant="title">Entrar</PText>
+      <PText variant="heading">Honda CG 160 Fan</PText>
       <PText variant="number-xl"><small>R$</small> 7.154,27</PText>
       <PText variant="number-l">18.420 km</PText>
       <PText variant="h2">Próxima troca de óleo</PText>
@@ -236,6 +237,9 @@ const networkError = ApiError.network(new Error('offline'))
         <PButton variant="primary" size="lg">Entrar</PButton>
         <PButton icon="refresh" variant="primary">Tentar de novo</PButton>
         <PButton icon-right="chevron-down">Novembro</PButton>
+      </ShowcaseRow>
+      <ShowcaseRow label="dashed">
+        <PButton variant="dashed" icon="add">Adicionar veículo</PButton>
       </ShowcaseRow>
       <ShowcaseRow label="icon · fab · link">
         <PIconButton icon="more" label="Mais ações" variant="outline" />

@@ -30,12 +30,22 @@ const model = defineModel<V>()
     </RouterLink>
   </nav>
   <TabsRoot v-else v-model="model" class="p-tabs__root" activation-mode="automatic">
-    <TabsList class="p-tabs" :aria-label="label">
-      <TabsTrigger v-for="item in items" :key="item.value" :value="item.value" class="p-tabs__tab">
-        {{ item.label
-        }}<span v-if="item.count !== undefined" class="p-tabs__count">{{ item.count }}</span>
-      </TabsTrigger>
-    </TabsList>
+    <div class="p-tabs__bar">
+      <slot name="start" />
+      <TabsList class="p-tabs" :aria-label="label">
+        <TabsTrigger
+          v-for="item in items"
+          :key="item.value"
+          :value="item.value"
+          class="p-tabs__tab"
+        >
+          {{ item.label
+          }}<span v-if="item.count !== undefined" class="p-tabs__count">{{ item.count }}</span>
+        </TabsTrigger>
+      </TabsList>
+      <span v-if="$slots.end" class="p-tabs__spacer" />
+      <slot name="end" />
+    </div>
     <slot />
   </TabsRoot>
 </template>
@@ -45,6 +55,17 @@ const model = defineModel<V>()
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.p-tabs__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.p-tabs__spacer {
+  flex: 1;
 }
 
 .p-tabs {

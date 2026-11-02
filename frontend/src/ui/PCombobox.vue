@@ -13,8 +13,9 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { useField } from './field'
+import type { IconName } from './icons'
 import PIcon from './PIcon.vue'
-import type { Option } from './types'
+import type { Option, Tone } from './types'
 
 const props = withDefaults(
   defineProps<{
@@ -23,10 +24,20 @@ const props = withDefaults(
     invalid?: boolean
     /** Label for the "create" item, receives the typed text: `Cadastrar nova oficina “{term}”`. */
     createLabel?: (term: string) => string
+    /** Icon shown before each option, in the tone. */
+    optionIcon?: IconName
+    tone?: Tone
     id?: string
     portal?: boolean
   }>(),
-  { placeholder: undefined, createLabel: undefined, id: undefined, portal: true },
+  {
+    placeholder: undefined,
+    createLabel: undefined,
+    optionIcon: undefined,
+    tone: undefined,
+    id: undefined,
+    portal: true,
+  },
 )
 
 const emit = defineEmits<{ create: [term: string] }>()
@@ -64,6 +75,7 @@ function displayValue(value: unknown): string {
 <template>
   <ComboboxRoot v-model="selected" ignore-filter>
     <ComboboxAnchor class="p-control" :class="{ 'p-control--invalid': field.invalid.value }">
+      <PIcon name="search" size="sm" class="p-control__icon" />
       <ComboboxInput
         :id="field.id.value"
         v-model="search"
@@ -73,7 +85,6 @@ function displayValue(value: unknown): string {
         :aria-invalid="field.invalid.value || undefined"
         :aria-describedby="field.describedBy.value"
       />
-      <PIcon name="chevron-down" size="sm" class="p-control__icon" />
     </ComboboxAnchor>
     <ComboboxPortal :disabled="!portal">
       <ComboboxContent class="p-options" position="popper" :side-offset="6">
@@ -87,6 +98,7 @@ function displayValue(value: unknown): string {
             :value="option.value"
             class="p-options__item"
           >
+            <PIcon v-if="optionIcon" :name="optionIcon" size="sm" :data-tone="tone" />
             <span class="p-options__text">
               {{ option.label }}
               <span v-if="option.description" class="p-options__description">{{
@@ -95,7 +107,7 @@ function displayValue(value: unknown): string {
             </span>
           </ComboboxItem>
           <ComboboxItem v-if="canCreate" :value="CREATE" class="p-options__item">
-            <PIcon name="add" size="sm" />
+            <span class="p-options__create"><PIcon name="add" size="sm" /></span>
             <span class="p-options__text">{{ createLabel?.(term) }}</span>
           </ComboboxItem>
         </ComboboxViewport>

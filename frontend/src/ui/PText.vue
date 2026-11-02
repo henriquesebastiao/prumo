@@ -5,6 +5,7 @@ withDefaults(
     variant?:
       | 'h1'
       | 'title'
+      | 'heading'
       | 'h2'
       | 'h3'
       | 'lead'
@@ -49,6 +50,13 @@ withDefaults(
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
+}
+
+.p-text--heading {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
 }
 
 .p-text--h2 {
@@ -110,6 +118,17 @@ withDefaults(
   font-size: 0.53em;
   font-weight: var(--weight-bold);
   letter-spacing: 0;
+}
+
+/* Units after the number ("18.420 km") and symbols before it ("R$ 7.154,27"). */
+.p-text--number-xl :deep(small:last-child),
+.p-text--number-l :deep(small:last-child) {
+  margin-left: 0.2em;
+}
+
+.p-text--number-xl :deep(small:first-child),
+.p-text--number-l :deep(small:first-child) {
+  margin-right: 0.15em;
 }
 
 .p-text--tone-secondary {

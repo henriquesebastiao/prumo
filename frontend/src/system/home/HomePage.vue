@@ -10,6 +10,8 @@ import { useMediaQuery } from '@/lib/media'
 import { installedModules } from '@/modules'
 import { useDashboard } from '@/system/api'
 import UserMenu from '@/layouts/UserMenu.vue'
+
+import HomeEvents from './HomeEvents.vue'
 import { PButton, PEmptyState, PPageHeader, PQueryState } from '@/ui'
 
 const { t } = useI18n()
@@ -28,6 +30,7 @@ const pinned = computed(() =>
   active.value.flatMap((module) =>
     (module.quickActions ?? [])
       .filter((action) => action.pinned)
+      .sort((a, b) => Number(a.pinned) - Number(b.pinned))
       .map((action) => ({ ...action, tone: module.id })),
   ),
 )
@@ -64,7 +67,7 @@ function retry() {
       :icon="action.icon"
       :icon-tone="action.tone"
       @click="runQuickAction(action.id)"
-      >{{ t(action.labelKey) }}</PButton
+      >{{ t(action.chipLabelKey ?? action.labelKey) }}</PButton
     >
   </div>
 
@@ -103,6 +106,11 @@ function retry() {
         :summary="widget.summary"
       />
     </div>
+    <HomeEvents
+      :modules="active"
+      :upcoming="dashboard.data.value?.upcoming ?? []"
+      :activity="dashboard.data.value?.activity ?? []"
+    />
   </PQueryState>
 </template>
 
@@ -117,7 +125,7 @@ function retry() {
   display: grid;
   align-items: start;
   gap: var(--space-4);
-  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
 }
 
 @media (width < 840px) {

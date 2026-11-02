@@ -24,7 +24,8 @@ const { messages, dismiss } = useToast()
   </ToastProvider>
 </template>
 
-<style scoped>
+<style>
+/* Not scoped: the content is teleported by Reka, which does not forward the scope id. */
 .p-toast__viewport {
   position: fixed;
   z-index: 60;

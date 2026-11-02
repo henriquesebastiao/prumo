@@ -4,12 +4,25 @@
  * enabled modules and the order returned by GET /api/v1/modules.
  */
 import type { Component } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
 
 import type { Schemas } from '@/lib/api/client'
+import type { i18n } from './i18n'
 import type { IconName } from '@/ui'
 
 type Lazy = () => Promise<{ default: Component }>
+
+export type Translate = typeof i18n.global.t
+
+/** How Início shows one "Vem aí" or "Atividade recente" item of a module. */
+export interface EventView {
+  title: string
+  subtitle?: string
+  /** Value at the right (activity): `18.420 km`, `R$ 46,36`. */
+  value?: string
+  icon?: IconName
+  to?: RouteLocationRaw
+}
 
 export interface QuickAction {
   /** `<module>.<action>`, e.g. `garage.update-km`. */
@@ -18,8 +31,10 @@ export interface QuickAction {
   icon: IconName
   /** Single key that runs the action while the Registrar menu is open. */
   shortcut?: string
-  /** Shown as a chip at the top of Início. */
-  pinned?: boolean
+  /** Shown as a chip at the top of Início; a number sets the order among the chips. */
+  pinned?: boolean | number
+  /** Shorter label for the chip ("Abastecer" instead of "Abastecimento"). */
+  chipLabelKey?: string
   component: Lazy
 }
 
@@ -34,6 +49,10 @@ export interface ModuleDefinition {
   dashboardWidget?: Lazy
   quickActions?: QuickAction[]
   messages: Partial<Record<string, () => Promise<{ default: Record<string, unknown> }>>>
+  /** Describes the module's `upcoming` items of GET /dashboard (by `kind`). */
+  describeUpcoming?: (item: Schemas['UpcomingItem'], t: Translate) => EventView | null
+  /** Describes the module's `activity` items of GET /dashboard (by `kind`). */
+  describeActivity?: (item: Schemas['ActivityItem'], t: Translate) => EventView | null
 }
 
 export function defineModule(definition: ModuleDefinition): ModuleDefinition {

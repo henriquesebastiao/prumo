@@ -178,6 +178,12 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** o km do formulário de edição do veículo registra uma leitura manual; a última leitura não pode ser excluída; o vão do intervalo de óleo é medido da última troca até a próxima prevista (respeita valores alterados pelo usuário); oficina com manutenções não pode ser excluída; o lint ignora `FAST003` porque parâmetros de caminho costumam ser consumidos por dependências (`VehicleDep`).
 **Consequências:** regras G2, G3, G6 e G10 detalhadas em `docs/dominio.md`.
 
+## D30 — Dados de demonstração das pranchas
+**Status:** aceita · 2026-11
+**Contexto:** comparar telas de módulo com o design exige muitos dados coerentes (km, trocas, abastecimentos) e "hoje" fixo; simular toda a API no navegador seria frágil.
+**Decisão:** `backend/scripts/e2e_server.py` cria um banco descartável, semeia os dados das pranchas pelos serviços (regras reais) e serve a API com o relógio congelado no momento do design. O Playwright o inicia junto com o Vite.
+**Consequências:** as capturas exercitam o backend de verdade. Cada módulo novo acrescenta seus dados ao script.
+
 ---
 
 ## Modelo

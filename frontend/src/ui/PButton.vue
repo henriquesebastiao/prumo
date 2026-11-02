@@ -9,8 +9,8 @@ import type { Tone } from './types'
 
 const props = withDefaults(
   defineProps<{
-    /** `chip`: quick action with the icon in the module color. */
-    variant?: 'primary' | 'outline' | 'tonal' | 'ghost' | 'danger' | 'chip'
+    /** `chip`: quick action. `dashed`: large placeholder to add an item ("Adicionar veículo"). */
+    variant?: 'primary' | 'outline' | 'tonal' | 'ghost' | 'danger' | 'chip' | 'dashed'
     size?: 'md' | 'lg'
     icon?: IconName
     iconTone?: Tone
@@ -118,6 +118,18 @@ const attrs = computed(() =>
 }
 
 .p-button--chip:hover:not(:disabled) {
+  background: var(--color-surface-inset);
+}
+
+.p-button--dashed {
+  width: 100%;
+  height: 72px;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  font-size: var(--text-lg);
+}
+
+.p-button--dashed:hover:not(:disabled) {
   background: var(--color-surface-inset);
 }
 

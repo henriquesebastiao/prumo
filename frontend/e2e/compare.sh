@@ -20,3 +20,16 @@ pair "Configurações.png" settings-light.png settings
 pair "Estados vazio, carregando, erro, exclusão.png" composition-states-light.png states
 magick "$DESIGN/Início — celular.png" -crop 780x1688+0+0 +repage "$OUT/design-mobile-top.png"
 pair "../output/design-mobile-top.png" home-mobile.png home-mobile
+pair "Início — claro.png" garage-home-light.png garage-home-light
+pair "Início — escuro.png" garage-home-dark.png garage-home-dark
+pair "Veículos · Lista — claro.png" garage-list-light.png garage-list-light
+pair "Veículos · Lista — escuro.png" garage-list-dark.png garage-list-dark
+pair "Veículos · Detalhe do veículo.png" garage-detail.png garage-detail
+pair "Veículos · Detalhe da manutenção.png" garage-maintenance.png garage-maintenance
+pair "Veículos · Registrar manutenção.png" garage-dialog-maintenance.png garage-dialog-maintenance
+pair "Veículos · Registrar abastecimento.png" garage-dialog-fueling.png garage-dialog-fueling
+pair "Veículos · Registrar troca de óleo.png" garage-dialog-oil.png garage-dialog-oil
+pair "Veículos · Atualizar km.png" garage-dialog-km.png garage-dialog-km
+pair "Veículos · Cadastro edição.png" garage-dialog-vehicle.png garage-dialog-vehicle
+magick "$DESIGN/Início — celular.png" +repage "$OUT/design-mobile-full.png"
+pair "../output/design-mobile-full.png" garage-home-phone.png garage-home-phone

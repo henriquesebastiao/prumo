@@ -121,7 +121,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
       />
       <BottomNav :items="bottomItems" :more-current="moreCurrent" @more="moreOpen = true" />
       <MoreDrawer v-model:open="moreOpen" :items="moreItems" />
-      <PDrawer v-model:open="registerOpen" :title="t('quickActions.title')">
+      <PDrawer
+        v-model:open="registerOpen"
+        :title="t('quickActions.title')"
+        initial-focus="[role='listbox']"
+      >
         <RegisterMenu :sections="sections" @select="runAction" />
       </PDrawer>
     </template>

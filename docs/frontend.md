@@ -62,11 +62,13 @@ export default defineModule({
   dashboardWidget: () => import('./widgets/GarageWidget.vue'), // recebe a prop `summary`
   quickActions: [
     { id: 'garage.update-km', labelKey: 'garage.actions.updateKm', icon: 'gauge', shortcut: 'K',
-      pinned: true, component: () => import('./forms/UpdateKmDialog.vue') },
-    { id: 'garage.add-fueling', labelKey: 'garage.actions.addFueling', icon: 'fuel', shortcut: 'A',
-      pinned: true, component: () => import('./forms/FuelingDialog.vue') },
+      pinned: 2, component: () => import('./forms/UpdateKmDialog.vue') },
+    { id: 'garage.add-fueling', labelKey: 'garage.actions.addFueling', chipLabelKey: 'garage.actions.fuel',
+      icon: 'fuel', shortcut: 'A', pinned: 1, component: () => import('./forms/FuelingDialog.vue') },
   ],
   messages: { 'pt-BR': () => import('./locales/pt-BR.json') },
+  describeUpcoming, // (item, t) => { title, subtitle, to } para os itens de "Vem aí" do módulo
+  describeActivity, // (item, t) => { title, subtitle, value, icon, to } para "Atividade recente"
 })
 ```
 
@@ -74,8 +76,8 @@ O registro (`app/registry.ts`) monta rotas, itens de navegação, widgets do In�
 
 As ações rápidas cumprem a regra de que registros frequentes ficam a no máximo dois cliques de qualquer tela:
 
-- **Menu Registrar**: botão do trilho (ou FAB no celular) e tecla **N** em qualquer tela. Dentro do menu, a tecla de `shortcut` executa a ação.
-- **Chips do Início**: ações com `pinned: true`.
+- **Menu Registrar**: botão do trilho (ou FAB no celular) e tecla **N** em qualquer tela. O menu abre com o foco na lista: a tecla de `shortcut` executa a ação, as setas navegam e Tab leva à busca.
+- **Chips do Início**: ações com `pinned` (um número ordena os chips; `chipLabelKey` dá um rótulo mais curto).
 - O componente da ação é um diálogo que recebe `v-model:open`.
 
 ## Camadas de estilo
@@ -184,9 +186,13 @@ Também existem `--text-2xs` (11), `--text-2xl-plus` (24, título no celular) e 
 - **Desktop:** trilho com logo, botão Registrar, Início, módulos ativos, Módulos (leva a Configurações › Módulos), Configurações e o avatar (menu da conta: tema, Configurações, Sair). Item ativo de módulo usa o container da cor dele; Início usa grafite.
 - **Celular (< 840 px):** barra inferior com Início, até três módulos e Mais (gaveta com o restante, Configurações e Sair), FAB flutuante para Registrar, avatar no topo do Início. Diálogos viram tela cheia com rodapé fixo; tabelas viram listas.
 
+### Overlays
+
+Componentes cujo conteúdo o Reka leva para um portal (`PDialog`, `PPopover`, `PDrawer`, `PToaster`) usam CSS não escopado com classes `p-*` únicas: o Reka não repassa o atributo de escopo ao conteúdo. Diálogos de formulário abrem com o foco no primeiro campo.
+
 ### Comparação com o design
 
-`make screenshots` captura login, Início, Configurações, Início no celular, a vitrine e as composições (API simulada, relógio em 17/11/2026 14:30, densidade 2×) em `frontend/e2e/output/` e monta imagens lado a lado (design | implementação) em `frontend/e2e/output/compare/`.
+`make screenshots` captura as telas em densidade 2× e monta imagens lado a lado (design | implementação) em `frontend/e2e/output/compare/`. As telas de plataforma (login, Configurações, vitrine) usam API simulada (`e2e/fixtures.ts`); as de módulo usam a API real com os dados das pranchas e o relógio em 17/11/2026 14:30 (`backend/scripts/e2e_server.py`, banco descartável `prumo_e2e`).
 
 ### Divergências conhecidas entre o design v1 e os docs
 
@@ -194,7 +200,7 @@ Decididas na Fase 0 (D22): login só por usuário (sem e-mail), sem foto de perf
 
 Ainda abertas, a decidir na fase de cada módulo:
 
-- **Veículos:** combustível padrão do veículo; "óleo utilizado" na troca; datas estimadas pelo ritmo de uso (km/dia); km rodados no mês; listas entre veículos (abastecimentos, manutenções, trocas, oficinas); estatísticas da oficina no autocompletar; peça sem quantidade no formulário e mão de obra como linha "Serviço"; histórico de consumo por ciclo.
+- **Veículos (Fase 1, D27):** resolvidas. Diferenças que ficaram: sem busca na lista de veículos (D22); o formulário de abastecimento não mostra a prévia "Consumo deste tanque" (seria cálculo de regra no cliente; o consumo aparece depois de salvar); o cadastro de peça tem quantidade (padrão 1); o diálogo de km é um popover só no detalhe do veículo.
 - **Finanças:** hora na transação (`occurred_on` é data); excluir categoria em uso (F8 proíbe); categorias sugeridas como escolha no primeiro uso (F7 cria automaticamente); "saldo atual" no cadastro e "Ajustar saldo"; histórico de 6 meses na visão geral; busca por valor.
 - **Livros:** previsão de término e ritmo de leitura; lista de todas as anotações; data editável na anotação; `owned` ("tenho") sem lugar na interface.
 - **Início:** seções "Vem aí" e "Atividade recente" (agregações entre módulos que o dashboard ainda não tem).

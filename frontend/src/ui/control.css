@@ -115,6 +115,22 @@
   font-size: var(--text-sm);
 }
 
+.p-options__create {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--color-fill);
+}
+
+.p-options__item [data-tone] {
+  color: var(--tone);
+}
+
 .p-options__empty {
   padding: var(--space-3) var(--space-2-5);
   color: var(--color-text-muted);

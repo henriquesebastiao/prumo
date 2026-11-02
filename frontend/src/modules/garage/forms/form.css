@@ -1,0 +1,39 @@
+/* Layout shared by the garage forms (layout only: appearance comes from src/ui). */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-3-5) var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+}
+
+.form__switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.form__switch-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.form__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}

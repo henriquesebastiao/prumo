@@ -51,6 +51,7 @@ function onKeydown(event: KeyboardEvent) {
   const item = props.groups.flatMap((group) => group.items).find((i) => i.shortcut === key)
   if (item) {
     event.preventDefault()
+    event.stopPropagation()
     emit('select', item.id)
   }
 }
@@ -62,7 +63,7 @@ function onKeydown(event: KeyboardEvent) {
     highlight-on-hover
     selection-behavior="replace"
     @update:model-value="onSelect"
-    @keydown="onKeydown"
+    @keydown.capture="onKeydown"
   >
     <div class="p-command__search">
       <PIcon name="search" size="sm" />

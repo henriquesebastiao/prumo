@@ -78,7 +78,7 @@ Acesse `http://localhost:5173`. O Vite encaminha `/api` para a API, então o com
 ## Testes do frontend
 
 - Vitest para `lib/` (formatadores, cliente da API, utilitários), registro de módulos, composables e componentes de `src/ui/`.
-- Playwright para screenshots de comparação com o design (`make screenshots`, fora do `make check` porque exige o navegador) e, a partir da Fase 4, E2E dos fluxos principais. Nas capturas a API é simulada (`e2e/fixtures.ts`) e o relógio fica no momento das pranchas (17/11/2026, 14:30), então só o Vite precisa rodar.
+- Playwright para screenshots de comparação com o design (`make screenshots`, fora do `make check` porque exige o navegador) e, a partir da Fase 4, E2E dos fluxos principais. As telas de plataforma usam API simulada (`e2e/fixtures.ts`); as de módulo usam uma API real iniciada pelo próprio Playwright (`backend/scripts/e2e_server.py`, porta 8001), que recria o banco `prumo_e2e` no container de testes, semeia os dados das pranchas e roda com o relógio no momento delas (17/11/2026, 14:30). Usuário: `henrique` / `prumo-demo-01`.
 
 ## Migrations
 

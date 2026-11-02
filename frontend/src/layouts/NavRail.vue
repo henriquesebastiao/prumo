@@ -30,6 +30,7 @@ function select(id: string) {
       align="start"
       :label="t('quickActions.title')"
       width="340px"
+      initial-focus="[role='listbox']"
     >
       <template #trigger>
         <PFab

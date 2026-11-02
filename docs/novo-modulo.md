@@ -80,7 +80,7 @@ Depois:
 2. Adicione o módulo ao contrato do `import-linter`.
 3. `make migration m="add habits module"` e revise o arquivo.
 4. Testes em `tests/modules/habits/`: regras de serviço, endpoints, e acesso de outro usuário retornando 404.
-5. Se o módulo tiver resumo no Início, basta o `summary` com o tipo de retorno anotado: a união discriminada do dashboard é montada a partir dos módulos instalados.
+5. Se o módulo tiver resumo no Início, basta o `summary` com o tipo de retorno anotado: a união discriminada do dashboard é montada a partir dos módulos instalados. Para aparecer em "Vem aí" e "Atividade recente", forneça `upcoming` e `activity` no `PrumoModule` e documente os `kind` e os campos de `data` em `docs/api.md`.
 6. `make openapi`.
 
 ## 3. Frontend
@@ -115,7 +115,9 @@ Depois:
 1. Adicione o módulo a `src/modules/index.ts`.
 2. Crie os tokens `--color-module-habits`, `-container`, `-on-container`, `-soft` e `-softer` em `src/design/themes/light.css` e `dark.css`, e o bloco `[data-tone='habits']` em `src/design/tones.css` (veja "Cores por módulo" em `docs/frontend.md`).
 3. Telas só com componentes de `src/ui/`. Se faltar um componente genérico, crie em `src/ui/` e coloque na vitrine `/dev/ui`; se for específico do módulo, crie em `modules/habits/components/` compondo componentes de `src/ui/`.
-4. Todos os textos em `locales/pt-BR.json`, incluindo as traduções dos códigos de erro `habits.*`.
+4. Todos os textos em `locales/pt-BR.json`; as traduções dos códigos de erro `habits.*` vão em `src/app/locales/pt-BR.json`, em `errors.habits`.
+5. Se o backend publica itens de "Vem aí" ou "Atividade recente", implemente `describeUpcoming` e `describeActivity` na definição do módulo.
+6. Dados das telas do design no `backend/scripts/e2e_server.py` e capturas em `frontend/e2e/`, para comparar com o design (`make screenshots`).
 
 ## 4. Feche
 
