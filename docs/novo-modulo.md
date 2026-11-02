@@ -1,0 +1,111 @@
+# Como criar um módulo
+
+Exemplo usado neste guia: um módulo hipotético de hábitos, com id `habits`.
+
+## 1. Defina antes de codar
+
+- **id**: em inglês, curto, estável (vira prefixo de rota, de tabela e chave de preferência). Não mude depois de publicado.
+- **Nome exibido**: em pt-BR, no i18n.
+- **Entidades e regras**: nova seção em `docs/dominio.md`, com regras numeradas (H1, H2…).
+- **Rotas**: nova seção em `docs/api.md`.
+- **Plano**: nova fase ou item em `ROADMAP.md`.
+
+## 2. Backend
+
+```
+backend/src/prumo/modules/habits/
+├── __init__.py
+├── models.py
+├── schemas.py
+├── service.py
+├── router.py
+└── summary.py
+```
+
+```python
+# models.py
+class Habit(Base, IdMixin, TimestampMixin, UserOwnedMixin):
+    __tablename__ = "habits_habits"          # sempre com o prefixo do módulo
+
+    name: Mapped[str] = mapped_column(String(120))
+```
+
+```python
+# service.py
+def list_habits(session: Session, user: User, page: PageParams) -> Page[Habit]:
+    stmt = select(Habit).where(Habit.user_id == user.id)   # sempre filtrado pelo usuário
+    return paginate(session, stmt, page)
+
+def get_habit(session: Session, user: User, habit_id: UUID) -> Habit:
+    habit = session.scalar(select(Habit).where(Habit.id == habit_id, Habit.user_id == user.id))
+    if habit is None:
+        raise NotFoundError()                # vira 404 com o formato padrão
+    return habit
+```
+
+```python
+# router.py
+router = APIRouter()
+
+@router.get("/habits", response_model=Page[HabitRead])
+def list_habits(session: SessionDep, user: CurrentUser, page: PageDep) -> Page[Habit]:
+    return service.list_habits(session, user, page)
+```
+
+```python
+# __init__.py
+module = PrumoModule(
+    id="habits",
+    version="0.1.0",
+    router=router,
+    summary=build_summary,     # opcional: bloco no Início
+)
+```
+
+Depois:
+
+1. Adicione `habits.module` a `INSTALLED_MODULES` em `modules/__init__.py`.
+2. Adicione o módulo ao contrato do `import-linter`.
+3. `make migration m="add habits module"` e revise o arquivo.
+4. Testes em `tests/modules/habits/`: regras de serviço, endpoints, e acesso de outro usuário retornando 404.
+5. Se o módulo tiver resumo no Início, adicione o schema dele à união discriminada do dashboard.
+6. `make openapi`.
+
+## 3. Frontend
+
+```
+frontend/src/modules/habits/
+├── index.ts
+├── routes.ts
+├── api.ts
+├── pages/
+├── forms/
+├── widgets/HabitsWidget.vue
+└── locales/pt-BR.json
+```
+
+```ts
+// index.ts
+export default defineModule({
+  id: 'habits',
+  icon: 'repeat',
+  nav: { labelKey: 'habits.nav', route: 'habits.home' },
+  routes,
+  dashboardWidget: () => import('./widgets/HabitsWidget.vue'),
+  quickActions: [],
+  messages: { 'pt-BR': () => import('./locales/pt-BR.json') },
+})
+```
+
+Depois:
+
+1. Adicione o módulo a `src/modules/index.ts`.
+2. Crie o token `--color-module-habits` em `src/design/` (nos dois temas).
+3. Telas só com componentes de `src/ui/`. Se faltar um componente genérico, crie em `src/ui/` e coloque na vitrine `/dev/ui`; se for específico do módulo, crie em `modules/habits/components/` compondo componentes de `src/ui/`.
+4. Todos os textos em `locales/pt-BR.json`, incluindo as traduções dos códigos de erro `habits.*`.
+
+## 4. Feche
+
+- [ ] `make check` verde
+- [ ] `docs/dominio.md`, `docs/api.md` e `ROADMAP.md` atualizados
+- [ ] Módulo aparece em `GET /api/v1/modules`, na navegação e no Início, e some quando desativado nas Configurações
