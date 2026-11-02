@@ -2,6 +2,7 @@
 name = "prumo"
 version = "0.0.0"
 description = "Prumo API: self-hosted, modular personal organization"
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.20.1",

@@ -190,12 +190,12 @@ Também existem `--text-2xs` (11), `--text-2xl-plus` (24, título no celular) e 
 
 ### Divergências conhecidas entre o design v1 e os docs
 
-Decididas na Fase 0 (D22): login só por usuário (sem e-mail), sem foto de perfil, usuário não editável, tema guardado na conta, sem busca global por enquanto.
+Decididas na Fase 0 (D22): login só por usuário (sem e-mail), sem foto de perfil, usuário não editável, tema guardado na conta, sem busca global por enquanto. Período da fatura: vale F4 (D26).
 
 Ainda abertas, a decidir na fase de cada módulo:
 
 - **Veículos:** combustível padrão do veículo; "óleo utilizado" na troca; datas estimadas pelo ritmo de uso (km/dia); km rodados no mês; listas entre veículos (abastecimentos, manutenções, trocas, oficinas); estatísticas da oficina no autocompletar; peça sem quantidade no formulário e mão de obra como linha "Serviço"; histórico de consumo por ciclo.
-- **Finanças:** hora na transação (`occurred_on` é data); período da fatura (o design inclui a compra do dia do fechamento, F4 não); excluir categoria em uso (F8 proíbe); categorias sugeridas como escolha no primeiro uso (F7 cria automaticamente); "saldo atual" no cadastro e "Ajustar saldo"; histórico de 6 meses na visão geral; busca por valor.
+- **Finanças:** hora na transação (`occurred_on` é data); excluir categoria em uso (F8 proíbe); categorias sugeridas como escolha no primeiro uso (F7 cria automaticamente); "saldo atual" no cadastro e "Ajustar saldo"; histórico de 6 meses na visão geral; busca por valor.
 - **Livros:** previsão de término e ritmo de leitura; lista de todas as anotações; data editável na anotação; `owned` ("tenho") sem lugar na interface.
 - **Início:** seções "Vem aí" e "Atividade recente" (agregações entre módulos que o dashboard ainda não tem).
 

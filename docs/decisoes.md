@@ -89,9 +89,10 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Consequências:** traduzir para outros idiomas não exige mudar código.
 
 ## D15 — Licença
-**Status:** pendente
-**Contexto:** projeto open source e self-hosted.
-**Decisão:** a definir antes da versão 0.1.
+**Status:** aceita · 2026-11
+**Contexto:** projeto open source e self-hosted, usado como serviço de rede.
+**Decisão:** GNU Affero General Public License v3.0 ou posterior (`AGPL-3.0-or-later`), texto em `LICENSE`.
+**Consequências:** quem modificar o Prumo e oferecê-lo pela rede a outras pessoas precisa disponibilizar o código-fonte modificado a elas (seção 13). Usar a versão sem modificações não exige nada além de manter a licença.
 
 ## D16 — Ícones Lucide atrás de `<PIcon>`
 **Status:** aceita · 2026-11
@@ -152,6 +153,12 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Contexto:** algumas versões estáveis mais novas ainda não funcionam com o resto do ecossistema.
 **Decisão:** TypeScript 6.0 (o 7.0 é o port nativo, e o `typescript-eslint` ainda exige < 6.1). Testes de backend usam `httpx2`, que o Starlette 1.10 passou a recomendar no `TestClient` no lugar do `httpx`.
 **Consequências:** revisar quando o `typescript-eslint` aceitar o TypeScript 7.
+
+## D26 — Fatura segue a regra F4, não o design v1
+**Status:** aceita · 2026-11
+**Contexto:** a prancha "Cartões de crédito" mostra, para fechamento no dia 3, "lançamentos de 04/11 a 03/12", o que inclui a compra feita no dia do fechamento.
+**Decisão:** vale F4: a compra no dia do fechamento cai na fatura seguinte (no exemplo, lançamentos de 03/11 a 02/12). A interface mostra o período calculado pela API.
+**Consequências:** o texto da prancha é tratado como erro do design.
 
 ---
 

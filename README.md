@@ -48,6 +48,10 @@ docker compose exec api prumo users create --admin
 
 Acesse `http://<seu-servidor>:<PRUMO_PORT>`. Para HTTPS, publique a porta através do seu proxy reverso. Não existe cadastro público: novos usuários são criados pela linha de comando.
 
+> **Cookie seguro.** Com `PRUMO_COOKIE_SECURE=true` (o padrão), o navegador só envia o cookie de sessão por HTTPS, então o login pela web não funciona acessando o Prumo por `http://` (exceto em `localhost`). Use um proxy reverso com TLS ou, só numa rede de confiança, defina `PRUMO_COOKIE_SECURE=false`. O app Android não depende de cookie.
+>
+> **Senha do banco.** `POSTGRES_PASSWORD` entra na URL de conexão da API: use letras, números, `-` e `_`, ou codifique os demais caracteres (`@` vira `%40`).
+
 O backup é um dump do PostgreSQL (`make backup`); veja [docs/desenvolvimento.md](docs/desenvolvimento.md).
 
 ## Desenvolvimento
@@ -92,7 +96,7 @@ Issues e sugestões são bem-vindas. Antes de abrir um pull request, leia a arqu
 
 ## Licença
 
-A definir antes da versão 0.1.
+[GNU Affero General Public License v3.0 ou posterior](LICENSE) (`AGPL-3.0-or-later`). Se você modificar o Prumo e oferecê-lo pela rede a outras pessoas, precisa disponibilizar o código-fonte modificado a elas.
 
 ---
 
