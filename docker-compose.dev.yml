@@ -1,0 +1,39 @@
+# Development only: PostgreSQL for the API (make dev) and a throwaway database for tests.
+name: prumo-dev
+
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: prumo
+      POSTGRES_PASSWORD: prumo
+      POSTGRES_DB: prumo
+    ports:
+      - "127.0.0.1:${PRUMO_DEV_DB_PORT:-5432}:5432"
+    volumes:
+      - db_dev_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prumo -d prumo"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  db_test:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: prumo
+      POSTGRES_PASSWORD: prumo
+      POSTGRES_DB: prumo_test
+    command: ["postgres", "-c", "fsync=off", "-c", "synchronous_commit=off", "-c", "full_page_writes=off"]
+    ports:
+      - "127.0.0.1:${PRUMO_TEST_DB_PORT:-5433}:5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prumo -d prumo_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  db_dev_data:

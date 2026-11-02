@@ -5,7 +5,7 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 ## Fase 0 — Fundação
 
 ### Repositório e ferramentas
-- [ ] Mover a exportação atual de `design/` para `design/v1/` (sem alterar arquivos) e criar `design/README.md` indicando a versão ativa
+- [x] Mover a exportação atual de `design/` para `design/v1/` (sem alterar arquivos) e criar `design/README.md` indicando a versão ativa
 - [ ] Estrutura de pastas: `backend/`, `frontend/`, `deploy/`, `openapi/`
 - [ ] `Makefile` com os comandos listados no `CLAUDE.md`
 - [ ] `docker-compose.yml` (db, api, web) e `.env.example`; compose de desenvolvimento só com o banco
