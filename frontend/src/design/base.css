@@ -1,0 +1,143 @@
+/* Global base: reset, page defaults, focus and motion preferences. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure, fieldset, blockquote) {
+  margin: 0;
+}
+
+:where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+:where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+:where(button) {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  font-variant-numeric: var(--numeric-figures);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme] {
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.p-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes p-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes p-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes p-ring {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes p-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes p-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes p-swing {
+  0% {
+    transform: rotate(16deg);
+  }
+
+  22% {
+    transform: rotate(-11deg);
+  }
+
+  44% {
+    transform: rotate(7deg);
+  }
+
+  66% {
+    transform: rotate(-4deg);
+  }
+
+  84% {
+    transform: rotate(1.5deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

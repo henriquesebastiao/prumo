@@ -1,0 +1,61 @@
+/* Shared look of menus and the command list. */
+.p-menu {
+  z-index: 50;
+  display: flex;
+  min-width: 260px;
+  flex-direction: column;
+  padding: var(--space-2);
+  border-radius: var(--radius-menu);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-lg);
+}
+
+.p-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-menu-item);
+  outline: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.p-menu__item[data-highlighted],
+.p-menu__item:hover,
+.p-menu__item--current {
+  background: var(--color-surface-tint);
+}
+
+.p-menu__item--danger {
+  color: var(--color-danger);
+}
+
+.p-menu__item > .p-menu__shortcut {
+  margin-left: auto;
+}
+
+.p-menu__item [data-tone] {
+  color: var(--tone);
+}
+
+.p-menu__label {
+  padding: var(--space-2-5) var(--space-3) var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+}
+
+.p-menu__separator {
+  height: 1px;
+  margin: var(--space-1-5) var(--space-2);
+  background: var(--color-divider);
+}

@@ -1,0 +1,8 @@
+/* Entry point of the visual layer. A redesign starts here and in src/ui/. */
+@import url('@fontsource-variable/figtree');
+@import url('./tokens.css');
+@import url('./scales.css');
+@import url('./themes/light.css');
+@import url('./themes/dark.css');
+@import url('./tones.css');
+@import url('./base.css');

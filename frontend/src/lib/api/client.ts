@@ -37,6 +37,9 @@ export function createApiClient(fetchImpl?: typeof fetch) {
 
 export const api = createApiClient()
 
+/** Response data without the `undefined` of error results; `void` for empty (204) responses. */
+type Data<T> = [Exclude<T, undefined>] extends [never] ? void : Exclude<T, undefined>
+
 type Result<T> =
   | { data: T; error?: never; response: Response }
   | { data?: never; error: unknown; response: Response }
@@ -45,7 +48,7 @@ type Result<T> =
  * Turns an openapi-fetch result into data or a thrown ApiError (what TanStack Query expects).
  * Network failures become `ApiError` with status 0 and code `network_error`.
  */
-export async function unwrap<T>(request: Promise<Result<T>>): Promise<T> {
+export async function unwrap<T>(request: Promise<Result<T>>): Promise<Data<T>> {
   let result: Result<T>
   try {
     result = await request
@@ -57,5 +60,5 @@ export async function unwrap<T>(request: Promise<Result<T>>): Promise<T> {
     if (error.status === 401) unauthorizedListeners.forEach((listener) => listener(error))
     throw error
   }
-  return result.data as T
+  return result.data as Data<T>
 }

@@ -1,0 +1,81 @@
+/*
+ * Primitive tokens: the raw palette and scales of design v1 (design/v1/).
+ * Components never use these directly; they use the semantic tokens of themes/*.css.
+ */
+:root {
+  /* Warm neutrals: light theme */
+  --p-sand-0: #fff;
+  --p-sand-50: #f7f6f4;
+  --p-sand-100: #f4f3f1;
+  --p-sand-150: #f0eeeb;
+  --p-sand-200: #efedea;
+  --p-sand-300: #e6e3df;
+  --p-sand-400: #d3cfca;
+  --p-graphite-400: #8e8a93;
+  --p-graphite-500: #67646c;
+  --p-graphite-700: #47454c;
+  --p-graphite-900: #1c1b1f;
+
+  /* Neutrals: dark theme */
+  --p-night-1000: #131215;
+  --p-night-900: #1d1c20;
+  --p-night-850: #26252a;
+  --p-night-800: #2a282e;
+  --p-night-750: #2e2c32;
+  --p-night-700: #34323a;
+  --p-night-600: #4a4750;
+  --p-mist-400: #a3a0a9;
+  --p-mist-200: #cac7cf;
+  --p-mist-50: #eeedf0;
+
+  /* Orange: Veículos */
+  --p-orange-50: #fbe9df;
+  --p-orange-200: #f3c2a6;
+  --p-orange-250: #f6b892;
+  --p-orange-400: #f08a55;
+  --p-orange-500: #e4672e;
+  --p-orange-750: #7a4127;
+  --p-orange-800: #8a3a12;
+  --p-orange-950: #3a2418;
+
+  /* Green: Finanças */
+  --p-green-50: #e1f3ea;
+  --p-green-150: #bfe6d1;
+  --p-green-250: #8fe0b8;
+  --p-green-300: #7ccba3;
+  --p-green-400: #4cc98f;
+  --p-green-500: #24a06b;
+  --p-green-650: #2e8a62;
+  --p-green-750: #1f5c42;
+  --p-green-800: #17643f;
+  --p-green-950: #15301f;
+
+  /* Violet: Livros */
+  --p-violet-50: #ece8fd;
+  --p-violet-150: #c9bef8;
+  --p-violet-200: #c3b8ff;
+  --p-violet-400: #9c8bff;
+  --p-violet-500: #6f57e8;
+  --p-violet-700: #4a34b5;
+  --p-violet-750: #4b3f8f;
+  --p-violet-950: #262047;
+
+  /* Red: danger */
+  --p-red-0: #fff;
+  --p-red-50: #fbe4e1;
+  --p-red-200: #ffb4aa;
+  --p-red-400: #ff7a6b;
+  --p-red-600: #c2362b;
+  --p-red-800: #8f2219;
+  --p-red-950: #3d1814;
+  --p-red-1000: #2a0905;
+
+  /* User color palette (accounts, categories) */
+  --p-blue-500: #2f6fde;
+  --p-pink-500: #d2508a;
+  --p-cyan-500: #1f9db3;
+
+  /* Typography */
+  --p-font-figtree: 'Figtree Variable', 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --p-font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', menlo, monospace;
+}

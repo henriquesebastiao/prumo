@@ -1,0 +1,71 @@
+/*
+ * Tones: components take a `tone` prop (a module id or a status) rendered as `data-tone`.
+ * Each tone exposes the same five variables, so components never branch on the tone.
+ * A new module adds its --color-module-<id>* tokens to both themes and one block here.
+ *
+ * The block sits on every [data-tone] element, so the values resolve against the theme of
+ * that element (both themes can live side by side, as in /dev/ui).
+ */
+[data-tone] {
+  --tone: var(--color-text-secondary);
+  --tone-container: var(--color-fill);
+  --tone-on-container: var(--color-text-secondary);
+  --tone-soft: var(--color-neutral);
+  --tone-softer: var(--color-fill);
+}
+
+[data-tone='accent'] {
+  --tone: var(--color-accent);
+  --tone-container: var(--color-accent);
+  --tone-on-container: var(--color-accent-contrast);
+  --tone-soft: var(--color-text-secondary);
+  --tone-softer: var(--color-fill);
+}
+
+[data-tone='danger'] {
+  --tone: var(--color-danger);
+  --tone-container: var(--color-danger-container);
+  --tone-on-container: var(--color-on-danger-container);
+  --tone-soft: var(--color-danger);
+  --tone-softer: var(--color-danger-container);
+}
+
+[data-tone='success'] {
+  --tone: var(--color-success);
+  --tone-container: var(--color-success-container);
+  --tone-on-container: var(--color-on-success-container);
+  --tone-soft: var(--color-success);
+  --tone-softer: var(--color-success-container);
+}
+
+[data-tone='warning'] {
+  --tone: var(--color-warning);
+  --tone-container: var(--color-warning-container);
+  --tone-on-container: var(--color-on-warning-container);
+  --tone-soft: var(--color-warning);
+  --tone-softer: var(--color-warning-container);
+}
+
+[data-tone='finance'] {
+  --tone: var(--color-module-finance);
+  --tone-container: var(--color-module-finance-container);
+  --tone-on-container: var(--color-module-finance-on-container);
+  --tone-soft: var(--color-module-finance-soft);
+  --tone-softer: var(--color-module-finance-softer);
+}
+
+[data-tone='garage'] {
+  --tone: var(--color-module-garage);
+  --tone-container: var(--color-module-garage-container);
+  --tone-on-container: var(--color-module-garage-on-container);
+  --tone-soft: var(--color-module-garage-soft);
+  --tone-softer: var(--color-module-garage-softer);
+}
+
+[data-tone='reading'] {
+  --tone: var(--color-module-reading);
+  --tone-container: var(--color-module-reading-container);
+  --tone-on-container: var(--color-module-reading-on-container);
+  --tone-soft: var(--color-module-reading-soft);
+  --tone-softer: var(--color-module-reading-softer);
+}

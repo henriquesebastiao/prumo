@@ -1,0 +1,189 @@
+{
+  "app": {
+    "name": "Prumo",
+    "tagline": "Sua vida no prumo.",
+    "description": "Veículos, finanças e leituras organizados em um só lugar — no seu próprio servidor.",
+    "openSource": "Código aberto · self-hosted",
+    "skipToContent": "Pular para o conteúdo"
+  },
+  "ui": {
+    "optional": "opcional",
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha",
+    "noResults": "Nada encontrado.",
+    "decrease": "Diminuir",
+    "increase": "Aumentar",
+    "loadingServer": "Carregando dados do servidor…",
+    "loadFailed": "Não foi possível carregar os dados",
+    "retry": "Tentar de novo",
+    "details": "Ver detalhes",
+    "sortable": {
+      "handle": "Mover {item}",
+      "instructions": "Use as setas para cima e para baixo para mudar a posição.",
+      "moved": "{item} na posição {position} de {total}."
+    }
+  },
+  "nav": {
+    "main": "Navegação principal",
+    "home": "Início",
+    "homeLink": "Prumo, Início",
+    "modules": "Módulos",
+    "settings": "Configurações",
+    "more": "Mais",
+    "register": "Registrar",
+    "account": "Conta"
+  },
+  "theme": {
+    "label": "Tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Automático",
+    "systemHint": "segue o sistema"
+  },
+  "quickActions": {
+    "title": "Registrar",
+    "search": "O que você quer registrar?",
+    "empty": "Nenhuma ação disponível ainda. As ações aparecem quando um módulo está ativo.",
+    "hint": "Abra este menu de qualquer tela com a tecla {key}.",
+    "region": "Registro rápido"
+  },
+  "auth": {
+    "login": {
+      "about": "Sobre o Prumo",
+      "title": "Entrar",
+      "subtitle": "Use a conta criada na instalação.",
+      "username": "Usuário",
+      "password": "Senha",
+      "remember": "Manter conectado neste dispositivo",
+      "submit": "Entrar",
+      "forgot": "Esqueceu a senha? Ela pode ser redefinida pelo terminal do servidor onde o Prumo está instalado.",
+      "failed": "Não foi possível entrar"
+    },
+    "logout": "Sair"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Bom dia, {name}",
+      "afternoon": "Boa tarde, {name}",
+      "evening": "Boa noite, {name}"
+    },
+    "noModules": {
+      "title": "Nenhum módulo instalado",
+      "description": "Quando um módulo for instalado no servidor, o resumo dele aparece aqui."
+    },
+    "allDisabled": {
+      "title": "Todos os módulos estão desativados",
+      "description": "Ative um módulo para ver o resumo dele no Início.",
+      "action": "Escolher módulos"
+    },
+    "loadFailed": "Não foi possível carregar o Início"
+  },
+  "settings": {
+    "overline": "Instância pessoal",
+    "title": "Configurações",
+    "sections": "Seções",
+    "profile": {
+      "title": "Perfil",
+      "save": "Salvar alterações",
+      "name": "Nome",
+      "username": "Usuário",
+      "usernameHint": "Definido na instalação.",
+      "password": "Senha",
+      "changePassword": "Alterar senha",
+      "saved": "Perfil atualizado"
+    },
+    "password": {
+      "title": "Alterar senha",
+      "current": "Senha atual",
+      "new": "Nova senha",
+      "confirm": "Repita a nova senha",
+      "hint": "Pelo menos 8 caracteres. As outras sessões serão encerradas.",
+      "mismatch": "As senhas não conferem.",
+      "submit": "Alterar senha",
+      "changed": "Senha alterada. As outras sessões foram encerradas."
+    },
+    "appearance": {
+      "nav": "Aparência",
+      "title": "Tema",
+      "description": "Fica salvo na sua conta e vale para a web em qualquer navegador."
+    },
+    "modules": {
+      "title": "Módulos",
+      "description": "Arraste para mudar a ordem no menu. Um módulo desativado sai da navegação, mas os dados continuam guardados.",
+      "note": "Novos módulos aparecem aqui quando forem instalados no servidor, já com cor e ícone próprios.",
+      "empty": "Nenhum módulo instalado no servidor ainda.",
+      "toggle": "Módulo {name} ativo",
+      "list": "Módulos instalados",
+      "saved": "Módulos atualizados"
+    },
+    "sessions": {
+      "title": "Sessões",
+      "description": "Dispositivos conectados à sua conta. Encerre os que você não reconhece.",
+      "current": "Este dispositivo",
+      "web": "Navegador",
+      "app": "App",
+      "unknownDevice": "Dispositivo sem nome",
+      "lastUsed": "Último uso: {when}",
+      "expires": "expira em {date}",
+      "end": "Encerrar",
+      "confirmTitle": "Encerrar sessão?",
+      "confirmDescription": "{device} será desconectado e precisará entrar de novo.",
+      "ended": "Sessão encerrada",
+      "loadFailed": "Não foi possível carregar as sessões"
+    }
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "O endereço não existe ou foi movido.",
+    "action": "Voltar ao Início"
+  },
+  "errors": {
+    "unknown": "Algo deu errado. Tente de novo.",
+    "network_error": "O servidor não respondeu. Verifique se a sua instância está no ar.",
+    "internal_error": "O servidor encontrou um erro. Tente de novo em instantes.",
+    "http_error": "O servidor recusou a requisição.",
+    "validation_error": "Confira os campos destacados.",
+    "not_found": "Não encontrado.",
+    "conflict": "Já existe um registro igual.",
+    "forbidden": "Ação não permitida.",
+    "rate_limited": "Muitas tentativas. Aguarde um pouco e tente de novo.",
+    "method_not_allowed": "Ação não permitida.",
+    "auth": {
+      "required": "Sua sessão terminou. Entre de novo.",
+      "session_expired": "Sua sessão expirou. Entre de novo.",
+      "invalid_credentials": "Usuário ou senha incorretos.",
+      "rate_limited": "Muitas tentativas sem sucesso. Aguarde alguns minutos e tente de novo.",
+      "client_header_required": "O servidor recusou a requisição.",
+      "wrong_password": "A senha atual está incorreta."
+    },
+    "users": {
+      "password_too_short": "A senha precisa de pelo menos {min_length} caracteres.",
+      "password_too_long": "A senha pode ter no máximo {max_length} caracteres.",
+      "invalid_username": "Use de 2 a 32 letras, números, ponto, hífen ou sublinhado.",
+      "invalid_name": "O nome precisa ter de 1 a 80 caracteres.",
+      "username_taken": "Esse usuário já existe."
+    }
+  },
+  "fieldErrors": {
+    "invalid": "Valor inválido.",
+    "missing": "Campo obrigatório.",
+    "not_nullable": "Campo obrigatório.",
+    "string_too_short": "Muito curto.",
+    "string_too_long": "Muito longo.",
+    "string_pattern_mismatch": "Formato inválido.",
+    "greater_than": "Valor muito baixo.",
+    "greater_than_equal": "Valor muito baixo.",
+    "less_than": "Valor muito alto.",
+    "less_than_equal": "Valor muito alto.",
+    "int_parsing": "Informe um número inteiro.",
+    "float_parsing": "Informe um número.",
+    "enum": "Escolha uma das opções.",
+    "literal_error": "Escolha uma das opções.",
+    "invalid_timezone": "Fuso horário desconhecido.",
+    "unknown_module": "Módulo desconhecido.",
+    "duplicate_items": "Itens repetidos."
+  }
+}

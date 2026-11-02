@@ -1,0 +1,56 @@
+/* Semantic tokens: dark theme. */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: var(--p-night-1000);
+  --color-surface: var(--p-night-900);
+  --color-surface-raised: var(--p-night-900);
+  --color-surface-inset: var(--p-night-850);
+  --color-surface-tint: var(--p-night-850);
+  --color-fill: var(--p-night-750);
+  --color-divider: var(--p-night-800);
+  --color-border: var(--p-night-700);
+  --color-border-strong: var(--p-night-600);
+  --color-text: var(--p-mist-50);
+  --color-text-secondary: var(--p-mist-200);
+  --color-text-muted: var(--p-mist-400);
+  --color-neutral: var(--p-graphite-400);
+  --color-accent: var(--p-mist-50);
+  --color-accent-contrast: var(--p-night-1000);
+  --color-focus: var(--p-mist-50);
+  --color-knob: var(--p-sand-0);
+  --color-danger: var(--p-red-400);
+  --color-danger-container: var(--p-red-950);
+  --color-on-danger-container: var(--p-red-200);
+  --color-on-danger: var(--p-red-1000);
+  --color-success: var(--p-green-400);
+  --color-success-container: var(--p-green-950);
+  --color-on-success-container: var(--p-green-250);
+  --color-warning: var(--p-orange-400);
+  --color-warning-container: var(--p-orange-950);
+  --color-on-warning-container: var(--p-orange-250);
+  --color-scrim: rgb(0 0 0 / 60%);
+  --color-module-finance: var(--p-green-400);
+  --color-module-finance-container: var(--p-green-950);
+  --color-module-finance-on-container: var(--p-green-250);
+  --color-module-finance-soft: var(--p-green-650);
+  --color-module-finance-softer: var(--p-green-750);
+  --color-module-garage: var(--p-orange-400);
+  --color-module-garage-container: var(--p-orange-950);
+  --color-module-garage-on-container: var(--p-orange-250);
+  --color-module-garage-soft: var(--p-orange-750);
+  --color-module-garage-softer: var(--p-orange-950);
+  --color-module-reading: var(--p-violet-400);
+  --color-module-reading-container: var(--p-violet-950);
+  --color-module-reading-on-container: var(--p-violet-200);
+  --color-module-reading-soft: var(--p-violet-750);
+  --color-module-reading-softer: var(--p-violet-950);
+  --color-swatch-blue: var(--p-blue-500);
+  --color-swatch-pink: var(--p-pink-500);
+  --color-swatch-cyan: var(--p-cyan-500);
+  --shadow-sm: none;
+  --shadow-lg: 0 16px 40px rgb(0 0 0 / 55%);
+  --shadow-focus: 0 0 0 3px var(--color-fill);
+  --shadow-selected: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text);
+  --shadow-drop-indicator: inset 0 2px 0 var(--color-focus);
+}

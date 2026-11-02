@@ -1,0 +1,63 @@
+/* Semantic tokens: light theme. `:root` is the default before the theme is resolved. */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  --color-bg: var(--p-sand-100);
+  --color-surface: var(--p-sand-0);
+  --color-surface-raised: var(--p-sand-0);
+  --color-surface-inset: var(--p-sand-50);
+  --color-surface-tint: var(--p-sand-100);
+  --color-fill: var(--p-sand-150);
+  --color-divider: var(--p-sand-200);
+  --color-border: var(--p-sand-300);
+  --color-border-strong: var(--p-sand-400);
+  --color-text: var(--p-graphite-900);
+  --color-text-secondary: var(--p-graphite-700);
+  --color-text-muted: var(--p-graphite-500);
+  --color-neutral: var(--p-graphite-400);
+  --color-accent: var(--p-graphite-900);
+  --color-accent-contrast: var(--p-sand-0);
+  --color-focus: var(--p-graphite-900);
+  --color-knob: var(--p-sand-0);
+  --color-danger: var(--p-red-600);
+  --color-danger-container: var(--p-red-50);
+  --color-on-danger-container: var(--p-red-800);
+  --color-on-danger: var(--p-red-0);
+
+  /* Not in design v1: derived from the module hues for generic positive/attention states. */
+  --color-success: var(--p-green-500);
+  --color-success-container: var(--p-green-50);
+  --color-on-success-container: var(--p-green-800);
+  --color-warning: var(--p-orange-500);
+  --color-warning-container: var(--p-orange-50);
+  --color-on-warning-container: var(--p-orange-800);
+  --color-scrim: rgb(28 27 31 / 42%);
+
+  /* Modules: main, container, text on container, soft (history in charts), softer (ramp end) */
+  --color-module-finance: var(--p-green-500);
+  --color-module-finance-container: var(--p-green-50);
+  --color-module-finance-on-container: var(--p-green-800);
+  --color-module-finance-soft: var(--p-green-300);
+  --color-module-finance-softer: var(--p-green-150);
+  --color-module-garage: var(--p-orange-500);
+  --color-module-garage-container: var(--p-orange-50);
+  --color-module-garage-on-container: var(--p-orange-800);
+  --color-module-garage-soft: var(--p-orange-200);
+  --color-module-garage-softer: var(--p-orange-50);
+  --color-module-reading: var(--p-violet-500);
+  --color-module-reading-container: var(--p-violet-50);
+  --color-module-reading-on-container: var(--p-violet-700);
+  --color-module-reading-soft: var(--p-violet-150);
+  --color-module-reading-softer: var(--p-violet-50);
+
+  /* User colors (accounts, categories) */
+  --color-swatch-blue: var(--p-blue-500);
+  --color-swatch-pink: var(--p-pink-500);
+  --color-swatch-cyan: var(--p-cyan-500);
+  --shadow-sm: 0 1px 2px rgb(28 27 31 / 6%);
+  --shadow-lg: 0 16px 40px rgb(28 27 31 / 18%);
+  --shadow-focus: 0 0 0 3px var(--color-fill);
+  --shadow-selected: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text);
+  --shadow-drop-indicator: inset 0 2px 0 var(--color-focus);
+}

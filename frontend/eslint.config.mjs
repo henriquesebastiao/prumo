@@ -46,8 +46,9 @@ export default defineConfigWithVueTs(
     },
   },
   {
-    name: 'app/tests',
-    files: ['src/**/*.test.ts', 'e2e/**/*.ts'],
+    // Tests and the /dev/ui showcase (development only, never shipped) may use literal text.
+    name: 'app/tests-and-showcase',
+    files: ['src/**/*.test.ts', 'e2e/**/*.ts', 'src/system/dev-ui/**'],
     rules: { 'vue/no-bare-strings-in-template': 'off' },
   },
   skipFormatting,

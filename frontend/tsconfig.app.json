@@ -13,6 +13,7 @@
     }
   },
   "vueCompilerOptions": {
-    "strictTemplates": true
+    "checkUnknownComponents": true,
+    "checkUnknownDirectives": true
   }
 }
