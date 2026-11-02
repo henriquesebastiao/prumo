@@ -38,13 +38,15 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 ## Fase 1 — Veículos (`garage`)
 
 ### Backend
-- [ ] Veículos: CRUD e arquivamento
-- [ ] Odômetro: leituras, consistência cronológica e km atual
-- [ ] Oficinas: busca para autocompletar e criação implícita
-- [ ] Manutenções com itens (peças) e total calculado
-- [ ] Troca de óleo: sugestão da próxima e status (ok, em breve, atrasada)
-- [ ] Abastecimentos: preço por litro e consumo pelo método do tanque cheio
-- [ ] Detalhe do veículo com informações rápidas e resumo do módulo para o Início
+- [x] Veículos: CRUD e arquivamento
+- [x] Odômetro: leituras, consistência cronológica e km atual
+- [x] Oficinas: busca para autocompletar e criação implícita
+- [x] Manutenções com itens (peças) e total calculado
+- [x] Troca de óleo: sugestão da próxima e status (ok, em breve, atrasada)
+- [x] Abastecimentos: preço por litro e consumo pelo método do tanque cheio
+- [x] Detalhe do veículo com informações rápidas e resumo do módulo para o Início
+- [x] Extras do design (D27): combustível habitual, óleo utilizado, ritmo de uso, km do mês, histórico de consumo, listas entre veículos e oficinas
+- [x] "Vem aí" e "Atividade recente" no dashboard (D28)
 
 ### Frontend
 - [ ] Lista de veículos, cadastro e edição

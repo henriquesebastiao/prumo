@@ -1,10 +1,11 @@
 from collections.abc import Iterator
 from datetime import datetime
+from enum import StrEnum
 from functools import lru_cache
 from typing import Any, ClassVar
 from uuid import UUID, uuid7
 
-from sqlalchemy import DateTime, Engine, ForeignKey, MetaData, create_engine, func
+from sqlalchemy import DateTime, Engine, Enum, ForeignKey, MetaData, create_engine, func
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -29,6 +30,18 @@ NAMING_CONVENTION = {
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
     type_annotation_map: ClassVar[dict[Any, Any]] = {datetime: DateTime(timezone=True)}
+
+
+def string_enum[E: StrEnum](enum: type[E], name: str, length: int = 24) -> Enum:
+    """Enum stored as text with a CHECK constraint (portable, easy to extend in migrations)."""
+    return Enum(
+        enum,
+        name=name,
+        native_enum=False,
+        create_constraint=True,
+        length=length,
+        values_callable=lambda members: [member.value for member in members],
+    )
 
 
 class IdMixin:

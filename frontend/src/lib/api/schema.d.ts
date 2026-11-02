@@ -203,17 +203,370 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/garage/overview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Overview
+     * @description Month summary of all vehicles (fuel, km driven) and the next oil change due.
+     */
+    get: operations['garage_read_overview']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Vehicles */
+    get: operations['garage_list_vehicles']
+    put?: never
+    /** Create Vehicle */
+    post: operations['garage_create_vehicle']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Vehicle */
+    get: operations['garage_read_vehicle']
+    put?: never
+    post?: never
+    /**
+     * Delete Vehicle
+     * @description Deletes the vehicle and all its history (G11). Prefer archiving.
+     */
+    delete: operations['garage_delete_vehicle']
+    options?: never
+    head?: never
+    /** Update Vehicle */
+    patch: operations['garage_update_vehicle']
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Vehicle */
+    post: operations['garage_archive_vehicle']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Vehicle */
+    post: operations['garage_unarchive_vehicle']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/odometer': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Odometer */
+    get: operations['garage_list_odometer']
+    put?: never
+    /** Create Odometer Reading */
+    post: operations['garage_create_odometer_reading']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/odometer/{reading_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Odometer Reading */
+    delete: operations['garage_delete_odometer_reading']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/maintenances': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List All Maintenances
+     * @description Maintenances of every vehicle.
+     */
+    get: operations['garage_list_all_maintenances']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/maintenances': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Maintenances */
+    get: operations['garage_list_maintenances']
+    put?: never
+    /** Create Maintenance */
+    post: operations['garage_create_maintenance']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/maintenances/{maintenance_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Maintenance */
+    get: operations['garage_read_maintenance']
+    put?: never
+    post?: never
+    /** Delete Maintenance */
+    delete: operations['garage_delete_maintenance']
+    options?: never
+    head?: never
+    /** Update Maintenance */
+    patch: operations['garage_update_maintenance']
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/oil-change-suggestion': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Oil Change Suggestion
+     * @description Next oil change for a km and date (defaults: current km, today), plus oils used before.
+     */
+    get: operations['garage_read_oil_change_suggestion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/fuelings': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List All Fuelings
+     * @description Fuelings of every vehicle. `from` and `to` are days in the user's time zone.
+     */
+    get: operations['garage_list_all_fuelings']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/fuelings': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Fuelings */
+    get: operations['garage_list_fuelings']
+    put?: never
+    /** Create Fueling */
+    post: operations['garage_create_fueling']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/vehicles/{vehicle_id}/fuelings/{fueling_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Fueling */
+    get: operations['garage_read_fueling']
+    put?: never
+    post?: never
+    /** Delete Fueling */
+    delete: operations['garage_delete_fueling']
+    options?: never
+    head?: never
+    /** Update Fueling */
+    patch: operations['garage_update_fueling']
+    trace?: never
+  }
+  '/api/v1/garage/workshops': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Workshops
+     * @description Workshops with usage statistics, filtered by name (`q`).
+     */
+    get: operations['garage_list_workshops']
+    put?: never
+    /** Create Workshop */
+    post: operations['garage_create_workshop']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/garage/workshops/{workshop_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Workshop */
+    delete: operations['garage_delete_workshop']
+    options?: never
+    head?: never
+    /** Update Workshop */
+    patch: operations['garage_update_workshop']
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    /**
+     * ActivityItem
+     * @description A recent record ("Atividade recente" on Início).
+     */
+    ActivityItem: {
+      /** Module */
+      module: string
+      /**
+       * Kind
+       * @description Stable code, translated by clients: `garage.fueling`.
+       */
+      kind: string
+      /**
+       * Occurred At
+       * Format: date-time
+       */
+      occurred_at: string
+      /** Subject */
+      subject: string
+      /** Entity Id */
+      entity_id?: string | null
+      /** Data */
+      data?: {
+        [key: string]: components['schemas']['EventValue']
+      }
+    }
+    /** ConsumptionPoint */
+    ConsumptionPoint: {
+      /**
+       * Fueling Id
+       * Format: uuid
+       */
+      fueling_id: string
+      /**
+       * Fueled At
+       * Format: date-time
+       */
+      fueled_at: string
+      /** Km L */
+      km_l: number
+    }
     /** DashboardRead */
     DashboardRead: {
       /**
        * Modules
        * @description Summaries of the enabled modules, in the user's order.
        */
-      modules: components['schemas']['ModuleSummary'][]
+      modules: components['schemas']['GarageSummary'][]
+      /**
+       * Upcoming
+       * @description Due items of the enabled modules (next 60 days), by date.
+       */
+      upcoming: components['schemas']['UpcomingItem'][]
+      /**
+       * Activity
+       * @description Recent records of the enabled modules, newest first.
+       */
+      activity: components['schemas']['ActivityItem'][]
     }
     /** ErrorBody */
     ErrorBody: {
@@ -241,6 +594,129 @@ export interface components {
     ErrorResponse: {
       error: components['schemas']['ErrorBody']
     }
+    EventValue: string | number | boolean | null
+    /**
+     * FuelType
+     * @enum {string}
+     */
+    FuelType: 'gasoline' | 'gasoline_additive' | 'gasoline_premium' | 'ethanol' | 'diesel' | 'cng'
+    /** FuelingCreate */
+    FuelingCreate: {
+      /**
+       * Fueled At
+       * Format: date-time
+       */
+      fueled_at: string
+      /** Km */
+      km: number
+      /** @description Defaults to the vehicle's usual fuel (required if it has none). */
+      fuel_type?: components['schemas']['FuelType'] | null
+      /** Volume Ml */
+      volume_ml: number
+      /** Total Cents */
+      total_cents: number
+      /**
+       * Full Tank
+       * @default true
+       */
+      full_tank?: boolean
+      /** Notes */
+      notes?: string | null
+    }
+    /** FuelingRead */
+    FuelingRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      vehicle: components['schemas']['VehicleRef']
+      /**
+       * Fueled At
+       * Format: date-time
+       */
+      fueled_at: string
+      /** Km */
+      km: number
+      fuel_type: components['schemas']['FuelType']
+      /** Volume Ml */
+      volume_ml: number
+      /** Total Cents */
+      total_cents: number
+      /**
+       * Price Per Liter
+       * @description R$ per litre, 3 decimals (G7).
+       */
+      price_per_liter: number
+      /** Full Tank */
+      full_tank: boolean
+      /**
+       * Consumption Km L
+       * @description km/l of the full-tank cycle this fueling closes (G8), 2 decimals.
+       */
+      consumption_km_l: number | null
+      /** Notes */
+      notes: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** FuelingUpdate */
+    FuelingUpdate: {
+      /** Fueled At */
+      fueled_at?: string | null
+      /** Km */
+      km?: number | null
+      fuel_type?: components['schemas']['FuelType'] | null
+      /** Volume Ml */
+      volume_ml?: number | null
+      /** Total Cents */
+      total_cents?: number | null
+      /** Full Tank */
+      full_tank?: boolean | null
+      /** Notes */
+      notes?: string | null
+    }
+    /** GarageOverview */
+    GarageOverview: {
+      /**
+       * Month
+       * @example 2026-11
+       */
+      month: string
+      /** Month Fuel Cents */
+      month_fuel_cents: number
+      /** Month Fuelings Count */
+      month_fuelings_count: number
+      /** Month Km */
+      month_km: number
+      /** Vehicles Km */
+      vehicles_km: components['schemas']['VehicleKm'][]
+      next_due: components['schemas']['NextDue'] | null
+    }
+    /** GarageSummary */
+    GarageSummary: {
+      /**
+       * Module
+       * @default garage
+       * @constant
+       */
+      module?: 'garage'
+      /** Vehicles Count */
+      vehicles_count: number
+      next_due: components['schemas']['NextDue'] | null
+      /** Vehicles */
+      vehicles: components['schemas']['SummaryVehicle'][]
+      /** Month Fuel Cents */
+      month_fuel_cents: number
+    }
     /** Health */
     Health: {
       /**
@@ -255,6 +731,44 @@ export interface components {
       database: 'ok' | 'unavailable'
       /** Version */
       version: string
+    }
+    /** LastFuelingRead */
+    LastFuelingRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Fueled At
+       * Format: date-time
+       */
+      fueled_at: string
+      /** Volume Ml */
+      volume_ml: number
+      /** Total Cents */
+      total_cents: number
+      /** Price Per Liter */
+      price_per_liter: number
+      /** Full Tank */
+      full_tank: boolean
+    }
+    /** LastOilChangeRead */
+    LastOilChangeRead: {
+      /**
+       * Maintenance Id
+       * Format: uuid
+       */
+      maintenance_id: string
+      /**
+       * Performed At
+       * Format: date-time
+       */
+      performed_at: string
+      /** Km */
+      km: number
+      /** Oil Type */
+      oil_type: string | null
     }
     /** LoginRequest */
     LoginRequest: {
@@ -290,6 +804,149 @@ export interface components {
        */
       token?: string | null
     }
+    /** MaintenanceCreate */
+    MaintenanceCreate: {
+      /** @default general */
+      kind?: components['schemas']['MaintenanceKind']
+      /**
+       * Performed At
+       * Format: date-time
+       */
+      performed_at: string
+      /** Km */
+      km: number
+      /** Workshop Id */
+      workshop_id?: string | null
+      /**
+       * Workshop Name
+       * @description Used when `workshop_id` is absent; creates the workshop if new.
+       */
+      workshop_name?: string | null
+      /**
+       * Labor Cost Cents
+       * @default 0
+       */
+      labor_cost_cents?: number
+      /** Notes */
+      notes?: string | null
+      /** Oil Type */
+      oil_type?: string | null
+      /**
+       * Next Oil Change Km
+       * @description Absent: suggested from the interval. `null`: no forecast.
+       */
+      next_oil_change_km?: number | null
+      /**
+       * Next Oil Change On
+       * @description Absent: suggested from the interval. `null`: no forecast.
+       */
+      next_oil_change_on?: string | null
+      /** Items */
+      items?: components['schemas']['MaintenanceItemIn'][]
+    }
+    /** MaintenanceItemIn */
+    MaintenanceItemIn: {
+      /** Description */
+      description: string
+      /**
+       * Quantity
+       * @default 1
+       */
+      quantity?: number
+      /** Unit Price Cents */
+      unit_price_cents: number
+    }
+    /** MaintenanceItemRead */
+    MaintenanceItemRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Description */
+      description: string
+      /** Quantity */
+      quantity: number
+      /** Unit Price Cents */
+      unit_price_cents: number
+      /** Total Cents */
+      total_cents: number
+    }
+    /**
+     * MaintenanceKind
+     * @enum {string}
+     */
+    MaintenanceKind: 'general' | 'oil_change'
+    /** MaintenanceRead */
+    MaintenanceRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      vehicle: components['schemas']['VehicleRef']
+      kind: components['schemas']['MaintenanceKind']
+      /**
+       * Performed At
+       * Format: date-time
+       */
+      performed_at: string
+      /** Km */
+      km: number
+      workshop: components['schemas']['WorkshopRef'] | null
+      /** Labor Cost Cents */
+      labor_cost_cents: number
+      /** Parts Cents */
+      parts_cents: number
+      /** Total Cents */
+      total_cents: number
+      /** Notes */
+      notes: string | null
+      /** Oil Type */
+      oil_type: string | null
+      /** Next Oil Change Km */
+      next_oil_change_km: number | null
+      /** Next Oil Change On */
+      next_oil_change_on: string | null
+      /** Items */
+      items: components['schemas']['MaintenanceItemRead'][]
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /**
+     * MaintenanceUpdate
+     * @description Partial update. `items`, when present, replaces all the items.
+     */
+    MaintenanceUpdate: {
+      /** Performed At */
+      performed_at?: string | null
+      /** Km */
+      km?: number | null
+      /** Workshop Id */
+      workshop_id?: string | null
+      /** Workshop Name */
+      workshop_name?: string | null
+      /** Labor Cost Cents */
+      labor_cost_cents?: number | null
+      /** Notes */
+      notes?: string | null
+      /** Oil Type */
+      oil_type?: string | null
+      /** Next Oil Change Km */
+      next_oil_change_km?: number | null
+      /** Next Oil Change On */
+      next_oil_change_on?: string | null
+      /** Items */
+      items?: components['schemas']['MaintenanceItemIn'][] | null
+    }
     /** ModuleList */
     ModuleList: {
       /** Items */
@@ -315,14 +972,190 @@ export interface components {
        */
       position: number
     }
+    /** NextDue */
+    NextDue: {
+      vehicle: components['schemas']['VehicleRef']
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'ok' | 'due_soon' | 'overdue' | 'unknown'
+      /**
+       * Primary
+       * @enum {string}
+       */
+      primary: 'km' | 'date'
+      /** Remaining Km */
+      remaining_km: number | null
+      /** Remaining Days */
+      remaining_days: number | null
+      /** Used Percent */
+      used_percent: number | null
+      /**
+       * Due On
+       * @description Expected day (pace for km, date otherwise).
+       */
+      due_on: string | null
+    }
+    /** OdometerReadingCreate */
+    OdometerReadingCreate: {
+      /** Km */
+      km: number
+      /**
+       * Recorded At
+       * @description Defaults to now.
+       */
+      recorded_at?: string | null
+    }
+    /** OdometerReadingRead */
+    OdometerReadingRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Km */
+      km: number
+      /**
+       * Recorded At
+       * Format: date-time
+       */
+      recorded_at: string
+      source: components['schemas']['ReadingSource']
+      /** Source Id */
+      source_id: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
     /**
-     * ModuleSummary
-     * @description Base of every dashboard summary. Subclasses narrow `module` to `Literal["<module id>"]`,
-     *     which is the discriminator of the dashboard union.
+     * OilChangeRead
+     * @description G6. `null` on the vehicle when it has no oil interval (G1).
      */
-    ModuleSummary: {
-      /** Module */
-      module: string
+    OilChangeRead: {
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'ok' | 'due_soon' | 'overdue' | 'unknown'
+      /**
+       * Primary
+       * @description Criterion that is due first.
+       */
+      primary: ('km' | 'date') | null
+      /** Interval Km */
+      interval_km: number | null
+      /** Interval Months */
+      interval_months: number | null
+      last: components['schemas']['LastOilChangeRead'] | null
+      /** Next Km */
+      next_km: number | null
+      /** Remaining Km */
+      remaining_km: number | null
+      /**
+       * Used Km Percent
+       * @description 0-100: share of the km interval used.
+       */
+      used_km_percent: number | null
+      /** Next On */
+      next_on: string | null
+      /** Remaining Days */
+      remaining_days: number | null
+      /**
+       * Used Days Percent
+       * @description 0-100: share of the time interval used.
+       */
+      used_days_percent: number | null
+      /**
+       * Estimated Km On
+       * @description When the km criterion should be due at the current pace (G12).
+       */
+      estimated_km_on: string | null
+    }
+    /** OilChangeSuggestion */
+    OilChangeSuggestion: {
+      /** Next Oil Change Km */
+      next_oil_change_km: number | null
+      /** Next Oil Change On */
+      next_oil_change_on: string | null
+      /** Interval Km */
+      interval_km: number | null
+      /** Interval Months */
+      interval_months: number | null
+      /** Pace Km Per Day */
+      pace_km_per_day: number | null
+      /**
+       * Estimated Km On
+       * @description When the suggested km would be reached.
+       */
+      estimated_km_on: string | null
+      /**
+       * Previous Oil Types
+       * @description Oils used before, most recent first.
+       */
+      previous_oil_types: string[]
+    }
+    /** Page[FuelingRead] */
+    Page_FuelingRead_: {
+      /** Items */
+      items: components['schemas']['FuelingRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[MaintenanceRead] */
+    Page_MaintenanceRead_: {
+      /** Items */
+      items: components['schemas']['MaintenanceRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[OdometerReadingRead] */
+    Page_OdometerReadingRead_: {
+      /** Items */
+      items: components['schemas']['OdometerReadingRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[VehicleRead] */
+    Page_VehicleRead_: {
+      /** Items */
+      items: components['schemas']['VehicleRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[WorkshopRead] */
+    Page_WorkshopRead_: {
+      /** Items */
+      items: components['schemas']['WorkshopRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
     }
     /** PasswordChange */
     PasswordChange: {
@@ -384,6 +1217,11 @@ export interface components {
       enabled_modules?: string[] | null
     }
     /**
+     * ReadingSource
+     * @enum {string}
+     */
+    ReadingSource: 'manual' | 'maintenance' | 'fueling'
+    /**
      * SessionClient
      * @enum {string}
      */
@@ -429,11 +1267,59 @@ export interface components {
        */
       updated_at: string
     }
+    /** SummaryVehicle */
+    SummaryVehicle: {
+      vehicle: components['schemas']['VehicleRef']
+      /** Current Km */
+      current_km: number
+      /** Oil Primary */
+      oil_primary: ('km' | 'date') | null
+      /** Oil Status */
+      oil_status: ('ok' | 'due_soon' | 'overdue' | 'unknown') | null
+      /** Remaining Km */
+      remaining_km: number | null
+      /** Remaining Days */
+      remaining_days: number | null
+      /** Used Percent */
+      used_percent: number | null
+    }
     /**
      * Theme
      * @enum {string}
      */
     Theme: 'system' | 'light' | 'dark'
+    /**
+     * UpcomingItem
+     * @description Something due on a day ("Vem aí" on Início): an oil change, an invoice closing…
+     */
+    UpcomingItem: {
+      /** Module */
+      module: string
+      /**
+       * Kind
+       * @description Stable code, translated by clients: `garage.oil_change`.
+       */
+      kind: string
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      /**
+       * Subject
+       * @description What it is about, such as the vehicle name.
+       */
+      subject: string
+      /** Entity Id */
+      entity_id?: string | null
+      /**
+       * Data
+       * @description Values of the event, documented per `kind`.
+       */
+      data?: {
+        [key: string]: components['schemas']['EventValue']
+      }
+    }
     /** UserRead */
     UserRead: {
       /**
@@ -462,6 +1348,198 @@ export interface components {
     UserUpdate: {
       /** Display Name */
       display_name?: string | null
+    }
+    /** VehicleCreate */
+    VehicleCreate: {
+      kind: components['schemas']['VehicleKind']
+      /**
+       * Name
+       * @description Nickname shown in Prumo.
+       */
+      name: string
+      /** Brand */
+      brand: string
+      /** Model */
+      model: string
+      /** Year */
+      year: number
+      /** @description Usual fuel (pre-selected). */
+      fuel_type?: components['schemas']['FuelType'] | null
+      /**
+       * Current Km
+       * @description Odometer at registration; creates the first reading.
+       */
+      current_km: number
+      /** Oil Interval Km */
+      oil_interval_km?: number | null
+      /** Oil Interval Months */
+      oil_interval_months?: number | null
+      /** Notes */
+      notes?: string | null
+    }
+    /**
+     * VehicleKind
+     * @enum {string}
+     */
+    VehicleKind: 'car' | 'motorcycle'
+    /** VehicleKm */
+    VehicleKm: {
+      vehicle: components['schemas']['VehicleRef']
+      /** Km */
+      km: number
+    }
+    /** VehicleRead */
+    VehicleRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      kind: components['schemas']['VehicleKind']
+      /** Name */
+      name: string
+      /** Brand */
+      brand: string
+      /** Model */
+      model: string
+      /** Year */
+      year: number
+      fuel_type: components['schemas']['FuelType'] | null
+      /** Current Km */
+      current_km: number
+      /**
+       * Current Km At
+       * Format: date-time
+       */
+      current_km_at: string
+      /** Oil Interval Km */
+      oil_interval_km: number | null
+      /** Oil Interval Months */
+      oil_interval_months: number | null
+      /** Notes */
+      notes: string | null
+      /** Archived At */
+      archived_at: string | null
+      oil_change: components['schemas']['OilChangeRead'] | null
+      stats: components['schemas']['VehicleStats']
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** VehicleRef */
+    VehicleRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      kind: components['schemas']['VehicleKind']
+    }
+    /** VehicleStats */
+    VehicleStats: {
+      last_fueling: components['schemas']['LastFuelingRead'] | null
+      /** Last Consumption Km L */
+      last_consumption_km_l: number | null
+      /** Avg Consumption Km L */
+      avg_consumption_km_l: number | null
+      /**
+       * Recent Consumption
+       * @description Last 5 full-tank cycles.
+       */
+      recent_consumption: components['schemas']['ConsumptionPoint'][]
+      /** Pace Km Per Day */
+      pace_km_per_day: number | null
+      /** Month Km */
+      month_km: number
+      /** Month Spent Cents */
+      month_spent_cents: number
+      /** Month Fuelings Count */
+      month_fuelings_count: number
+      /** Month Maintenances Count */
+      month_maintenances_count: number
+    }
+    /** VehicleUpdate */
+    VehicleUpdate: {
+      kind?: components['schemas']['VehicleKind'] | null
+      /** Name */
+      name?: string | null
+      /** Brand */
+      brand?: string | null
+      /** Model */
+      model?: string | null
+      /** Year */
+      year?: number | null
+      fuel_type?: components['schemas']['FuelType'] | null
+      /**
+       * Current Km
+       * @description A different value records a manual reading now.
+       */
+      current_km?: number | null
+      /** Oil Interval Km */
+      oil_interval_km?: number | null
+      /** Oil Interval Months */
+      oil_interval_months?: number | null
+      /** Notes */
+      notes?: string | null
+    }
+    /** WorkshopCreate */
+    WorkshopCreate: {
+      /** Name */
+      name: string
+      /** Notes */
+      notes?: string | null
+    }
+    /** WorkshopRead */
+    WorkshopRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Notes */
+      notes: string | null
+      /** Maintenances Count */
+      maintenances_count: number
+      /** Last Maintenance At */
+      last_maintenance_at: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** WorkshopRef */
+    WorkshopRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+    }
+    /** WorkshopUpdate */
+    WorkshopUpdate: {
+      /** Name */
+      name?: string | null
+      /** Notes */
+      notes?: string | null
     }
   }
   responses: never
@@ -967,6 +2045,1710 @@ export interface operations {
       }
       /** @description Unauthorized */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_read_overview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GarageOverview']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_vehicles: {
+    parameters: {
+      query?: {
+        archived?: 'false' | 'true' | 'all'
+        limit?: number
+        offset?: number
+        /** @description One of: -created_at, -name, created_at, name. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_VehicleRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_create_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VehicleCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_read_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_delete_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_update_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['VehicleUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_archive_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_unarchive_vehicle: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_odometer: {
+    parameters: {
+      query?: {
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_OdometerReadingRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_create_odometer_reading: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OdometerReadingCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OdometerReadingRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_delete_odometer_reading: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        reading_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_all_maintenances: {
+    parameters: {
+      query?: {
+        vehicle_id?: string | null
+        kind?: components['schemas']['MaintenanceKind'] | null
+        workshop_id?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_MaintenanceRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_maintenances: {
+    parameters: {
+      query?: {
+        kind?: components['schemas']['MaintenanceKind'] | null
+        limit?: number
+        offset?: number
+        /** @description One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_MaintenanceRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_create_maintenance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['MaintenanceCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaintenanceRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_read_maintenance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        maintenance_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaintenanceRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_delete_maintenance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        maintenance_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_update_maintenance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        maintenance_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['MaintenanceUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaintenanceRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_read_oil_change_suggestion: {
+    parameters: {
+      query?: {
+        km?: number | null
+        on?: string | null
+      }
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OilChangeSuggestion']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_all_fuelings: {
+    parameters: {
+      query?: {
+        vehicle_id?: string | null
+        from?: string | null
+        to?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_FuelingRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_fuelings: {
+    parameters: {
+      query?: {
+        limit?: number
+        offset?: number
+        /** @description One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_FuelingRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_create_fueling: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FuelingCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FuelingRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_read_fueling: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        fueling_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FuelingRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_delete_fueling: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        fueling_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_update_fueling: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        fueling_id: string
+        vehicle_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FuelingUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FuelingRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_list_workshops: {
+    parameters: {
+      query?: {
+        q?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_WorkshopRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_create_workshop: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['WorkshopCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WorkshopRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_delete_workshop: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        workshop_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  garage_update_workshop: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        workshop_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['WorkshopUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WorkshopRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
         headers: {
           [name: string]: unknown
         }

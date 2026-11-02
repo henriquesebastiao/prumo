@@ -160,6 +160,24 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** vale F4: a compra no dia do fechamento cai na fatura seguinte (no exemplo, lançamentos de 03/11 a 02/12). A interface mostra o período calculado pela API.
 **Consequências:** o texto da prancha é tratado como erro do design.
 
+## D27 — Extras do design v1 em Veículos
+**Status:** aceita · 2026-11
+**Contexto:** o design v1 mostra dados que o domínio não tinha (G1–G8 da análise da Fase 0).
+**Decisão:** entram no domínio e na API: combustível habitual do veículo, óleo utilizado na troca (com sugestões), ritmo de uso com data estimada (G12), km rodados no mês (G13), histórico de consumo, listas de manutenções e abastecimentos entre veículos, oficinas com estatísticas, quantidade por peça (padrão 1) e mão de obra separada (exibida como linha "Serviço" só na interface).
+**Consequências:** mais valores derivados no backend, iguais para web e Android.
+
+## D28 — "Vem aí" e "Atividade recente" no dashboard
+**Status:** aceita · 2026-11
+**Contexto:** o Início do design agrega eventos de vários módulos.
+**Decisão:** `PrumoModule` ganha os provedores opcionais `upcoming` e `activity`, que devolvem itens genéricos (`UpcomingItem`, `ActivityItem`: `module`, `kind`, data ou horário, `subject`, `entity_id`, `data`). O dashboard junta os itens dos módulos ativos, ordena e limita (10 itens; `upcoming` até 60 dias à frente). Os clientes traduzem cada `kind`.
+**Consequências:** mudança aditiva no `GET /dashboard`. Cada módulo documenta os seus `kind` e os campos de `data` em `docs/api.md`.
+
+## D29 — Regras de odômetro e oficinas na implementação
+**Status:** aceita · 2026-11
+**Contexto:** pontos que o domínio deixava em aberto.
+**Decisão:** o km do formulário de edição do veículo registra uma leitura manual; a última leitura não pode ser excluída; o vão do intervalo de óleo é medido da última troca até a próxima prevista (respeita valores alterados pelo usuário); oficina com manutenções não pode ser excluída; o lint ignora `FAST003` porque parâmetros de caminho costumam ser consumidos por dependências (`VehicleDep`).
+**Consequências:** regras G2, G3, G6 e G10 detalhadas em `docs/dominio.md`.
+
 ---
 
 ## Modelo

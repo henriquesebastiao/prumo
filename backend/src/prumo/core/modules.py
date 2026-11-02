@@ -9,10 +9,12 @@ import re
 import typing
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from typing import Any, Literal
+from uuid import UUID
 
 from fastapi import APIRouter
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from prumo.core.events import Event, EventHandler, bus
@@ -22,6 +24,10 @@ MODULE_ID = re.compile(r"^[a-z][a-z0-9_]{1,31}$")
 # The user argument is the platform's `User` model; `core` cannot import it.
 type SummaryProvider = Callable[[Session, Any], "ModuleSummary"]
 type UserHook = Callable[[Session, Any], None]
+type UpcomingProvider = Callable[[Session, Any], list["UpcomingItem"]]
+type ActivityProvider = Callable[[Session, Any], list["ActivityItem"]]
+
+type EventValue = str | int | float | bool | None
 
 
 class ModuleSummary(BaseModel):
@@ -29,6 +35,30 @@ class ModuleSummary(BaseModel):
     which is the discriminator of the dashboard union."""
 
     module: str
+
+
+class UpcomingItem(BaseModel):
+    """Something due on a day ("Vem aí" on Início): an oil change, an invoice closing…"""
+
+    module: str
+    kind: str = Field(description="Stable code, translated by clients: `garage.oil_change`.")
+    on: date
+    subject: str = Field(description="What it is about, such as the vehicle name.")
+    entity_id: UUID | None = None
+    data: dict[str, EventValue] = Field(
+        default_factory=dict, description="Values of the event, documented per `kind`."
+    )
+
+
+class ActivityItem(BaseModel):
+    """A recent record ("Atividade recente" on Início)."""
+
+    module: str
+    kind: str = Field(description="Stable code, translated by clients: `garage.fueling`.")
+    occurred_at: datetime
+    subject: str
+    entity_id: UUID | None = None
+    data: dict[str, EventValue] = Field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -39,6 +69,8 @@ class PrumoModule:
     summary: SummaryProvider | None = None
     on_user_created: UserHook | None = None
     event_handlers: Mapping[type[Event], EventHandler] = field(default_factory=dict)
+    upcoming: UpcomingProvider | None = None
+    activity: ActivityProvider | None = None
 
     def __post_init__(self) -> None:
         if not MODULE_ID.match(self.id):

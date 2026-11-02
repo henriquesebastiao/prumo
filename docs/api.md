@@ -116,6 +116,8 @@ Todas abaixo de `/api/v1`. Resumo; o detalhe está no OpenAPI.
 | `GET /modules` | Módulos instalados na ordem do usuário: `{ "items": [{ "id", "version", "enabled", "position" }] }` |
 | `GET /dashboard` | `{ "modules": [ … ] }`: resumo de cada módulo ativo, na ordem do usuário (Início) |
 
+O dashboard também traz `upcoming` (próximos eventos de todos os módulos ativos, por data, até 10, nos próximos 60 dias, incluindo vencidos) e `activity` (registros recentes, do mais novo, até 10). Os dois itens têm `module`, `kind` (código estável, como `garage.oil_change` ou `garage.fueling`, que o cliente traduz), `subject` (nome do que se trata, como o veículo), `entity_id` e `data` (valores simples do evento, documentados por `kind` na seção do módulo); `upcoming` tem `on` (data) e `activity`, `occurred_at`.
+
 Cada resumo do dashboard é um schema do módulo que herda de `ModuleSummary` e fixa `module: Literal["<id>"]`; no OpenAPI, a lista é uma união discriminada por `module` (`oneOf` + `discriminator`). Sem módulos com resumo, os itens usam o schema base `ModuleSummary`.
 
 As preferências (`/me/preferences`) têm `theme` (`system` | `light` | `dark`), `locale` (`pt-BR`), `timezone` (IANA), `currency` (ISO 4217) e `enabled_modules` (ids, em ordem). No `PATCH`, `enabled_modules` lista os ativos na ordem desejada; os instalados que ficarem de fora são desativados. Nenhum desses campos aceita `null`.
@@ -123,18 +125,23 @@ As preferências (`/me/preferences`) têm `theme` (`system` | `light` | `dark`),
 ### Veículos (`/garage`)
 | Rota | Descrição |
 |---|---|
-| `GET, POST /garage/vehicles` | Lista (com status de óleo de cada um) e cadastro |
-| `GET, PATCH, DELETE /garage/vehicles/{id}` | Detalhe com informações rápidas (`oil_change`, `stats`), edição, exclusão |
+| `GET /garage/overview` | Resumo do mês: combustível (total e quantidade), km rodados (total e por veículo) e próximo vencimento de óleo |
+| `GET, POST /garage/vehicles` | Lista paginada (filtro `archived`: `false` padrão, `true`, `all`), já com `oil_change` e `stats`; cadastro (cria a leitura inicial) |
+| `GET, PATCH, DELETE /garage/vehicles/{id}` | Detalhe com informações rápidas (`oil_change`, `stats`), edição (`current_km` registra uma leitura manual), exclusão definitiva |
 | `POST /garage/vehicles/{id}/archive`, `/unarchive` | Arquivamento |
-| `GET, POST /garage/vehicles/{id}/odometer` | Histórico de km e nova leitura manual |
+| `GET, POST /garage/vehicles/{id}/odometer` | Histórico de km (mais recente primeiro) e nova leitura manual (`km`, `recorded_at` opcional) |
 | `DELETE /garage/vehicles/{id}/odometer/{reading_id}` | Remove leitura manual |
-| `GET, POST /garage/vehicles/{id}/maintenances` | Lista (filtro `kind=oil_change`) e cadastro com itens |
-| `GET, PATCH, DELETE /garage/vehicles/{id}/maintenances/{maintenance_id}` | |
-| `GET /garage/vehicles/{id}/oil-change-suggestion?km=…&on=…` | Próxima troca sugerida para um km e data informados (usado no formulário) |
+| `GET, POST /garage/vehicles/{id}/maintenances` | Lista (filtro `kind`) e cadastro com itens |
+| `GET, PATCH, DELETE /garage/vehicles/{id}/maintenances/{maintenance_id}` | Detalhe, edição (itens enviados substituem os atuais), exclusão |
+| `GET /garage/vehicles/{id}/oil-change-suggestion?km=…&on=…` | Próxima troca sugerida para um km e data, mais `previous_oil_types` (usado no formulário) |
 | `GET, POST /garage/vehicles/{id}/fuelings` | Lista e cadastro |
 | `GET, PATCH, DELETE /garage/vehicles/{id}/fuelings/{fueling_id}` | |
-| `GET, POST /garage/workshops` | Lista com busca (`q`) e cadastro |
-| `PATCH, DELETE /garage/workshops/{id}` | |
+| `GET /garage/maintenances` | Manutenções de todos os veículos (filtros `vehicle_id`, `kind`, `workshop_id`) |
+| `GET /garage/fuelings` | Abastecimentos de todos os veículos (filtros `vehicle_id`, `from`, `to`) |
+| `GET, POST /garage/workshops` | Lista com busca (`q`) e estatísticas (`maintenances_count`, `last_maintenance_at`); cadastro |
+| `PATCH, DELETE /garage/workshops/{id}` | Edição; exclusão só sem manutenções |
+
+Manutenções e abastecimentos retornam o resumo do veículo (`vehicle: { id, name, kind }`), o que permite listas entre veículos sem consultas extras. Manutenções retornam `items`, `parts_cents`, `total_cents` e `workshop` (`{ id, name }` ou `null`); abastecimentos retornam `price_per_liter` e `consumption_km_l` (do ciclo que fecham, ou `null`).
 
 Exemplo do bloco de informações rápidas no detalhe do veículo:
 
@@ -142,16 +149,33 @@ Exemplo do bloco de informações rápidas no detalhe do veículo:
 "oil_change": {
   "status": "due_soon",
   "primary": "km",
-  "next_km": 19000, "remaining_km": 580,
-  "next_on": "2026-12-10", "remaining_days": 38
+  "interval_km": 1000, "interval_months": 3,
+  "last": { "maintenance_id": "…", "performed_at": "2026-10-21T13:00:00Z", "km": 17640, "oil_type": "4T 20W-50 semissintético" },
+  "next_km": 18640, "remaining_km": 220, "used_km_percent": 78,
+  "next_on": "2027-01-21", "remaining_days": 65, "used_days_percent": 29,
+  "estimated_km_on": "2026-11-25"
 },
 "stats": {
-  "last_fueling": { "fueled_at": "2026-10-30T12:10:00Z", "volume_ml": 9800, "total_cents": 6260 },
-  "last_consumption_km_l": 39.1,
-  "avg_consumption_km_l": 38.4,
-  "month_spent_cents": 31250
+  "last_fueling": { "id": "…", "fueled_at": "2026-11-16T21:10:00Z", "volume_ml": 7300, "total_cents": 4636, "price_per_liter": 6.351, "full_tank": true },
+  "last_consumption_km_l": 40.1,
+  "avg_consumption_km_l": 40.4,
+  "recent_consumption": [ { "fueling_id": "…", "fueled_at": "2026-11-16T21:10:00Z", "km_l": 40.1 } ],
+  "pace_km_per_day": 29.3,
+  "month_km": 463,
+  "month_spent_cents": 9070, "month_fuelings_count": 2, "month_maintenances_count": 0
 }
 ```
+
+Itens do Início publicados pelo módulo:
+
+| `kind` | Onde | `subject` / `entity_id` | `data` |
+|---|---|---|---|
+| `garage.oil_change` | `upcoming` | veículo / veículo | `basis` (`km_pace` ou `date`), `status`, `remaining_km`, `remaining_days`, `pace_km_per_day`, `interval_months` |
+| `garage.odometer` | `activity` | veículo / veículo | `km` |
+| `garage.fueling` | `activity` | veículo / abastecimento | `vehicle_id`, `km`, `volume_ml`, `total_cents` |
+| `garage.maintenance` | `activity` | veículo / manutenção | `vehicle_id`, `maintenance_kind`, `km`, `total_cents`, `items_count`, `workshop` |
+
+Erros do módulo: `garage.odometer_inconsistent` (com `details.conflict`, `km`, `recorded_at`), `garage.last_reading`, `garage.reading_not_manual`, `garage.workshop_in_use`, `garage.workshop_exists`, `garage.oil_fields_require_oil_change`, `garage.fuel_type_required`.
 
 ### Finanças (`/finance`)
 | Rota | Descrição |

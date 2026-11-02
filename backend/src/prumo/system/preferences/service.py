@@ -1,7 +1,10 @@
+from datetime import date, datetime
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
+from prumo.core.clock import utcnow
 from prumo.core.config import get_settings
 from prumo.core.modules import PrumoModule, registry
 from prumo.system.preferences.models import Theme, UserPreferences
@@ -71,3 +74,16 @@ def update_preferences(session: Session, user: User, data: PreferencesUpdate) ->
         preferences.disabled_modules = [m for m in registry.ids if m not in enabled]
     session.commit()
     return preferences
+
+
+def timezone_for(session: Session, user_id: UUID) -> ZoneInfo:
+    """The user's time zone: "today" and "this month" are computed in it (S3)."""
+    return ZoneInfo(get_preferences(session, user_id).timezone)
+
+
+def now_for(session: Session, user_id: UUID) -> datetime:
+    return utcnow().astimezone(timezone_for(session, user_id))
+
+
+def today_for(session: Session, user_id: UUID) -> date:
+    return now_for(session, user_id).date()

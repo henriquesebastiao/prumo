@@ -4,13 +4,14 @@
 """
 
 from dataclasses import dataclass, field
+from datetime import UTC, date, datetime
 from typing import Any, Literal
 
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
 
 from prumo.core.events import Event
-from prumo.core.modules import ModuleSummary, PrumoModule
+from prumo.core.modules import ActivityItem, ModuleSummary, PrumoModule, UpcomingItem
 from prumo.system.auth.deps import CurrentUser
 
 
@@ -59,12 +60,33 @@ def tasks_on_user_created(session: Session, user: Any) -> None:
     journal.created_users.append(user.username)
 
 
+def tasks_upcoming(session: Session, user: Any) -> list[UpcomingItem]:
+    return [
+        UpcomingItem(module="tasks", kind="tasks.due", on=date(2026, 11, 20), subject="Relatório"),
+        UpcomingItem(module="tasks", kind="tasks.due", on=date(2027, 6, 1), subject="Muito longe"),
+    ]
+
+
+def tasks_activity(session: Session, user: Any) -> list[ActivityItem]:
+    return [
+        ActivityItem(
+            module="tasks",
+            kind="tasks.done",
+            occurred_at=datetime(2026, 11, 16, 12, tzinfo=UTC),
+            subject="Pagar luz",
+            data={"points": 3},
+        )
+    ]
+
+
 tasks = PrumoModule(
     id="tasks",
     version="1.0.0",
     router=tasks_router,
     summary=tasks_summary,
     on_user_created=tasks_on_user_created,
+    upcoming=tasks_upcoming,
+    activity=tasks_activity,
 )
 
 # ---------------------------------------------------------------- notes
@@ -88,12 +110,31 @@ def on_task_completed(session: Session, event: TaskCompleted) -> None:
     journal.handled_events.append(event.title)
 
 
+def notes_upcoming(session: Session, user: Any) -> list[UpcomingItem]:
+    return [
+        UpcomingItem(module="notes", kind="notes.review", on=date(2026, 11, 18), subject="Ideias")
+    ]
+
+
+def notes_activity(session: Session, user: Any) -> list[ActivityItem]:
+    return [
+        ActivityItem(
+            module="notes",
+            kind="notes.created",
+            occurred_at=datetime(2026, 11, 17, 9, tzinfo=UTC),
+            subject="Comprar pão",
+        )
+    ]
+
+
 notes = PrumoModule(
     id="notes",
     version="0.3.0",
     router=notes_router,
     summary=notes_summary,
     event_handlers={TaskCompleted: on_task_completed},
+    upcoming=notes_upcoming,
+    activity=notes_activity,
 )
 
 # A module without summary or hooks.

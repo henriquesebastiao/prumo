@@ -653,24 +653,2839 @@
           }
         ]
       }
+    },
+    "/api/v1/garage/overview": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Read Overview",
+        "description": "Month summary of all vehicles (fuel, km driven) and the next oil change due.",
+        "operationId": "garage_read_overview",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GarageOverview"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/api/v1/garage/vehicles": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List Vehicles",
+        "operationId": "garage_list_vehicles",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "false",
+                "true",
+                "all"
+              ],
+              "type": "string",
+              "default": "false",
+              "title": "Archived"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "One of: -created_at, -name, created_at, name. A leading `-` sorts descending.",
+              "default": "created_at",
+              "title": "Sort"
+            },
+            "description": "One of: -created_at, -name, created_at, name. A leading `-` sorts descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_VehicleRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Create Vehicle",
+        "operationId": "garage_create_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Read Vehicle",
+        "operationId": "garage_read_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Update Vehicle",
+        "operationId": "garage_update_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Delete Vehicle",
+        "description": "Deletes the vehicle and all its history (G11). Prefer archiving.",
+        "operationId": "garage_delete_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/archive": {
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Archive Vehicle",
+        "operationId": "garage_archive_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/unarchive": {
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Unarchive Vehicle",
+        "operationId": "garage_unarchive_vehicle",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/odometer": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List Odometer",
+        "operationId": "garage_list_odometer",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_OdometerReadingRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Create Odometer Reading",
+        "operationId": "garage_create_odometer_reading",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OdometerReadingCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OdometerReadingRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/odometer/{reading_id}": {
+      "delete": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Delete Odometer Reading",
+        "operationId": "garage_delete_odometer_reading",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reading_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Reading Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/maintenances": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List All Maintenances",
+        "description": "Maintenances of every vehicle.",
+        "operationId": "garage_list_all_maintenances",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MaintenanceKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "workshop_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Workshop Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending.",
+              "default": "-performed_at",
+              "title": "Sort"
+            },
+            "description": "One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MaintenanceRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/maintenances": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List Maintenances",
+        "operationId": "garage_list_maintenances",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MaintenanceKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending.",
+              "default": "-performed_at",
+              "title": "Sort"
+            },
+            "description": "One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MaintenanceRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Create Maintenance",
+        "operationId": "garage_create_maintenance",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintenanceCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/maintenances/{maintenance_id}": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Read Maintenance",
+        "operationId": "garage_read_maintenance",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "maintenance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Maintenance Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Update Maintenance",
+        "operationId": "garage_update_maintenance",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "maintenance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Maintenance Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintenanceUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Delete Maintenance",
+        "operationId": "garage_delete_maintenance",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "maintenance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Maintenance Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/oil-change-suggestion": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Read Oil Change Suggestion",
+        "description": "Next oil change for a km and date (defaults: current km, today), plus oils used before.",
+        "operationId": "garage_read_oil_change_suggestion",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "km",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Km"
+            }
+          },
+          {
+            "name": "on",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "On"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OilChangeSuggestion"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/fuelings": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List All Fuelings",
+        "description": "Fuelings of every vehicle. `from` and `to` are days in the user's time zone.",
+        "operationId": "garage_list_all_fuelings",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending.",
+              "default": "-fueled_at",
+              "title": "Sort"
+            },
+            "description": "One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_FuelingRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/fuelings": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List Fuelings",
+        "operationId": "garage_list_fuelings",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending.",
+              "default": "-fueled_at",
+              "title": "Sort"
+            },
+            "description": "One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_FuelingRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Create Fueling",
+        "operationId": "garage_create_fueling",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FuelingCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuelingRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/vehicles/{vehicle_id}/fuelings/{fueling_id}": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Read Fueling",
+        "operationId": "garage_read_fueling",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fueling_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fueling Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuelingRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Update Fueling",
+        "operationId": "garage_update_fueling",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fueling_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fueling Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FuelingUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuelingRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Delete Fueling",
+        "operationId": "garage_delete_fueling",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fueling_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fueling Id"
+            }
+          },
+          {
+            "name": "vehicle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Vehicle Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/workshops": {
+      "get": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "List Workshops",
+        "description": "Workshops with usage statistics, filtered by name (`q`).",
+        "operationId": "garage_list_workshops",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_WorkshopRead_"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Create Workshop",
+        "operationId": "garage_create_workshop",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkshopCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkshopRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/garage/workshops/{workshop_id}": {
+      "patch": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Update Workshop",
+        "operationId": "garage_update_workshop",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workshop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workshop Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkshopUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkshopRead"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "garage"
+        ],
+        "summary": "Delete Workshop",
+        "operationId": "garage_delete_workshop",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workshop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workshop Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "DashboardRead": {
+      "ActivityItem": {
         "properties": {
-          "modules": {
-            "items": {
-              "$ref": "#/components/schemas/ModuleSummary"
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind",
+            "description": "Stable code, translated by clients: `garage.fueling`."
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Occurred At"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "entity_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Id"
+          },
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/EventValue"
             },
-            "type": "array",
-            "title": "Modules",
-            "description": "Summaries of the enabled modules, in the user's order."
+            "type": "object",
+            "title": "Data"
           }
         },
         "type": "object",
         "required": [
-          "modules"
+          "module",
+          "kind",
+          "occurred_at",
+          "subject"
+        ],
+        "title": "ActivityItem",
+        "description": "A recent record (\"Atividade recente\" on Início)."
+      },
+      "ConsumptionPoint": {
+        "properties": {
+          "fueling_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fueling Id"
+          },
+          "fueled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fueled At"
+          },
+          "km_l": {
+            "type": "number",
+            "title": "Km L"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fueling_id",
+          "fueled_at",
+          "km_l"
+        ],
+        "title": "ConsumptionPoint"
+      },
+      "DashboardRead": {
+        "properties": {
+          "modules": {
+            "items": {
+              "$ref": "#/components/schemas/GarageSummary"
+            },
+            "type": "array",
+            "title": "Modules",
+            "description": "Summaries of the enabled modules, in the user's order."
+          },
+          "upcoming": {
+            "items": {
+              "$ref": "#/components/schemas/UpcomingItem"
+            },
+            "type": "array",
+            "title": "Upcoming",
+            "description": "Due items of the enabled modules (next 60 days), by date."
+          },
+          "activity": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityItem"
+            },
+            "type": "array",
+            "title": "Activity",
+            "description": "Recent records of the enabled modules, newest first."
+          }
+        },
+        "type": "object",
+        "required": [
+          "modules",
+          "upcoming",
+          "activity"
         ],
         "title": "DashboardRead"
       },
@@ -753,6 +3568,374 @@
         ],
         "title": "ErrorResponse"
       },
+      "EventValue": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "FuelType": {
+        "type": "string",
+        "enum": [
+          "gasoline",
+          "gasoline_additive",
+          "gasoline_premium",
+          "ethanol",
+          "diesel",
+          "cng"
+        ],
+        "title": "FuelType"
+      },
+      "FuelingCreate": {
+        "properties": {
+          "fueled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fueled At"
+          },
+          "km": {
+            "type": "integer",
+            "maximum": 9999999.0,
+            "minimum": 0.0,
+            "title": "Km"
+          },
+          "fuel_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Defaults to the vehicle's usual fuel (required if it has none)."
+          },
+          "volume_ml": {
+            "type": "integer",
+            "maximum": 10000000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Volume Ml"
+          },
+          "total_cents": {
+            "type": "integer",
+            "maximum": 10000000000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Total Cents"
+          },
+          "full_tank": {
+            "type": "boolean",
+            "title": "Full Tank",
+            "default": true
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fueled_at",
+          "km",
+          "volume_ml",
+          "total_cents"
+        ],
+        "title": "FuelingCreate"
+      },
+      "FuelingRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleRef"
+          },
+          "fueled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fueled At"
+          },
+          "km": {
+            "type": "integer",
+            "title": "Km"
+          },
+          "fuel_type": {
+            "$ref": "#/components/schemas/FuelType"
+          },
+          "volume_ml": {
+            "type": "integer",
+            "title": "Volume Ml"
+          },
+          "total_cents": {
+            "type": "integer",
+            "title": "Total Cents"
+          },
+          "price_per_liter": {
+            "type": "number",
+            "title": "Price Per Liter",
+            "description": "R$ per litre, 3 decimals (G7)."
+          },
+          "full_tank": {
+            "type": "boolean",
+            "title": "Full Tank"
+          },
+          "consumption_km_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consumption Km L",
+            "description": "km/l of the full-tank cycle this fueling closes (G8), 2 decimals."
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "vehicle",
+          "fueled_at",
+          "km",
+          "fuel_type",
+          "volume_ml",
+          "total_cents",
+          "price_per_liter",
+          "full_tank",
+          "consumption_km_l",
+          "notes",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "FuelingRead"
+      },
+      "FuelingUpdate": {
+        "properties": {
+          "fueled_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fueled At"
+          },
+          "km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Km"
+          },
+          "fuel_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "volume_ml": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Volume Ml"
+          },
+          "total_cents": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Cents"
+          },
+          "full_tank": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Tank"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "title": "FuelingUpdate"
+      },
+      "GarageOverview": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month",
+            "examples": [
+              "2026-11"
+            ]
+          },
+          "month_fuel_cents": {
+            "type": "integer",
+            "title": "Month Fuel Cents"
+          },
+          "month_fuelings_count": {
+            "type": "integer",
+            "title": "Month Fuelings Count"
+          },
+          "month_km": {
+            "type": "integer",
+            "title": "Month Km"
+          },
+          "vehicles_km": {
+            "items": {
+              "$ref": "#/components/schemas/VehicleKm"
+            },
+            "type": "array",
+            "title": "Vehicles Km"
+          },
+          "next_due": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NextDue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "month_fuel_cents",
+          "month_fuelings_count",
+          "month_km",
+          "vehicles_km",
+          "next_due"
+        ],
+        "title": "GarageOverview"
+      },
+      "GarageSummary": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "const": "garage",
+            "title": "Module",
+            "default": "garage"
+          },
+          "vehicles_count": {
+            "type": "integer",
+            "title": "Vehicles Count"
+          },
+          "next_due": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NextDue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vehicles": {
+            "items": {
+              "$ref": "#/components/schemas/SummaryVehicle"
+            },
+            "type": "array",
+            "title": "Vehicles"
+          },
+          "month_fuel_cents": {
+            "type": "integer",
+            "title": "Month Fuel Cents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicles_count",
+          "next_due",
+          "vehicles",
+          "month_fuel_cents"
+        ],
+        "title": "GarageSummary"
+      },
       "Health": {
         "properties": {
           "status": {
@@ -783,6 +3966,83 @@
           "version"
         ],
         "title": "Health"
+      },
+      "LastFuelingRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "fueled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fueled At"
+          },
+          "volume_ml": {
+            "type": "integer",
+            "title": "Volume Ml"
+          },
+          "total_cents": {
+            "type": "integer",
+            "title": "Total Cents"
+          },
+          "price_per_liter": {
+            "type": "number",
+            "title": "Price Per Liter"
+          },
+          "full_tank": {
+            "type": "boolean",
+            "title": "Full Tank"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fueled_at",
+          "volume_ml",
+          "total_cents",
+          "price_per_liter",
+          "full_tank"
+        ],
+        "title": "LastFuelingRead"
+      },
+      "LastOilChangeRead": {
+        "properties": {
+          "maintenance_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Maintenance Id"
+          },
+          "performed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Performed At"
+          },
+          "km": {
+            "type": "integer",
+            "title": "Km"
+          },
+          "oil_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "maintenance_id",
+          "performed_at",
+          "km",
+          "oil_type"
+        ],
+        "title": "LastOilChangeRead"
       },
       "LoginRequest": {
         "properties": {
@@ -861,6 +4121,458 @@
         ],
         "title": "LoginResponse"
       },
+      "MaintenanceCreate": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/MaintenanceKind",
+            "default": "general"
+          },
+          "performed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Performed At"
+          },
+          "km": {
+            "type": "integer",
+            "maximum": 9999999.0,
+            "minimum": 0.0,
+            "title": "Km"
+          },
+          "workshop_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workshop Id"
+          },
+          "workshop_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workshop Name",
+            "description": "Used when `workshop_id` is absent; creates the workshop if new."
+          },
+          "labor_cost_cents": {
+            "type": "integer",
+            "maximum": 10000000000.0,
+            "minimum": 0.0,
+            "title": "Labor Cost Cents",
+            "default": 0
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "oil_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Type"
+          },
+          "next_oil_change_km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change Km",
+            "description": "Absent: suggested from the interval. `null`: no forecast."
+          },
+          "next_oil_change_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change On",
+            "description": "Absent: suggested from the interval. `null`: no forecast."
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MaintenanceItemIn"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "performed_at",
+          "km"
+        ],
+        "title": "MaintenanceCreate"
+      },
+      "MaintenanceItemIn": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Description"
+          },
+          "quantity": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Quantity",
+            "default": 1
+          },
+          "unit_price_cents": {
+            "type": "integer",
+            "maximum": 10000000000.0,
+            "minimum": 0.0,
+            "title": "Unit Price Cents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description",
+          "unit_price_cents"
+        ],
+        "title": "MaintenanceItemIn"
+      },
+      "MaintenanceItemRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "unit_price_cents": {
+            "type": "integer",
+            "title": "Unit Price Cents"
+          },
+          "total_cents": {
+            "type": "integer",
+            "title": "Total Cents"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "description",
+          "quantity",
+          "unit_price_cents",
+          "total_cents"
+        ],
+        "title": "MaintenanceItemRead"
+      },
+      "MaintenanceKind": {
+        "type": "string",
+        "enum": [
+          "general",
+          "oil_change"
+        ],
+        "title": "MaintenanceKind"
+      },
+      "MaintenanceRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleRef"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/MaintenanceKind"
+          },
+          "performed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Performed At"
+          },
+          "km": {
+            "type": "integer",
+            "title": "Km"
+          },
+          "workshop": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkshopRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "labor_cost_cents": {
+            "type": "integer",
+            "title": "Labor Cost Cents"
+          },
+          "parts_cents": {
+            "type": "integer",
+            "title": "Parts Cents"
+          },
+          "total_cents": {
+            "type": "integer",
+            "title": "Total Cents"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "oil_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Type"
+          },
+          "next_oil_change_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change Km"
+          },
+          "next_oil_change_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change On"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MaintenanceItemRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "vehicle",
+          "kind",
+          "performed_at",
+          "km",
+          "workshop",
+          "labor_cost_cents",
+          "parts_cents",
+          "total_cents",
+          "notes",
+          "oil_type",
+          "next_oil_change_km",
+          "next_oil_change_on",
+          "items",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "MaintenanceRead"
+      },
+      "MaintenanceUpdate": {
+        "properties": {
+          "performed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Performed At"
+          },
+          "km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Km"
+          },
+          "workshop_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workshop Id"
+          },
+          "workshop_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workshop Name"
+          },
+          "labor_cost_cents": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Labor Cost Cents"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "oil_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Type"
+          },
+          "next_oil_change_km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change Km"
+          },
+          "next_oil_change_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change On"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/MaintenanceItemIn"
+                },
+                "type": "array",
+                "maxItems": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "MaintenanceUpdate",
+        "description": "Partial update. `items`, when present, replaces all the items."
+      },
       "ModuleList": {
         "properties": {
           "items": {
@@ -910,19 +4622,577 @@
         ],
         "title": "ModuleRead"
       },
-      "ModuleSummary": {
+      "NextDue": {
         "properties": {
-          "module": {
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleRef"
+          },
+          "status": {
             "type": "string",
-            "title": "Module"
+            "enum": [
+              "ok",
+              "due_soon",
+              "overdue",
+              "unknown"
+            ],
+            "title": "Status"
+          },
+          "primary": {
+            "type": "string",
+            "enum": [
+              "km",
+              "date"
+            ],
+            "title": "Primary"
+          },
+          "remaining_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Km"
+          },
+          "remaining_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Days"
+          },
+          "used_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used Percent"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On",
+            "description": "Expected day (pace for km, date otherwise)."
           }
         },
         "type": "object",
         "required": [
-          "module"
+          "vehicle",
+          "status",
+          "primary",
+          "remaining_km",
+          "remaining_days",
+          "used_percent",
+          "due_on"
         ],
-        "title": "ModuleSummary",
-        "description": "Base of every dashboard summary. Subclasses narrow `module` to `Literal[\"<module id>\"]`,\nwhich is the discriminator of the dashboard union."
+        "title": "NextDue"
+      },
+      "OdometerReadingCreate": {
+        "properties": {
+          "km": {
+            "type": "integer",
+            "maximum": 9999999.0,
+            "minimum": 0.0,
+            "title": "Km"
+          },
+          "recorded_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recorded At",
+            "description": "Defaults to now."
+          }
+        },
+        "type": "object",
+        "required": [
+          "km"
+        ],
+        "title": "OdometerReadingCreate"
+      },
+      "OdometerReadingRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "km": {
+            "type": "integer",
+            "title": "Km"
+          },
+          "recorded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Recorded At"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ReadingSource"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "km",
+          "recorded_at",
+          "source",
+          "source_id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "OdometerReadingRead"
+      },
+      "OilChangeRead": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "due_soon",
+              "overdue",
+              "unknown"
+            ],
+            "title": "Status"
+          },
+          "primary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "km",
+                  "date"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary",
+            "description": "Criterion that is due first."
+          },
+          "interval_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Km"
+          },
+          "interval_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Months"
+          },
+          "last": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LastOilChangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "next_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Km"
+          },
+          "remaining_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Km"
+          },
+          "used_km_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used Km Percent",
+            "description": "0-100: share of the km interval used."
+          },
+          "next_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next On"
+          },
+          "remaining_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Days"
+          },
+          "used_days_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used Days Percent",
+            "description": "0-100: share of the time interval used."
+          },
+          "estimated_km_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Km On",
+            "description": "When the km criterion should be due at the current pace (G12)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "primary",
+          "interval_km",
+          "interval_months",
+          "last",
+          "next_km",
+          "remaining_km",
+          "used_km_percent",
+          "next_on",
+          "remaining_days",
+          "used_days_percent",
+          "estimated_km_on"
+        ],
+        "title": "OilChangeRead",
+        "description": "G6. `null` on the vehicle when it has no oil interval (G1)."
+      },
+      "OilChangeSuggestion": {
+        "properties": {
+          "next_oil_change_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change Km"
+          },
+          "next_oil_change_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Oil Change On"
+          },
+          "interval_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Km"
+          },
+          "interval_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Months"
+          },
+          "pace_km_per_day": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pace Km Per Day"
+          },
+          "estimated_km_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Km On",
+            "description": "When the suggested km would be reached."
+          },
+          "previous_oil_types": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Previous Oil Types",
+            "description": "Oils used before, most recent first."
+          }
+        },
+        "type": "object",
+        "required": [
+          "next_oil_change_km",
+          "next_oil_change_on",
+          "interval_km",
+          "interval_months",
+          "pace_km_per_day",
+          "estimated_km_on",
+          "previous_oil_types"
+        ],
+        "title": "OilChangeSuggestion"
+      },
+      "Page_FuelingRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FuelingRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "Page[FuelingRead]"
+      },
+      "Page_MaintenanceRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MaintenanceRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "Page[MaintenanceRead]"
+      },
+      "Page_OdometerReadingRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OdometerReadingRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "Page[OdometerReadingRead]"
+      },
+      "Page_VehicleRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/VehicleRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "Page[VehicleRead]"
+      },
+      "Page_WorkshopRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/WorkshopRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "Page[WorkshopRead]"
       },
       "PasswordChange": {
         "properties": {
@@ -1070,6 +5340,15 @@
         "title": "PreferencesUpdate",
         "description": "Partial update: absent fields are left unchanged. None of these fields accepts null."
       },
+      "ReadingSource": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "maintenance",
+          "fueling"
+        ],
+        "title": "ReadingSource"
+      },
       "SessionClient": {
         "type": "string",
         "enum": [
@@ -1154,6 +5433,93 @@
         ],
         "title": "SessionRead"
       },
+      "SummaryVehicle": {
+        "properties": {
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleRef"
+          },
+          "current_km": {
+            "type": "integer",
+            "title": "Current Km"
+          },
+          "oil_primary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "km",
+                  "date"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Primary"
+          },
+          "oil_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ok",
+                  "due_soon",
+                  "overdue",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Status"
+          },
+          "remaining_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Km"
+          },
+          "remaining_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Days"
+          },
+          "used_percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle",
+          "current_km",
+          "oil_primary",
+          "oil_status",
+          "remaining_km",
+          "remaining_days",
+          "used_percent"
+        ],
+        "title": "SummaryVehicle"
+      },
       "Theme": {
         "type": "string",
         "enum": [
@@ -1162,6 +5528,58 @@
           "dark"
         ],
         "title": "Theme"
+      },
+      "UpcomingItem": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind",
+            "description": "Stable code, translated by clients: `garage.oil_change`."
+          },
+          "on": {
+            "type": "string",
+            "format": "date",
+            "title": "On"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject",
+            "description": "What it is about, such as the vehicle name."
+          },
+          "entity_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Id"
+          },
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/EventValue"
+            },
+            "type": "object",
+            "title": "Data",
+            "description": "Values of the event, documented per `kind`."
+          }
+        },
+        "type": "object",
+        "required": [
+          "module",
+          "kind",
+          "on",
+          "subject"
+        ],
+        "title": "UpcomingItem",
+        "description": "Something due on a day (\"Vem aí\" on Início): an oil change, an invoice closing…"
       },
       "UserRead": {
         "properties": {
@@ -1222,6 +5640,640 @@
         },
         "type": "object",
         "title": "UserUpdate"
+      },
+      "VehicleCreate": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/VehicleKind"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name",
+            "description": "Nickname shown in Prumo."
+          },
+          "brand": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Brand"
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Model"
+          },
+          "year": {
+            "type": "integer",
+            "maximum": 2100.0,
+            "minimum": 1900.0,
+            "title": "Year"
+          },
+          "fuel_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Usual fuel (pre-selected)."
+          },
+          "current_km": {
+            "type": "integer",
+            "maximum": 9999999.0,
+            "minimum": 0.0,
+            "title": "Current Km",
+            "description": "Odometer at registration; creates the first reading."
+          },
+          "oil_interval_km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Km"
+          },
+          "oil_interval_months": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 120.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Months"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name",
+          "brand",
+          "model",
+          "year",
+          "current_km"
+        ],
+        "title": "VehicleCreate"
+      },
+      "VehicleKind": {
+        "type": "string",
+        "enum": [
+          "car",
+          "motorcycle"
+        ],
+        "title": "VehicleKind"
+      },
+      "VehicleKm": {
+        "properties": {
+          "vehicle": {
+            "$ref": "#/components/schemas/VehicleRef"
+          },
+          "km": {
+            "type": "integer",
+            "title": "Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vehicle",
+          "km"
+        ],
+        "title": "VehicleKm"
+      },
+      "VehicleRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/VehicleKind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "fuel_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "current_km": {
+            "type": "integer",
+            "title": "Current Km"
+          },
+          "current_km_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Current Km At"
+          },
+          "oil_interval_km": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Km"
+          },
+          "oil_interval_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Months"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "archived_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "oil_change": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OilChangeRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stats": {
+            "$ref": "#/components/schemas/VehicleStats"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "brand",
+          "model",
+          "year",
+          "fuel_type",
+          "current_km",
+          "current_km_at",
+          "oil_interval_km",
+          "oil_interval_months",
+          "notes",
+          "archived_at",
+          "oil_change",
+          "stats",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "VehicleRead"
+      },
+      "VehicleRef": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/VehicleKind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind"
+        ],
+        "title": "VehicleRef"
+      },
+      "VehicleStats": {
+        "properties": {
+          "last_fueling": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LastFuelingRead"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "last_consumption_km_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Consumption Km L"
+          },
+          "avg_consumption_km_l": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Consumption Km L"
+          },
+          "recent_consumption": {
+            "items": {
+              "$ref": "#/components/schemas/ConsumptionPoint"
+            },
+            "type": "array",
+            "title": "Recent Consumption",
+            "description": "Last 5 full-tank cycles."
+          },
+          "pace_km_per_day": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pace Km Per Day"
+          },
+          "month_km": {
+            "type": "integer",
+            "title": "Month Km"
+          },
+          "month_spent_cents": {
+            "type": "integer",
+            "title": "Month Spent Cents"
+          },
+          "month_fuelings_count": {
+            "type": "integer",
+            "title": "Month Fuelings Count"
+          },
+          "month_maintenances_count": {
+            "type": "integer",
+            "title": "Month Maintenances Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "last_fueling",
+          "last_consumption_km_l",
+          "avg_consumption_km_l",
+          "recent_consumption",
+          "pace_km_per_day",
+          "month_km",
+          "month_spent_cents",
+          "month_fuelings_count",
+          "month_maintenances_count"
+        ],
+        "title": "VehicleStats"
+      },
+      "VehicleUpdate": {
+        "properties": {
+          "kind": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VehicleKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "brand": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brand"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2100.0,
+                "minimum": 1900.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          },
+          "fuel_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FuelType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "current_km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Km",
+            "description": "A different value records a manual reading now."
+          },
+          "oil_interval_km": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Km"
+          },
+          "oil_interval_months": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 120.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oil Interval Months"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "title": "VehicleUpdate"
+      },
+      "WorkshopCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "WorkshopCreate"
+      },
+      "WorkshopRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "maintenances_count": {
+            "type": "integer",
+            "title": "Maintenances Count"
+          },
+          "last_maintenance_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Maintenance At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "notes",
+          "maintenances_count",
+          "last_maintenance_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "WorkshopRead"
+      },
+      "WorkshopRef": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "WorkshopRef"
+      },
+      "WorkshopUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "title": "WorkshopUpdate"
       }
     },
     "securitySchemes": {
