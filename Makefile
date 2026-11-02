@@ -8,7 +8,7 @@ WEB := cd frontend && pnpm
 .PHONY: help dev db-up db-down check lint typecheck test format \
 	lint-backend typecheck-backend test-backend lint-frontend typecheck-frontend test-frontend \
 	openapi openapi-check screenshots \
-	migration migrate user
+	migration migrate user backup restore
 
 help: ## List available commands
 	@grep -hE '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -37,6 +37,13 @@ migrate: ## Apply migrations
 
 user: ## Create a user (interactive)
 	$(API) prumo users create
+
+backup: ## Dump the database to backups/ (COMPOSE_FILE=docker-compose.dev.yml for dev)
+	@./deploy/backup.sh
+
+restore: ## Restore a backup, replacing the database: make restore f=backups/<file>.sql.gz
+	@test -n "$(f)" || (echo 'usage: make restore f=backups/<file>.sql.gz' && exit 1)
+	@./deploy/restore.sh "$(f)"
 
 # ------------------------------------------------------------------ quality
 

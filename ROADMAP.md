@@ -6,11 +6,11 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 
 ### Repositório e ferramentas
 - [x] Mover a exportação atual de `design/` para `design/v1/` (sem alterar arquivos) e criar `design/README.md` indicando a versão ativa
-- [ ] Estrutura de pastas: `backend/`, `frontend/`, `deploy/`, `openapi/`
-- [ ] `Makefile` com os comandos listados no `CLAUDE.md`
-- [ ] `docker-compose.yml` (db, api, web) e `.env.example`; compose de desenvolvimento só com o banco
-- [ ] Scripts de backup e restauração do PostgreSQL
-- [ ] CI: lint, typecheck, testes com PostgreSQL, verificação do snapshot OpenAPI e build
+- [x] Estrutura de pastas: `backend/`, `frontend/`, `deploy/`, `openapi/`
+- [x] `Makefile` com os comandos listados no `CLAUDE.md`
+- [x] `docker-compose.yml` (db, api, web) e `.env.example`; compose de desenvolvimento só com o banco
+- [x] Scripts de backup e restauração do PostgreSQL
+- [x] CI: lint, typecheck, testes com PostgreSQL, verificação do snapshot OpenAPI e build
 
 ### Backend
 - [x] Configuração (pydantic-settings, prefixo `PRUMO_`), engine e sessão, Alembic
