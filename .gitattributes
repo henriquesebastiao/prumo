@@ -1,4 +1,4 @@
-/design/* linguist-detectable=false
+/design/** linguist-detectable=false
 /design/*.md linguist-documentation=true
 /docs/* linguist-documentation=true
 
