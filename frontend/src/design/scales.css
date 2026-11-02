@@ -16,6 +16,7 @@
   --text-lg: 1rem; /* 16 */
   --text-xl: 1.0625rem; /* 17: h2 */
   --text-2xl: 1.375rem; /* 22: large numbers */
+  --text-2xl-plus: 1.5rem; /* 24: phone page title */
   --text-3xl: 1.625rem; /* 26: login title */
   --text-4xl: 2rem; /* 32: h1, extra-large numbers */
   --text-5xl: 2.75rem; /* 44: login headline */

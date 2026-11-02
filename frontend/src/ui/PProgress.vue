@@ -59,11 +59,11 @@ const percent = computed(() => Math.min(100, Math.max(0, (props.value / props.ma
   animation: p-grow-x var(--duration-draw) var(--easing-standard) 0.2s both;
 }
 
-.p-progress[data-tone='neutral'] .p-progress__fill {
-  background: var(--color-neutral);
-}
-
 .p-progress--strong .p-progress__fill {
   background: var(--tone-on-container);
+}
+
+.p-progress[data-tone='neutral'] .p-progress__fill {
+  background: var(--color-neutral);
 }
 </style>

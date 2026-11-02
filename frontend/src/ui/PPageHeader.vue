@@ -67,7 +67,7 @@ withDefaults(
 }
 
 .p-page-header--sm .p-page-header__title {
-  font-size: 1.5rem;
+  font-size: var(--text-2xl-plus);
   line-height: 1.2;
 }
 
