@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 from pydantic_core import PydanticCustomError
 
+from prumo.core.idempotency import ClientId
 from prumo.core.modules import ModuleSummary
 from prumo.core.schemas import reject_null
 from prumo.modules.garage.models import FuelType, MaintenanceKind, ReadingSource, VehicleKind
@@ -31,6 +32,7 @@ class VehicleRef(BaseModel):
 
 
 class VehicleCreate(BaseModel):
+    id: ClientId | None = None
     kind: VehicleKind
     name: Name = Field(description="Nickname shown in Prumo.")
     brand: ShortText
@@ -137,6 +139,7 @@ class VehicleRead(BaseModel):
 
 
 class OdometerReadingCreate(BaseModel):
+    id: ClientId | None = None
     km: Km
     recorded_at: datetime | None = Field(default=None, description="Defaults to now.")
 
@@ -157,6 +160,7 @@ class OdometerReadingRead(BaseModel):
 
 
 class WorkshopCreate(BaseModel):
+    id: ClientId | None = None
     name: Name
     notes: Notes | None = None
 
@@ -221,6 +225,7 @@ def _oil_fields_only_for_oil_change(model: BaseModel, kind: MaintenanceKind | No
 
 
 class MaintenanceCreate(BaseModel):
+    id: ClientId | None = None
     kind: MaintenanceKind = MaintenanceKind.GENERAL
     performed_at: datetime
     km: Km
@@ -295,6 +300,7 @@ class OilChangeSuggestion(BaseModel):
 
 
 class FuelingCreate(BaseModel):
+    id: ClientId | None = None
     fueled_at: datetime
     km: Km
     fuel_type: FuelType | None = Field(

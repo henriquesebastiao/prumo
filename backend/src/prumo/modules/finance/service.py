@@ -322,6 +322,7 @@ def list_accounts(session: Session, user: User, *, archived: Archived = "false")
 
 def create_account(session: Session, user: User, data: AccountCreate) -> Account:
     account = Account(
+        id=data.id or uuid7(),
         user_id=user.id,
         name=data.name,
         kind=data.kind,
@@ -378,6 +379,7 @@ def adjust_balance(
     if difference == 0:
         raise DomainError("The balance is already correct.", code="finance.balance_unchanged")
     transaction = Transaction(
+        id=data.id or uuid7(),
         user_id=user.id,
         kind=ADJUSTMENT,
         amount_cents=difference,
@@ -523,7 +525,12 @@ def _check_category_name(
 def create_category(session: Session, user: User, data: CategoryCreate) -> Category:
     _check_category_name(session, user, data.kind, data.name)
     category = Category(
-        user_id=user.id, kind=data.kind, name=data.name, color=data.color, icon=data.icon
+        id=data.id or uuid7(),
+        user_id=user.id,
+        kind=data.kind,
+        name=data.name,
+        color=data.color,
+        icon=data.icon,
     )
     session.add(category)
     session.commit()
@@ -741,7 +748,7 @@ def list_cards(
 def create_card(session: Session, user: User, data: CreditCardCreate) -> CreditCard:
     if data.payment_account_id is not None:
         get_account(session, user, data.payment_account_id)
-    card = CreditCard(user_id=user.id, **data.model_dump())
+    card = CreditCard(id=data.id or uuid7(), user_id=user.id, **data.model_dump(exclude={"id"}))
     session.add(card)
     session.commit()
     return card
@@ -843,6 +850,7 @@ def pay_invoice(
         raise NotFoundError(details={"resource": "invoice"})
     account = get_account(session, user, data.account_id)
     transaction = Transaction(
+        id=data.id or uuid7(),
         user_id=user.id,
         kind=CARD_PAYMENT,
         amount_cents=data.amount_cents,
@@ -995,6 +1003,7 @@ def create_transaction(session: Session, user: User, data: TransactionCreate) ->
     if not data.installments or card is None:
         transaction = Transaction(
             **common,
+            id=data.id or uuid7(),
             amount_cents=draft.amount_cents,
             occurred_on=draft.occurred_on,
             invoice_closing_on=draft.invoice_closing_on,
@@ -1010,6 +1019,7 @@ def create_transaction(session: Session, user: User, data: TransactionCreate) ->
     installments = [
         Transaction(
             **common,
+            id=(data.id or uuid7()) if index == 0 else uuid7(),
             amount_cents=amount,
             occurred_on=on,
             invoice_closing_on=_nth_closing(first_invoice, index, card.closing_day),

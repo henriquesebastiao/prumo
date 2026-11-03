@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from typing import Literal
-from uuid import UUID
+from uuid import UUID, uuid7
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import Select, delete, func, select
@@ -140,6 +140,7 @@ def list_vehicles(
 def create_vehicle(session: Session, user: User, data: VehicleCreate) -> Vehicle:
     now = utcnow()
     vehicle = Vehicle(
+        id=data.id or uuid7(),
         user_id=user.id,
         kind=data.kind,
         name=data.name,
@@ -249,9 +250,11 @@ def _add_reading(
     at: datetime,
     source: ReadingSource,
     source_id: UUID | None,
+    reading_id: UUID | None = None,
 ) -> OdometerReading:
     _check_consistency(session, vehicle.id, km, at)
     reading = OdometerReading(
+        id=reading_id or uuid7(),
         user_id=user.id,
         vehicle_id=vehicle.id,
         km=km,
@@ -320,7 +323,14 @@ def add_manual_reading(
     session: Session, user: User, vehicle: Vehicle, data: OdometerReadingCreate
 ) -> OdometerReading:
     reading = _add_reading(
-        session, user, vehicle, data.km, data.recorded_at or utcnow(), ReadingSource.MANUAL, None
+        session,
+        user,
+        vehicle,
+        data.km,
+        data.recorded_at or utcnow(),
+        ReadingSource.MANUAL,
+        None,
+        reading_id=data.id,
     )
     session.commit()
     return reading
@@ -587,7 +597,7 @@ def _find_workshop_by_name(session: Session, user: User, name: str) -> Workshop 
 def create_workshop(session: Session, user: User, data: WorkshopCreate) -> Workshop:
     if _find_workshop_by_name(session, user, data.name) is not None:
         raise ConflictError("Workshop already exists.", code="garage.workshop_exists")
-    workshop = Workshop(user_id=user.id, name=data.name, notes=data.notes)
+    workshop = Workshop(id=data.id or uuid7(), user_id=user.id, name=data.name, notes=data.notes)
     session.add(workshop)
     session.commit()
     return workshop
@@ -709,6 +719,7 @@ def create_maintenance(
 ) -> Maintenance:
     workshop = _resolve_workshop(session, user, data.workshop_id, data.workshop_name)
     maintenance = Maintenance(
+        id=data.id or uuid7(),
         user_id=user.id,
         vehicle_id=vehicle.id,
         kind=data.kind,
@@ -937,6 +948,7 @@ def create_fueling(session: Session, user: User, vehicle: Vehicle, data: Fueling
             code="garage.fuel_type_required",
         )
     fueling = Fueling(
+        id=data.id or uuid7(),
         user_id=user.id,
         vehicle_id=vehicle.id,
         fueled_at=data.fueled_at,

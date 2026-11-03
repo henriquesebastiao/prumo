@@ -424,7 +424,7 @@ export interface paths {
     /**
      * Create Transaction
      * @description Validates the fields of each `kind` (docs/dominio.md). With `installments`, creates every
-     *     installment and returns the first (F10).
+     *     installment and returns the first (F10); `id` is the first installment's.
      */
     post: operations['finance_create_transaction']
     delete?: never
@@ -957,7 +957,8 @@ export interface paths {
     put?: never
     /**
      * Add Progress
-     * @description R2-R4: records the current page; the status and dates follow.
+     * @description R2-R4: records the current page; the status and dates follow. `id` is the progress
+     *     record's; repeating it returns the book unchanged.
      */
     post: operations['reading_add_progress']
     delete?: never
@@ -1053,6 +1054,8 @@ export interface components {
     }
     /** AccountCreate */
     AccountCreate: {
+      /** Id */
+      id?: string | null
       /** Name */
       name: string
       kind: components['schemas']['AccountKind']
@@ -1222,6 +1225,8 @@ export interface components {
     }
     /** AdjustmentCreate */
     AdjustmentCreate: {
+      /** Id */
+      id?: string | null
       /**
        * Balance Cents
        * @description The real balance on `occurred_on`.
@@ -1248,6 +1253,8 @@ export interface components {
     }
     /** BookCreate */
     BookCreate: {
+      /** Id */
+      id?: string | null
       /** Title */
       title: string
       /** Author */
@@ -1446,6 +1453,8 @@ export interface components {
     }
     /** CategoryCreate */
     CategoryCreate: {
+      /** Id */
+      id?: string | null
       kind: components['schemas']['CategoryKind']
       /** Name */
       name: string
@@ -1575,6 +1584,8 @@ export interface components {
     }
     /** CreditCardCreate */
     CreditCardCreate: {
+      /** Id */
+      id?: string | null
       /** Name */
       name: string
       /** Limit Cents */
@@ -1812,6 +1823,8 @@ export interface components {
     FuelType: 'gasoline' | 'gasoline_additive' | 'gasoline_premium' | 'ethanol' | 'diesel' | 'cng'
     /** FuelingCreate */
     FuelingCreate: {
+      /** Id */
+      id?: string | null
       /**
        * Fueled At
        * Format: date-time
@@ -1990,6 +2003,8 @@ export interface components {
     }
     /** InvoicePaymentCreate */
     InvoicePaymentCreate: {
+      /** Id */
+      id?: string | null
       /** Amount Cents */
       amount_cents: number
       /**
@@ -2123,6 +2138,8 @@ export interface components {
     }
     /** MaintenanceCreate */
     MaintenanceCreate: {
+      /** Id */
+      id?: string | null
       /** @default general */
       kind?: components['schemas']['MaintenanceKind']
       /**
@@ -2325,6 +2342,8 @@ export interface components {
     }
     /** NoteCreate */
     NoteCreate: {
+      /** Id */
+      id?: string | null
       /**
        * Content
        * @description Simple markdown.
@@ -2382,6 +2401,8 @@ export interface components {
     }
     /** OdometerReadingCreate */
     OdometerReadingCreate: {
+      /** Id */
+      id?: string | null
       /** Km */
       km: number
       /**
@@ -2632,6 +2653,8 @@ export interface components {
     }
     /** ProgressCreate */
     ProgressCreate: {
+      /** Id */
+      id?: string | null
       /** Page */
       page: number
     }
@@ -2775,6 +2798,8 @@ export interface components {
     Theme: 'system' | 'light' | 'dark'
     /** TransactionCreate */
     TransactionCreate: {
+      /** Id */
+      id?: string | null
       kind: components['schemas']['TransactionKind']
       /**
        * Amount Cents
@@ -2977,6 +3002,8 @@ export interface components {
     }
     /** VehicleCreate */
     VehicleCreate: {
+      /** Id */
+      id?: string | null
       kind: components['schemas']['VehicleKind']
       /**
        * Name
@@ -3130,6 +3157,8 @@ export interface components {
     }
     /** WorkshopCreate */
     WorkshopCreate: {
+      /** Id */
+      id?: string | null
       /** Name */
       name: string
       /** Notes */
@@ -3859,6 +3888,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -3888,6 +3926,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -4213,6 +4260,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -4242,6 +4298,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -4334,6 +4399,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -4774,6 +4848,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -4803,6 +4886,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -5071,6 +5163,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -5100,6 +5201,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -5543,6 +5653,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -5572,6 +5691,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -5721,6 +5849,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['VehicleRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -5750,6 +5887,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -6136,6 +6282,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OdometerReadingRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -6165,6 +6320,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -6383,6 +6547,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MaintenanceRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -6412,6 +6585,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -6812,6 +6994,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FuelingRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -6841,6 +7032,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -7111,6 +7311,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WorkshopRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -7428,6 +7637,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -7457,6 +7675,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -7724,6 +7951,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -7753,6 +7989,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }
@@ -8090,6 +8335,15 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NoteRead']
+        }
+      }
       /** @description Successful Response */
       201: {
         headers: {
@@ -8119,6 +8373,15 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }

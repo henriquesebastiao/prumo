@@ -2,13 +2,21 @@ from datetime import date
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
+from prumo.core.idempotency import create_once, created_responses
 from prumo.core.pagination import Page, PageDep, Sort, sort_param
 from prumo.modules.garage import service
-from prumo.modules.garage.models import MaintenanceKind, Vehicle
+from prumo.modules.garage.models import (
+    Fueling,
+    Maintenance,
+    MaintenanceKind,
+    OdometerReading,
+    Vehicle,
+    Workshop,
+)
 from prumo.modules.garage.schemas import (
     FuelingCreate,
     FuelingRead,
@@ -65,9 +73,21 @@ def list_vehicles(
     return service.list_vehicles(session, user, page, archived=archived, sort=sort)
 
 
-@router.post("/vehicles", status_code=status.HTTP_201_CREATED)
-def create_vehicle(data: VehicleCreate, session: SessionDep, user: CurrentUser) -> VehicleRead:
-    return service.vehicle_read(session, user, service.create_vehicle(session, user, data))
+@router.post(
+    "/vehicles", status_code=status.HTTP_201_CREATED, responses=created_responses(VehicleRead)
+)
+def create_vehicle(
+    data: VehicleCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> VehicleRead:
+    vehicle = create_once(
+        session,
+        Vehicle,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_vehicle(session, user, data),
+    )
+    return service.vehicle_read(session, user, vehicle)
 
 
 @router.get("/vehicles/{vehicle_id}")
@@ -108,11 +128,26 @@ def list_odometer(
     return service.list_readings(session, user, vehicle, page)  # type: ignore[return-value]
 
 
-@router.post("/vehicles/{vehicle_id}/odometer", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/vehicles/{vehicle_id}/odometer",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(OdometerReadingRead),
+)
 def create_odometer_reading(
-    data: OdometerReadingCreate, vehicle: VehicleDep, session: SessionDep, user: CurrentUser
+    data: OdometerReadingCreate,
+    vehicle: VehicleDep,
+    session: SessionDep,
+    user: CurrentUser,
+    response: Response,
 ) -> OdometerReadingRead:
-    reading = service.add_manual_reading(session, user, vehicle, data)
+    reading = create_once(
+        session,
+        OdometerReading,
+        user.id,
+        data.id,
+        response,
+        lambda: service.add_manual_reading(session, user, vehicle, data),
+    )
     return OdometerReadingRead.model_validate(reading)
 
 
@@ -158,11 +193,26 @@ def list_maintenances(
     )
 
 
-@router.post("/vehicles/{vehicle_id}/maintenances", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/vehicles/{vehicle_id}/maintenances",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(MaintenanceRead),
+)
 def create_maintenance(
-    data: MaintenanceCreate, vehicle: VehicleDep, session: SessionDep, user: CurrentUser
+    data: MaintenanceCreate,
+    vehicle: VehicleDep,
+    session: SessionDep,
+    user: CurrentUser,
+    response: Response,
 ) -> MaintenanceRead:
-    maintenance = service.create_maintenance(session, user, vehicle, data)
+    maintenance = create_once(
+        session,
+        Maintenance,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_maintenance(session, user, vehicle, data),
+    )
     return service.maintenance_reads(session, [maintenance])[0]
 
 
@@ -236,11 +286,26 @@ def list_fuelings(
     return service.list_fuelings(session, user, page, vehicle_id=vehicle.id, sort=sort)
 
 
-@router.post("/vehicles/{vehicle_id}/fuelings", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/vehicles/{vehicle_id}/fuelings",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(FuelingRead),
+)
 def create_fueling(
-    data: FuelingCreate, vehicle: VehicleDep, session: SessionDep, user: CurrentUser
+    data: FuelingCreate,
+    vehicle: VehicleDep,
+    session: SessionDep,
+    user: CurrentUser,
+    response: Response,
 ) -> FuelingRead:
-    fueling = service.create_fueling(session, user, vehicle, data)
+    fueling = create_once(
+        session,
+        Fueling,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_fueling(session, user, vehicle, data),
+    )
     return service.fueling_reads(session, [fueling])[0]
 
 
@@ -286,9 +351,21 @@ def list_workshops(
     return service.list_workshops(session, user, page, q=q)
 
 
-@router.post("/workshops", status_code=status.HTTP_201_CREATED, responses=error_responses(409))
-def create_workshop(data: WorkshopCreate, session: SessionDep, user: CurrentUser) -> WorkshopRead:
-    return service.workshop_read(session, user, service.create_workshop(session, user, data))
+@router.post(
+    "/workshops", status_code=status.HTTP_201_CREATED, responses=created_responses(WorkshopRead)
+)
+def create_workshop(
+    data: WorkshopCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> WorkshopRead:
+    workshop = create_once(
+        session,
+        Workshop,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_workshop(session, user, data),
+    )
+    return service.workshop_read(session, user, workshop)
 
 
 @router.patch("/workshops/{workshop_id}", responses=error_responses(409))

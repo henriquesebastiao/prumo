@@ -86,7 +86,7 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] README em inglês
 
 ## Fase 5 — Preparação para o Android
-- [ ] Criação idempotente: aceitar `id` gerado pelo cliente nos `POST`
+- [x] Criação idempotente: aceitar `id` gerado pelo cliente nos `POST`
 - [ ] Sincronização incremental: `updated_since` e registro de exclusões
 - [ ] Revisão do contrato v1 e início do `CHANGELOG` da API
 - [ ] Repositório `prumo-android` (Material 3 Expressive, design system Henrique Sebastião — Android Design System)

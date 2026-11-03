@@ -238,6 +238,24 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** os arquivos do `swagger-ui-dist` 5 (bundle, CSS, favicon, licença) ficam em `backend/src/prumo/static/swagger-ui/`, copiados por `backend/scripts/update-swagger-ui.sh` com versão e checksum fixos, e a API os serve em `/api/docs/static`.
 **Consequências:** `/api/docs` funciona offline; atualizar é rodar o script com a nova versão.
 
+## D40 — Criação idempotente
+**Status:** aceita · 2026-11
+**Contexto:** o app Android precisa repetir criações depois de falhas de rede sem duplicar registros.
+**Decisão:** os `POST` de criação aceitam `id` (UUID v7) do cliente. Repetir com o mesmo `id`, o mesmo usuário e o mesmo recurso devolve `200` com o registro existente, sem comparar o corpo; `id` de outro usuário responde `409 id_conflict`. A verificação é feita na tabela do recurso; uma corrida entre duas requisições iguais termina na segunda lendo o registro da primeira.
+**Consequências:** o app gera os ids e pode criar offline; não há tabela de chaves de idempotência.
+
+## D41 — Sincronização incremental
+**Status:** aceita · 2026-11
+**Contexto:** o app precisa saber o que mudou e o que foi excluído desde a última sincronização.
+**Decisão:** listas paginadas aceitam `updated_since` (incluem arquivados e ordenam por `updated_at`); `GET /api/v1/sync/deletions` devolve as exclusões e o `server_time`. Um gatilho do PostgreSQL em cada tabela de módulo grava a exclusão em `sync_deletions` (inclusive as em cascata e as feitas em lote) e ignora as causadas pela exclusão do próprio usuário. Registros guardados por 180 dias; `since` mais antigo responde `410`.
+**Consequências:** cada módulo novo cria o gatilho das suas tabelas na própria migration (`docs/novo-modulo.md`). Valores derivados não alteram `updated_at`.
+
+## D42 — Changelog e app Android
+**Status:** aceita · 2026-11
+**Contexto:** a Fase 5 previa um changelog próprio da API e o repositório do app.
+**Decisão:** as mudanças da API entram no `CHANGELOG` do projeto, gerado do GitHub (`make changelog`), sem arquivo separado. O repositório `prumo-android` começa em outra sessão.
+**Consequências:** mudanças de contrato precisam de issue ou pull request descritivos para aparecer no changelog.
+
 ---
 
 ## Modelo

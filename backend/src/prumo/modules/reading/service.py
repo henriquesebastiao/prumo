@@ -2,7 +2,7 @@
 
 from collections.abc import Iterable, Sequence
 from datetime import date
-from uuid import UUID
+from uuid import UUID, uuid7
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import func, or_, select
@@ -73,9 +73,12 @@ def _check_page(book: Book, page: int) -> None:
         )
 
 
-def _record(session: Session, book: Book, page: int, previous: int) -> None:
+def _record(
+    session: Session, book: Book, page: int, previous: int, record_id: UUID | None = None
+) -> None:
     session.add(
         ReadingProgress(
+            id=record_id or uuid7(),
             user_id=book.user_id,
             book_id=book.id,
             page=page,
@@ -85,12 +88,14 @@ def _record(session: Session, book: Book, page: int, previous: int) -> None:
     )
 
 
-def _set_page(session: Session, book: Book, page: int, today: date) -> None:
+def _set_page(
+    session: Session, book: Book, page: int, today: date, record_id: UUID | None = None
+) -> None:
     """R2-R4: records the progress and updates the status and dates."""
     _check_page(book, page)
     if page == book.current_page:
         return
-    _record(session, book, page, book.current_page)
+    _record(session, book, page, book.current_page, record_id)
     book.current_page = page
     change = rules.after_page(
         status=book.status,
@@ -137,6 +142,7 @@ def create_book(session: Session, user: User, data: BookCreate) -> Book:
     elif page > 0 and status == BookStatus.WANT_TO_READ:
         status = BookStatus.READING
     book = Book(
+        id=data.id or uuid7(),
         user_id=user.id,
         title=data.title,
         author=data.author,
@@ -185,8 +191,10 @@ def delete_book(session: Session, book: Book) -> None:
     session.commit()
 
 
-def add_progress(session: Session, user: User, book: Book, page: int) -> Book:
-    _set_page(session, book, page, _today(timezone_for(session, user.id)))
+def add_progress(
+    session: Session, user: User, book: Book, page: int, record_id: UUID | None = None
+) -> Book:
+    _set_page(session, book, page, _today(timezone_for(session, user.id)), record_id)
     session.commit()
     return book
 
@@ -407,6 +415,7 @@ def create_note(session: Session, user: User, book: Book, data: NoteCreate) -> B
     if data.page is not None:
         _check_page(book, data.page)
     note = BookNote(
+        id=data.id or uuid7(),
         user_id=user.id,
         book_id=book.id,
         content=data.content,

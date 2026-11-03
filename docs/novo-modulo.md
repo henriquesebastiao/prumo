@@ -80,7 +80,7 @@ Depois:
 2. Adicione o módulo ao contrato do `import-linter`.
 3. `make migration m="add habits module"` e revise o arquivo.
 4. Testes em `tests/modules/habits/`: regras de serviço, endpoints, e acesso de outro usuário retornando 404.
-5. Se o módulo tiver resumo no Início, basta o `summary` com o tipo de retorno anotado: a união discriminada do dashboard é montada a partir dos módulos instalados. Para aparecer em "Vem aí" e "Atividade recente", forneça `upcoming` e `activity` no `PrumoModule` e documente os `kind` e os campos de `data` em `docs/api.md`. Para entrar na exportação dos dados do usuário (D38), forneça `export`: uma função que devolve `ModuleExport` com as tabelas (`table_rows` de `core/export.py` faz o trabalho) e, se houver, os arquivos enviados.
+5. Se o módulo tiver resumo no Início, basta o `summary` com o tipo de retorno anotado: a união discriminada do dashboard é montada a partir dos módulos instalados. Para aparecer em "Vem aí" e "Atividade recente", forneça `upcoming` e `activity` no `PrumoModule` e documente os `kind` e os campos de `data` em `docs/api.md`. Todo `POST` de criação aceita `id` do cliente (D40): ponha `id: ClientId | None = None` no schema de criação, crie o registro com `id=data.id or uuid7()` e envolva a chamada do serviço com `create_once` (de `core/idempotency.py`), declarando `responses=created_responses(<Read>)` na rota. Para entrar na exportação dos dados do usuário (D38), forneça `export`: uma função que devolve `ModuleExport` com as tabelas (`table_rows` de `core/export.py` faz o trabalho) e, se houver, os arquivos enviados.
 6. `make openapi`.
 
 ## 3. Frontend

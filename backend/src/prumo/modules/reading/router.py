@@ -1,14 +1,15 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Query, Response, UploadFile, status
 from fastapi.responses import FileResponse
 
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
+from prumo.core.idempotency import create_once, created_responses, find_existing
 from prumo.core.pagination import Page, PageDep, Sort, sort_param
 from prumo.modules.reading import covers, service
-from prumo.modules.reading.models import Book, BookNote, BookStatus
+from prumo.modules.reading.models import Book, BookNote, BookStatus, ReadingProgress
 from prumo.modules.reading.schemas import (
     BookCreate,
     BookDetail,
@@ -68,9 +69,19 @@ def list_books(
     return service.list_books(session, user, page, status=status, owned=owned, q=q, sort=sort)
 
 
-@router.post("/books", status_code=status.HTTP_201_CREATED)
-def create_book(data: BookCreate, session: SessionDep, user: CurrentUser) -> BookRead:
-    return service.book_read(session, user, service.create_book(session, user, data))
+@router.post("/books", status_code=status.HTTP_201_CREATED, responses=created_responses(BookRead))
+def create_book(
+    data: BookCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> BookRead:
+    book = create_once(
+        session,
+        Book,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_book(session, user, data),
+    )
+    return service.book_read(session, user, book)
 
 
 @router.get("/books/{book_id}")
@@ -96,12 +107,25 @@ def list_progress(book: BookDep, session: SessionDep) -> ProgressList:
     return ProgressList(items=service.list_progress(session, book))
 
 
-@router.post("/books/{book_id}/progress", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/books/{book_id}/progress",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(BookRead),
+)
 def add_progress(
-    data: ProgressCreate, book: BookDep, session: SessionDep, user: CurrentUser
+    data: ProgressCreate, book: BookDep, session: SessionDep, user: CurrentUser, response: Response
 ) -> BookRead:
-    """R2-R4: records the current page; the status and dates follow."""
-    return service.book_read(session, user, service.add_progress(session, user, book, data.page))
+    """R2-R4: records the current page; the status and dates follow. `id` is the progress
+    record's; repeating it returns the book unchanged."""
+    if (
+        data.id is not None
+        and find_existing(session, ReadingProgress, user.id, data.id) is not None
+    ):
+        response.status_code = status.HTTP_200_OK
+        return service.book_read(session, user, book)
+    return service.book_read(
+        session, user, service.add_progress(session, user, book, data.page, record_id=data.id)
+    )
 
 
 # ---------------------------------------------------------------- cover (R6)
@@ -155,11 +179,23 @@ def list_book_notes(book: BookDep, session: SessionDep) -> NoteList:
     return NoteList(items=service.list_book_notes(session, book))
 
 
-@router.post("/books/{book_id}/notes", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/books/{book_id}/notes",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(NoteRead),
+)
 def create_note(
-    data: NoteCreate, book: BookDep, session: SessionDep, user: CurrentUser
+    data: NoteCreate, book: BookDep, session: SessionDep, user: CurrentUser, response: Response
 ) -> NoteRead:
-    return service.note_read(service.create_note(session, user, book, data), book)
+    note = create_once(
+        session,
+        BookNote,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_note(session, user, book, data),
+    )
+    return service.note_read(note, book)
 
 
 @router.patch("/books/{book_id}/notes/{note_id}")

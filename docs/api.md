@@ -240,7 +240,23 @@ Erros do módulo: `reading.page_out_of_range`, `reading.invalid_cover` (tipo ou 
 - Todos os erros 4xx/5xx documentados usam o schema `ErrorResponse`, inclusive os 422 automáticos de validação.
 - O app Android gera ou escreve seus modelos a partir do mesmo arquivo (decisão do repositório `prumo-android`).
 
-## Preparação para o Android (Fase 5)
+## Criação idempotente
 
-- Criação idempotente: `POST` aceita `id` gerado pelo cliente, permitindo repetir uma requisição após falha de rede sem duplicar registros.
-- Sincronização incremental: listas aceitam `updated_since`, e exclusões ficam registradas para que o app saiba o que remover.
+Todo `POST` que cria um registro aceita um `id` opcional (UUID v7, gerado pelo cliente; outra versão responde 422). Assim o app pode repetir uma requisição depois de uma falha de rede sem duplicar nada (D40):
+
+- Sem `id`, a API gera um, como sempre.
+- Com um `id` novo, cria e responde `201`.
+- Com o `id` de um registro que o mesmo usuário já criou naquele recurso, não grava nada e responde `200` com o registro atual. O corpo não é comparado.
+- Com o `id` de um registro de outro usuário, responde `409` com `id_conflict`.
+
+Casos particulares: numa compra parcelada, o `id` é o da primeira parcela; em `POST /reading/books/{id}/progress`, o `id` é o do registro de progresso (a resposta continua sendo o livro); em pagamentos de fatura e ajustes de saldo, o da transação criada.
+
+## Sincronização incremental
+
+Para o app manter uma cópia local (D41):
+
+1. `GET /sync/deletions?since=<data-hora>` lista o que foi excluído desde `since` (página padrão com `items: [{ resource, id, deleted_at }]`) e devolve `server_time`, o cursor da próxima sincronização. `resource` segue o nome das tabelas da exportação: `garage.vehicles`, `finance.transactions`, `reading.notes`… Exclusões em cascata também aparecem.
+2. As listas paginadas aceitam `updated_since=<data-hora>`: devolvem só o que foi criado ou alterado depois, **incluindo arquivados**, ordenado por `updated_at` (o parâmetro `sort` é ignorado).
+3. Na próxima vez, o app usa o `server_time` anterior, com alguns segundos de folga (os registros chegam por `id`, então repetir não duplica).
+
+Valores derivados (saldos, faturas, status do óleo, ritmo de leitura) não mudam o `updated_at` do registro: o app recarrega as listas pequenas (`{items}`) e os resumos inteiros a cada sincronização. Exclusões ficam guardadas por 180 dias; um `since` mais antigo responde `410` com `sync.since_too_old`, e o app refaz a carga completa.

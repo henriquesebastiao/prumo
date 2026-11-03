@@ -950,6 +950,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1447,6 +1467,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1642,6 +1682,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryRead"
                 }
               }
             }
@@ -2306,7 +2356,7 @@
           "finance"
         ],
         "summary": "Create Transaction",
-        "description": "Validates the fields of each `kind` (docs/dominio.md). With `installments`, creates every\ninstallment and returns the first (F10).",
+        "description": "Validates the fields of each `kind` (docs/dominio.md). With `installments`, creates every\ninstallment and returns the first (F10); `id` is the first installment's.",
         "operationId": "finance_create_transaction",
         "security": [
           {
@@ -2369,6 +2419,26 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -2790,6 +2860,26 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditCardRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -3477,6 +3567,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -3738,6 +3848,26 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -4343,6 +4473,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OdometerReadingRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -4798,6 +4948,26 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -5556,6 +5726,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FuelingRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -6013,6 +6203,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkshopRead"
                 }
               }
             }
@@ -6503,6 +6703,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -6835,7 +7055,7 @@
           "reading"
         ],
         "summary": "Add Progress",
-        "description": "R2-R4: records the current page; the status and dates follow.",
+        "description": "R2-R4: records the current page; the status and dates follow. `id` is the progress\nrecord's; repeating it returns the book unchanged.",
         "operationId": "reading_add_progress",
         "security": [
           {
@@ -6910,6 +7130,26 @@
           },
           "422": {
             "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -7449,6 +7689,26 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Already created with this `id` (nothing changed).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteRead"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -7658,6 +7918,19 @@
       },
       "AccountCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "maxLength": 60,
@@ -8022,6 +8295,19 @@
       },
       "AdjustmentCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "balance_cents": {
             "type": "integer",
             "maximum": 100000000000.0,
@@ -8072,6 +8358,19 @@
       },
       "BookCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "title": {
             "type": "string",
             "maxLength": 200,
@@ -8602,6 +8901,19 @@
       },
       "CategoryCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "kind": {
             "$ref": "#/components/schemas/CategoryKind"
           },
@@ -8888,6 +9200,19 @@
       },
       "CreditCardCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "maxLength": 60,
@@ -9536,6 +9861,19 @@
       },
       "FuelingCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "fueled_at": {
             "type": "string",
             "format": "date-time",
@@ -10022,6 +10360,19 @@
       },
       "InvoicePaymentCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "amount_cents": {
             "type": "integer",
             "maximum": 100000000000.0,
@@ -10319,6 +10670,19 @@
       },
       "MaintenanceCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "kind": {
             "$ref": "#/components/schemas/MaintenanceKind",
             "default": "general"
@@ -10925,6 +11289,19 @@
       },
       "NoteCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "content": {
             "type": "string",
             "maxLength": 10000,
@@ -11080,6 +11457,19 @@
       },
       "OdometerReadingCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "km": {
             "type": "integer",
             "maximum": 9999999.0,
@@ -11804,6 +12194,19 @@
       },
       "ProgressCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "page": {
             "type": "integer",
             "maximum": 100000.0,
@@ -12167,6 +12570,19 @@
       },
       "TransactionCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "kind": {
             "$ref": "#/components/schemas/TransactionKind"
           },
@@ -12759,6 +13175,19 @@
       },
       "VehicleCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "kind": {
             "$ref": "#/components/schemas/VehicleKind"
           },
@@ -13275,6 +13704,19 @@
       },
       "WorkshopCreate": {
         "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "description": "Id chosen by the client (UUID v7). Repeating it returns the record (D40)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
           "name": {
             "type": "string",
             "maxLength": 80,

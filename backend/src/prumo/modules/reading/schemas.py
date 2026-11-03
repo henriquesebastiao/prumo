@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
 
+from prumo.core.idempotency import ClientId
 from prumo.core.modules import ModuleSummary
 from prumo.core.schemas import reject_null
 from prumo.modules.reading.models import BookStatus
@@ -25,6 +26,7 @@ class BookRef(BaseModel):
 
 
 class BookCreate(BaseModel):
+    id: ClientId | None = None
     title: Title
     author: Author
     total_pages: Pages
@@ -80,6 +82,7 @@ class BookDetail(BookRead):
 
 
 class ProgressCreate(BaseModel):
+    id: ClientId | None = None
     page: Page
 
 
@@ -99,6 +102,7 @@ class ProgressList(BaseModel):
 
 
 class NoteCreate(BaseModel):
+    id: ClientId | None = None
     content: NoteText = Field(description="Simple markdown.")
     page: Page | None = None
     noted_on: date | None = Field(default=None, description="Defaults to today.")

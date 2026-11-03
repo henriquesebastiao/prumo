@@ -2,10 +2,11 @@ from datetime import date
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Response, status
 
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
+from prumo.core.idempotency import create_once, created_responses
 from prumo.core.pagination import PageDep, Sort, sort_param
 from prumo.modules.finance import service
 from prumo.modules.finance.models import (
@@ -97,9 +98,21 @@ def list_accounts(
     return service.list_accounts(session, user, archived=archived)
 
 
-@router.post("/accounts", status_code=status.HTTP_201_CREATED)
-def create_account(data: AccountCreate, session: SessionDep, user: CurrentUser) -> AccountRead:
-    return service.account_read(session, user, service.create_account(session, user, data))
+@router.post(
+    "/accounts", status_code=status.HTTP_201_CREATED, responses=created_responses(AccountRead)
+)
+def create_account(
+    data: AccountCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> AccountRead:
+    account = create_once(
+        session,
+        Account,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_account(session, user, data),
+    )
+    return service.account_read(session, user, account)
 
 
 @router.get("/accounts/{account_id}")
@@ -134,12 +147,27 @@ def unarchive_account(account: AccountDep, session: SessionDep, user: CurrentUse
     )
 
 
-@router.post("/accounts/{account_id}/adjustments", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/accounts/{account_id}/adjustments",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(TransactionRead),
+)
 def adjust_balance(
-    data: AdjustmentCreate, account: AccountDep, session: SessionDep, user: CurrentUser
+    data: AdjustmentCreate,
+    account: AccountDep,
+    session: SessionDep,
+    user: CurrentUser,
+    response: Response,
 ) -> TransactionRead:
     """F11: records an `adjustment` with the difference to the real balance."""
-    transaction = service.adjust_balance(session, user, account, data)
+    transaction = create_once(
+        session,
+        Transaction,
+        user.id,
+        data.id,
+        response,
+        lambda: service.adjust_balance(session, user, account, data),
+    )
     return service.transaction_read(session, user, transaction)
 
 
@@ -157,9 +185,21 @@ def list_categories(
     return service.list_categories(session, user, kind=kind, archived=archived, month=month)
 
 
-@router.post("/categories", status_code=status.HTTP_201_CREATED, responses=error_responses(409))
-def create_category(data: CategoryCreate, session: SessionDep, user: CurrentUser) -> CategoryRead:
-    return service.category_read(session, user, service.create_category(session, user, data))
+@router.post(
+    "/categories", status_code=status.HTTP_201_CREATED, responses=created_responses(CategoryRead)
+)
+def create_category(
+    data: CategoryCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> CategoryRead:
+    category = create_once(
+        session,
+        Category,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_category(session, user, data),
+    )
+    return service.category_read(session, user, category)
 
 
 @router.get("/categories/{category_id}")
@@ -229,13 +269,24 @@ def list_transactions(
     return service.list_transactions(session, user, page, filters, sort=sort)
 
 
-@router.post("/transactions", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/transactions",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(TransactionRead),
+)
 def create_transaction(
-    data: TransactionCreate, session: SessionDep, user: CurrentUser
+    data: TransactionCreate, session: SessionDep, user: CurrentUser, response: Response
 ) -> TransactionRead:
     """Validates the fields of each `kind` (docs/dominio.md). With `installments`, creates every
-    installment and returns the first (F10)."""
-    transaction = service.create_transaction(session, user, data)
+    installment and returns the first (F10); `id` is the first installment's."""
+    transaction = create_once(
+        session,
+        Transaction,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_transaction(session, user, data),
+    )
     return service.transaction_read(session, user, transaction)
 
 
@@ -276,9 +327,23 @@ def list_cards(
     return CreditCardList(items=service.list_cards(session, user, archived=archived))
 
 
-@router.post("/credit-cards", status_code=status.HTTP_201_CREATED)
-def create_card(data: CreditCardCreate, session: SessionDep, user: CurrentUser) -> CreditCardRead:
-    return service.card_read(session, user, service.create_card(session, user, data))
+@router.post(
+    "/credit-cards",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(CreditCardRead),
+)
+def create_card(
+    data: CreditCardCreate, session: SessionDep, user: CurrentUser, response: Response
+) -> CreditCardRead:
+    card = create_once(
+        session,
+        CreditCard,
+        user.id,
+        data.id,
+        response,
+        lambda: service.create_card(session, user, data),
+    )
+    return service.card_read(session, user, card)
 
 
 @router.get("/credit-cards/{card_id}")
@@ -325,7 +390,9 @@ def read_invoice(
 
 
 @router.post(
-    "/credit-cards/{card_id}/invoices/{closing_on}/payments", status_code=status.HTTP_201_CREATED
+    "/credit-cards/{card_id}/invoices/{closing_on}/payments",
+    status_code=status.HTTP_201_CREATED,
+    responses=created_responses(TransactionRead),
 )
 def pay_invoice(
     closing_on: date,
@@ -333,7 +400,15 @@ def pay_invoice(
     card: CardDep,
     session: SessionDep,
     user: CurrentUser,
+    response: Response,
 ) -> TransactionRead:
     """Records a `card_payment` (total or partial) from an account."""
-    transaction = service.pay_invoice(session, user, card, closing_on, data)
+    transaction = create_once(
+        session,
+        Transaction,
+        user.id,
+        data.id,
+        response,
+        lambda: service.pay_invoice(session, user, card, closing_on, data),
+    )
     return service.transaction_read(session, user, transaction)

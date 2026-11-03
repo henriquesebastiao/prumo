@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
 
+from prumo.core.idempotency import ClientId
 from prumo.core.modules import ModuleSummary
 from prumo.core.pagination import Page
 from prumo.core.schemas import reject_null
@@ -56,6 +57,7 @@ class CardRef(BaseModel):
 
 
 class AccountCreate(BaseModel):
+    id: ClientId | None = None
     name: AccountName
     kind: AccountKind
     initial_balance_cents: SignedCents = Field(
@@ -101,6 +103,7 @@ class AccountList(BaseModel):
 
 
 class AdjustmentCreate(BaseModel):
+    id: ClientId | None = None
     balance_cents: SignedCents = Field(description="The real balance on `occurred_on`.")
     occurred_on: date | None = Field(default=None, description="Defaults to today.")
     description: Description = ""
@@ -110,6 +113,7 @@ class AdjustmentCreate(BaseModel):
 
 
 class CategoryCreate(BaseModel):
+    id: ClientId | None = None
     kind: CategoryKind
     name: CategoryName
     color: Color = "gray"
@@ -146,6 +150,7 @@ class CategoryList(BaseModel):
 
 
 class CreditCardCreate(BaseModel):
+    id: ClientId | None = None
     name: AccountName
     limit_cents: Cents
     closing_day: Day
@@ -200,6 +205,7 @@ class CreditCardRead(BaseModel):
 
 
 class InvoicePaymentCreate(BaseModel):
+    id: ClientId | None = None
     amount_cents: Annotated[int, Field(ge=1, le=MAX_CENTS)]
     account_id: UUID
     occurred_on: date | None = Field(default=None, description="Defaults to today.")
@@ -211,6 +217,7 @@ class InvoicePaymentCreate(BaseModel):
 
 
 class TransactionCreate(BaseModel):
+    id: ClientId | None = None
     kind: TransactionKind
     amount_cents: SignedCents = Field(
         description="Positive; only `adjustment` is signed. With `installments`, the total."
