@@ -45,12 +45,23 @@
   --color-module-reading-on-container: var(--p-violet-200);
   --color-module-reading-soft: var(--p-violet-750);
   --color-module-reading-softer: var(--p-violet-950);
-  --color-swatch-blue: var(--p-blue-500);
-  --color-swatch-pink: var(--p-pink-500);
+
+  /* User colors (accounts, categories, cards): rendered through the swatch-* tones */
+  --color-swatch-green: var(--p-green-500);
+  --color-swatch-teal: var(--p-teal-500);
   --color-swatch-cyan: var(--p-cyan-500);
+  --color-swatch-blue: var(--p-blue-500);
+  --color-swatch-indigo: var(--p-indigo-500);
+  --color-swatch-violet: var(--p-violet-500);
+  --color-swatch-pink: var(--p-pink-500);
+  --color-swatch-red: var(--p-red-600);
+  --color-swatch-orange: var(--p-orange-500);
+  --color-swatch-amber: var(--p-amber-500);
+  --color-swatch-gray: var(--p-graphite-400);
   --shadow-sm: none;
   --shadow-lg: 0 16px 40px rgb(0 0 0 / 55%);
   --shadow-focus: 0 0 0 3px var(--color-fill);
   --shadow-selected: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text);
+  --shadow-selected-inset: inset 0 0 0 1px var(--color-text);
   --shadow-drop-indicator: inset 0 2px 0 var(--color-focus);
 }

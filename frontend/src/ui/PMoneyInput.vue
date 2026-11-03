@@ -12,8 +12,10 @@ withDefaults(
     disabled?: boolean
     calculated?: boolean
     id?: string
+    /** `lg`: large amount, aligned to the start (transaction form). */
+    size?: 'md' | 'lg'
   }>(),
-  { placeholder: undefined, id: undefined },
+  { placeholder: undefined, id: undefined, size: 'md' },
 )
 
 /** Value in cents, as the API expects. */
@@ -37,6 +39,7 @@ const amount = computed({
     :invalid="invalid"
     :disabled="disabled"
     :calculated="calculated"
-    align="end"
+    :size="size"
+    :align="size === 'lg' ? 'start' : 'end'"
   />
 </template>

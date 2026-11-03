@@ -69,3 +69,59 @@
   --tone-soft: var(--color-module-reading-soft);
   --tone-softer: var(--color-module-reading-softer);
 }
+
+/*
+ * User colors (`swatch-<color>`): accounts, categories and cards. The ramp is derived from the
+ * swatch, mixed with the surface (backgrounds) and the text color (icons), so it adapts to the theme.
+ */
+[data-tone^='swatch-'] {
+  --tone: var(--swatch);
+  --tone-container: color-mix(in oklab, var(--swatch) 15%, var(--color-surface));
+  --tone-on-container: color-mix(in oklab, var(--swatch) 82%, var(--color-text));
+  --tone-soft: color-mix(in oklab, var(--swatch) 55%, var(--color-surface));
+  --tone-softer: color-mix(in oklab, var(--swatch) 25%, var(--color-surface));
+}
+
+[data-tone='swatch-green'] {
+  --swatch: var(--color-swatch-green);
+}
+
+[data-tone='swatch-teal'] {
+  --swatch: var(--color-swatch-teal);
+}
+
+[data-tone='swatch-cyan'] {
+  --swatch: var(--color-swatch-cyan);
+}
+
+[data-tone='swatch-blue'] {
+  --swatch: var(--color-swatch-blue);
+}
+
+[data-tone='swatch-indigo'] {
+  --swatch: var(--color-swatch-indigo);
+}
+
+[data-tone='swatch-violet'] {
+  --swatch: var(--color-swatch-violet);
+}
+
+[data-tone='swatch-pink'] {
+  --swatch: var(--color-swatch-pink);
+}
+
+[data-tone='swatch-red'] {
+  --swatch: var(--color-swatch-red);
+}
+
+[data-tone='swatch-orange'] {
+  --swatch: var(--color-swatch-orange);
+}
+
+[data-tone='swatch-amber'] {
+  --swatch: var(--color-swatch-amber);
+}
+
+[data-tone='swatch-gray'] {
+  --swatch: var(--color-swatch-gray);
+}

@@ -43,10 +43,15 @@ const open = defineModel<boolean>('open', { default: false })
 const FIELDS =
   'input:not([readonly]), textarea, select, [role="radio"][data-state="checked"], button'
 
-/** Forms open with the first field focused instead of the close button. */
+/**
+ * Forms open with the first field focused instead of the close button. A field wrapped in
+ * `data-autofocus` (the amount of a transaction) takes precedence.
+ */
 function focusFirstField(event: Event) {
   const content = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
-  const field = content?.querySelector<HTMLElement>(`.p-dialog__body :is(${FIELDS})`)
+  const field =
+    content?.querySelector<HTMLElement>(`.p-dialog__body [data-autofocus] :is(${FIELDS})`) ??
+    content?.querySelector<HTMLElement>(`.p-dialog__body :is(${FIELDS})`)
   if (!field) return
   event.preventDefault()
   requestAnimationFrame(() => field.focus())

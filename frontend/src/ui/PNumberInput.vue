@@ -15,6 +15,7 @@ const props = withDefaults(
     calculated?: boolean
     align?: 'start' | 'end'
     id?: string
+    size?: 'md' | 'lg'
   }>(),
   {
     decimals: 0,
@@ -23,6 +24,7 @@ const props = withDefaults(
     placeholder: undefined,
     align: 'start',
     id: undefined,
+    size: 'md',
   },
 )
 
@@ -56,6 +58,7 @@ function onBlur() {
     :disabled="disabled"
     :calculated="calculated"
     :align="align"
+    :size="size"
     :inputmode="decimals === 0 ? 'numeric' : 'decimal'"
     autocomplete="off"
     @update:model-value="onInput"

@@ -210,6 +210,12 @@ export function weekdayDate(value: DateInput, withYear = true): string {
   return `${weekday}, ${get('day')} de ${get('month')}${year}`
 }
 
+/** `Terça, 17/11` (day headers of transaction lists). */
+export function weekdayDayMonth(value: DateInput): string {
+  const get = parts(value, 'weekday', { weekday: 'long', day: 'numeric', month: 'long' })
+  return `${capitalize(get('weekday').replace(/-feira$/, ''))}, ${dateShort(value)}`
+}
+
 /** Day and abbreviated month for date badges: `{ day: '25', month: 'nov' }`. */
 export function dayMonth(value: DateInput): { day: string; month: string } {
   const get = parts(value, 'dayMonth', { day: '2-digit', month: 'short' })

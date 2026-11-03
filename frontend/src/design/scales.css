@@ -92,6 +92,7 @@
   --control-height: 44px;
   --control-height-sm: 36px;
   --control-height-lg: 52px;
+  --control-height-xl: 64px; /* hero amount field */
   --tab-height: 40px;
   --icon-sm: 16px;
   --icon-md: 20px;

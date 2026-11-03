@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, type RouteLocationRaw } from 'vue-router'
 
-withDefaults(defineProps<{ title?: string; subtitle?: string; to?: RouteLocationRaw }>(), {
-  title: undefined,
-  subtitle: undefined,
-  to: undefined,
-})
+withDefaults(
+  defineProps<{
+    title?: string
+    subtitle?: string
+    to?: RouteLocationRaw
+    /** Highlights the item being edited in a side panel. */
+    current?: boolean
+  }>(),
+  { title: undefined, subtitle: undefined, to: undefined },
+)
 </script>
 
 <template>
-  <li class="p-list-item">
+  <li class="p-list-item" :class="{ 'p-list-item--current': current }">
     <component :is="to ? RouterLink : 'div'" :to="to" class="p-list-item__row">
       <slot name="leading" />
       <span class="p-list-item__body">
@@ -32,6 +37,18 @@ withDefaults(defineProps<{ title?: string; subtitle?: string; to?: RouteLocation
 
 .p-list-item:first-child {
   border-top: 0;
+}
+
+.p-list-item--current,
+.p-list-item--current + .p-list-item {
+  border-top-color: transparent;
+}
+
+.p-list-item--current {
+  margin: 0 calc(-1 * var(--space-3));
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-inset);
 }
 
 .p-list-item__row {

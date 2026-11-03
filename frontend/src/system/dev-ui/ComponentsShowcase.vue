@@ -12,8 +12,10 @@ import {
   PBadge,
   PButton,
   PCard,
+  PCardFace,
   PChart,
   PCheckbox,
+  PChipChoice,
   PChoiceCards,
   PCombobox,
   PCommand,
@@ -29,6 +31,7 @@ import {
   PField,
   PIcon,
   PIconButton,
+  PIconPicker,
   PInput,
   PKbd,
   PLink,
@@ -37,6 +40,7 @@ import {
   PLogo,
   PMenu,
   PMoneyInput,
+  PMonthNav,
   PNavList,
   PNote,
   PNumberInput,
@@ -87,6 +91,36 @@ const off = ref(false)
 const checked = ref(true)
 const color = ref('blue')
 const page = ref(212)
+const bigCents = ref<number | null>(6430)
+const month = ref('2026-11')
+const chip = ref('food')
+const chips = [
+  { value: 'food', label: 'Alimentação', icon: 'utensils' as const },
+  { value: 'fuel', label: 'Combustível', icon: 'fuel' as const },
+  { value: 'home', label: 'Moradia', icon: 'home' as const },
+  { value: 'fun', label: 'Lazer', icon: 'ticket' as const },
+]
+const pickedIcon = ref('vault')
+const iconChoices = [
+  { value: 'bank', icon: 'bank' as const, label: 'Banco' },
+  { value: 'vault', icon: 'vault' as const, label: 'Cofre' },
+  { value: 'wallet', icon: 'wallet' as const, label: 'Carteira' },
+  { value: 'trending-up', icon: 'trending-up' as const, label: 'Investimento' },
+  { value: 'card', icon: 'card' as const, label: 'Cartão' },
+]
+const userColors = [
+  'green',
+  'teal',
+  'cyan',
+  'blue',
+  'indigo',
+  'violet',
+  'pink',
+  'red',
+  'orange',
+  'amber',
+  'gray',
+] as const
 const themeChoice = ref<'light' | 'dark' | 'system'>('light')
 const tab = ref('maintenances')
 const sortable = ref([
@@ -120,8 +154,12 @@ const kinds = [
 ]
 const swatches = [
   { value: 'blue', label: 'Azul', color: 'var(--color-swatch-blue)' },
+  { value: 'violet', label: 'Violeta', color: 'var(--color-swatch-violet)' },
+  { value: 'orange', label: 'Laranja', color: 'var(--color-swatch-orange)' },
+  { value: 'green', label: 'Verde', color: 'var(--color-swatch-green)' },
   { value: 'pink', label: 'Rosa', color: 'var(--color-swatch-pink)' },
   { value: 'cyan', label: 'Ciano', color: 'var(--color-swatch-cyan)' },
+  { value: 'gray', label: 'Cinza', color: 'var(--color-swatch-gray)' },
 ]
 const themes = [
   { value: 'light' as const, label: 'Claro' },
@@ -191,6 +229,9 @@ const networkError = ApiError.network(new Error('offline'))
           <i /><i /><i /><i /><i />
           <code>{{ tone }}</code>
         </span>
+      </ShowcaseRow>
+      <ShowcaseRow label="user colors (swatch-*)">
+        <PTile v-for="name in userColors" :key="name" icon="wallet" :tone="`swatch-${name}`" />
       </ShowcaseRow>
     </ShowcaseSection>
 
@@ -285,6 +326,9 @@ const networkError = ApiError.network(new Error('offline'))
         <PField label="Dinheiro (centavos)" :hint="`Valor: ${cents} centavos`">
           <PMoneyInput v-model="cents" />
         </PField>
+        <PField label="Valor em destaque" hint='size="lg"'>
+          <PMoneyInput v-model="bigCents" size="lg" />
+        </PField>
         <PField label="Calculado" hint="Fundo cinza e borda tracejada">
           <PInput model-value="6,35" prefix="R$" align="end" calculated readonly />
         </PField>
@@ -314,6 +358,15 @@ const networkError = ApiError.network(new Error('offline'))
         <PField label="Seleção">
           <PSelect v-model="account" :options="accounts" :portal="false" />
         </PField>
+        <PField label="Filtro" label-as="span">
+          <PSelect
+            v-model="account"
+            :options="accounts"
+            :portal="false"
+            variant="filter"
+            icon="calendar"
+          />
+        </PField>
         <PField label="Busca com criação">
           <PCombobox
             v-model="workshop"
@@ -336,6 +389,20 @@ const networkError = ApiError.network(new Error('offline'))
         </PField>
         <PField label="Cor" label-as="span">
           <PSwatchPicker v-model="color" :options="swatches" label="Cor" />
+        </PField>
+        <PField label="Ícone" label-as="span">
+          <PIconPicker
+            v-model="pickedIcon"
+            :options="iconChoices"
+            label="Ícone"
+            :tone="`swatch-${color}`"
+          />
+        </PField>
+        <PField label="Chips com ícone" label-as="span">
+          <PChipChoice v-model="chip" :options="chips" label="Categoria" tone="finance" />
+        </PField>
+        <PField label="Mês" label-as="span">
+          <PMonthNav v-model="month" label="Mês" />
         </PField>
         <PField label="Página atual" label-as="span">
           <div class="showcase__inline">
@@ -370,6 +437,10 @@ const networkError = ApiError.network(new Error('offline'))
             <template #leading><PTile icon="minus" tone="finance" /></template>
             <template #trailing><PText variant="h3" as="span">R$ 212,40</PText></template>
           </PListItem>
+          <PListItem title="Item em edição" subtitle="current" current>
+            <template #leading><PTile icon="fuel" tone="swatch-gray" /></template>
+            <template #trailing><PBadge variant="solid">Editando</PBadge></template>
+          </PListItem>
         </PList>
       </PCard>
       <PTable :columns="columns" :rows="rows" :row-key="(row) => row.id" caption="Exemplo">
@@ -393,6 +464,9 @@ const networkError = ApiError.network(new Error('offline'))
             { label: 'Intervalo', value: '1.000 km' },
           ]"
         />
+      </div>
+      <div class="showcase__card-face">
+        <PCardFace name="Nubank" caption="Fecha dia 3 · vence dia 10" tone="swatch-green" />
       </div>
       <ShowcaseRow label="tile · avatar">
         <PTile icon="car" tone="garage" />
@@ -654,6 +728,10 @@ const networkError = ApiError.network(new Error('offline'))
 .showcase__tone code {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+}
+
+.showcase__card-face {
+  max-width: 360px;
 }
 
 .showcase__swatch {

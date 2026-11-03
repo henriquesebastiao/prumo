@@ -25,6 +25,8 @@ const props = withDefaults(
     inputmode?: 'text' | 'numeric' | 'decimal' | 'email' | 'search' | 'tel' | 'url'
     id?: string
     maxlength?: number
+    /** `lg`: the hero amount of a form ("Valor" of a transaction). */
+    size?: 'md' | 'lg'
   }>(),
   {
     type: 'text',
@@ -37,6 +39,7 @@ const props = withDefaults(
     inputmode: undefined,
     id: undefined,
     maxlength: undefined,
+    size: 'md',
   },
 )
 
@@ -57,6 +60,7 @@ defineExpose({ focus: () => input.value?.focus(), select: () => input.value?.sel
       'p-control--invalid': field.invalid.value,
       'p-control--calculated': calculated,
       'p-control--disabled': disabled,
+      'p-control--lg': size === 'lg',
     }"
   >
     <PIcon v-if="icon" :name="icon" size="sm" class="p-control__icon" />

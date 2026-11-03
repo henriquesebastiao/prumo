@@ -24,7 +24,9 @@
       "handle": "Mover {item}",
       "instructions": "Use as setas para cima e para baixo para mudar a posição.",
       "moved": "{item} na posição {position} de {total}."
-    }
+    },
+    "previousMonth": "Mês anterior",
+    "nextMonth": "Próximo mês"
   },
   "nav": {
     "main": "Navegação principal",

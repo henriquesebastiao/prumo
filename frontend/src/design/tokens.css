@@ -70,10 +70,13 @@
   --p-red-950: #3d1814;
   --p-red-1000: #2a0905;
 
-  /* User color palette (accounts, categories) */
-  --p-blue-500: #2f6fde;
-  --p-pink-500: #d2508a;
+  /* User color palette (accounts, categories, cards) */
+  --p-teal-500: #16917f;
   --p-cyan-500: #1f9db3;
+  --p-blue-500: #2f6fde;
+  --p-indigo-500: #4f5ad1;
+  --p-pink-500: #d2508a;
+  --p-amber-500: #c98a12;
 
   /* Typography */
   --p-font-figtree: 'Figtree Variable', 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
