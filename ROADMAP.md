@@ -76,14 +76,14 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] Revisão visual contra `design/v1/`
 
 ## Fase 4 — Versão 0.1 (self-host)
-- [ ] Imagens Docker publicadas
-- [ ] Guia de instalação e atualização
+- [ ] Imagens Docker publicadas (workflow `release.yml` pronto; publica na primeira tag `0.1.0`)
+- [x] Guia de instalação e atualização
 - [x] Documentação interativa da API (`/api/docs`) sem CDN: servir os arquivos do Swagger UI pela própria instância
 - [x] Exportação dos dados do usuário (JSON e CSV)
 - [ ] Revisão de responsividade (tablet e celular) e de acessibilidade
 - [ ] Testes E2E dos fluxos principais com Playwright
 - [x] Licença escolhida e arquivo `LICENSE`
-- [ ] README em inglês
+- [x] README em inglês
 
 ## Fase 5 — Preparação para o Android
 - [ ] Criação idempotente: aceitar `id` gerado pelo cliente nos `POST`

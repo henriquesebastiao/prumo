@@ -95,6 +95,10 @@ Acesse `http://localhost:5173`. O Vite encaminha `/api` para a API, então o com
 
 Workflow em `.github/workflows/ci.yml` (sintaxe compatível com Forgejo Actions), com três jobs: backend (lint, mypy, pytest com PostgreSQL em service container, snapshot OpenAPI), frontend (lint, vue-tsc, Vitest, tipos gerados e build) e imagens (build de `deploy/api.Dockerfile` e `deploy/web.Dockerfile`, sem publicar).
 
+## Imagens e versões
+
+O `docker-compose.yml` usa as imagens do GHCR (`PRUMO_VERSION`, padrão `latest`). Para testar as imagens construídas a partir do código, some o override: `docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build`. O workflow `release.yml` publica as imagens quando uma tag de versão sem prefixo (`0.1.0`) é enviada (D37); o passo a passo está em [instalacao.md](instalacao.md#publicar-uma-versão-mantenedores).
+
 ## Backup e restauração
 
 `make backup` (`deploy/backup.sh`) executa `pg_dump --clean --if-exists` no container `db` e grava um arquivo compactado em `backups/` (fora do controle de versão); na stack de produção, também empacota o volume `uploads` (capas) num `.tar.gz` com o mesmo nome. `make restore` restaura os dois quando encontra o par. Em produção, agende o mesmo script (por exemplo, com cron) e copie os arquivos para fora do servidor. `make restore f=<arquivo>` (`deploy/restore.sh`) para a API, recria os objetos do banco a partir do backup e religa a API; `PRUMO_RESTORE_CONFIRM=yes` dispensa a confirmação.

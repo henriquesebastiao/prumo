@@ -1,103 +1,105 @@
 # Prumo
 
-Organização pessoal modular e self-hosted: veículos, finanças, leituras e o que mais vier, rodando no seu próprio servidor.
+Modular, self-hosted personal organization: vehicles, finances, books and whatever comes next, running on your own server.
 
-> "Estar no prumo" é estar em ordem, alinhado. É o que o Prumo tenta fazer pela rotina: um lugar só, sob o seu controle, para registrar e acompanhar as coisas do dia a dia.
+> In Portuguese, *estar no prumo* means to be in order, aligned (a *prumo* is a plumb line). That is what Prumo tries to do for everyday life: one place, under your control, to record and keep track of the things that matter.
 
-**Status:** em desenvolvimento inicial. Ainda não está pronto para uso; acompanhe pelo [ROADMAP](ROADMAP.md).
+**Status:** early development, heading to version 0.1. See the [ROADMAP](ROADMAP.md). The interface is in Brazilian Portuguese for now, and so is the technical documentation in `docs/`.
 
-## O que ele faz
+## Features
 
-**Veículos.** Carros e motos com quilometragem atualizável a qualquer momento; manutenções com peças, valores, mão de obra e oficina; trocas de óleo com cálculo automático da próxima, por km ou por data; abastecimentos com preço por litro e consumo médio; um painel rápido de cada veículo.
+**Finanças (finances).** Accounts and balances with adjustments; income, expenses and transfers with search by text or value; categories; credit cards with invoices, available limit, payments and installments; a monthly overview with a six-month chart and spending by category.
 
-**Finanças.** Contas e saldos; receitas, despesas e transferências; categorias personalizáveis; cartões de crédito com faturas, limite disponível e pagamento; visão geral do mês.
+**Veículos (vehicles).** Cars and motorcycles with an odometer you can update at any time; maintenances with parts, labor and workshop; oil changes with the next one due by km or by date, estimated from your pace; fuelings with price per liter and consumption.
 
-**Livros.** Os livros que você tem, está lendo e quer ler; progresso de leitura com histórico; anotações por livro.
+**Livros (books).** The books you own, are reading or want to read; reading progress with history, pace and a finish forecast; notes per book; covers.
 
-**E o que vier depois.** Cada área da vida é um módulo independente. Módulos novos entram sem mexer nos existentes, e cada pessoa ativa só os que usa.
+**Início (home).** A card per module, quick actions (press `N` anywhere), what is coming up next and recent activity across modules.
 
-## Princípios
+**And more to come.** Each area of life is an independent module. New modules plug in without touching the existing ones, and each person turns on only the modules they use.
 
-- **Seus dados, seu servidor.** Self-hosted, sem serviços de terceiros, com backup simples do banco.
-- **API primeiro.** Tudo o que a interface web faz passa por uma API documentada. O app Android usa a mesma API.
-- **Modular.** Módulos isolados, com o mesmo contrato no backend e no frontend.
-- **Multiusuário por instância.** Uma instalação pode atender mais de uma pessoa, cada uma com os próprios dados.
-- **Design substituível.** A aparência vive em tokens e em uma biblioteca de componentes própria, para que a interface evolua sem reescrever telas.
+## Principles
+
+- **Your data, your server.** Self-hosted, no third-party services (not even a CDN), simple backups and a full export of your data (JSON, CSV and files).
+- **API first.** Everything the web app does goes through a documented API (`/api/docs`). The Android app uses the same API.
+- **Modular.** Isolated modules with the same contract on the backend and the frontend.
+- **Multi-user.** One instance can serve several people, each with their own data.
+- **Replaceable design.** Look and feel live in design tokens and an in-house component library, so the interface can evolve without rewriting screens.
 
 ## Stack
 
-| Camada | Tecnologia |
+| Layer | Technology |
 |---|---|
 | API | Python 3.14, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic |
-| Banco | PostgreSQL |
+| Database | PostgreSQL |
 | Web | Vue 3, TypeScript, Vite, Vue Router, TanStack Query, vue-i18n, Reka UI |
-| Android | Kotlin, Jetpack Compose, Material 3 Expressive (repositório `prumo-android`, em breve) |
-| Implantação | Docker Compose, nginx |
+| Android | Kotlin, Jetpack Compose, Material 3 Expressive (`prumo-android` repository, coming soon) |
+| Deployment | Docker Compose, nginx, images on GitHub Container Registry |
 
-## Instalação (self-host)
+## Self-hosting
 
-> Disponível a partir da versão 0.1. Os comandos abaixo descrevem o fluxo planejado.
+Requirements: Docker with the Compose plugin and, outside `localhost`, a reverse proxy with HTTPS.
 
 ```bash
-git clone <url-do-repositorio> prumo
-cd prumo
-cp .env.example .env          # defina senhas, porta e fuso horário
+mkdir prumo && cd prumo
+base=https://raw.githubusercontent.com/henriquesebastiao/prumo/0.1.0
+curl -fsSLO "$base/docker-compose.yml"
+curl -fsSL "$base/.env.example" -o .env     # set POSTGRES_PASSWORD, PRUMO_VERSION, PRUMO_PORT
 docker compose up -d
 docker compose exec api prumo users create --admin
 ```
 
-Acesse `http://<seu-servidor>:<PRUMO_PORT>`. Para HTTPS, publique a porta através do seu proxy reverso. Não existe cadastro público: novos usuários são criados pela linha de comando.
+Open `http://<your-server>:<PRUMO_PORT>` (through your HTTPS proxy). There is no public sign-up: users are created from the command line. Database migrations run automatically when the API starts.
 
-> **Cookie seguro.** Com `PRUMO_COOKIE_SECURE=true` (o padrão), o navegador só envia o cookie de sessão por HTTPS, então o login pela web não funciona acessando o Prumo por `http://` (exceto em `localhost`). Use um proxy reverso com TLS ou, só numa rede de confiança, defina `PRUMO_COOKIE_SECURE=false`. O app Android não depende de cookie.
->
-> **Senha do banco.** `POSTGRES_PASSWORD` entra na URL de conexão da API: use letras, números, `-` e `_`, ou codifique os demais caracteres (`@` vira `%40`).
+The full guide, with backups, updates and building the images yourself, is in [docs/instalacao.md](docs/instalacao.md) (in Portuguese).
 
-O backup é um dump do PostgreSQL (`make backup`); veja [docs/desenvolvimento.md](docs/desenvolvimento.md).
+> **Secure cookie.** With `PRUMO_COOKIE_SECURE=true` (the default), browsers only send the session cookie over HTTPS, so web login does not work over plain `http://` except on `localhost`. Use a TLS reverse proxy or, on a trusted network only, set `PRUMO_COOKIE_SECURE=false`.
 
-## Desenvolvimento
+## Development
 
-Requisitos: Docker, [uv](https://docs.astral.sh/uv/), Node.js 26 (LTS) com pnpm 12 e make.
+Requirements: Docker, [uv](https://docs.astral.sh/uv/), Node.js 26 with pnpm 12, and make.
 
 ```bash
 cp .env.example .env
 (cd backend && uv sync) && (cd frontend && pnpm install)
-make dev        # banco no Docker, API com reload e frontend com Vite
-make user       # cria o primeiro usuário
-make check      # lint, tipos e testes
+make dev        # PostgreSQL in Docker, API with reload and the Vite dev server
+make user       # create the first user
+make check      # lint, types, tests and the OpenAPI snapshot
 ```
 
-O guia completo está em [docs/desenvolvimento.md](docs/desenvolvimento.md).
+`make screenshots` captures every screen with Playwright and builds side-by-side comparisons with the design. See [docs/desenvolvimento.md](docs/desenvolvimento.md) for the complete guide.
 
-## Estrutura
+## Repository layout
 
 ```
 prumo/
-├── backend/     API FastAPI (pacote prumo), migrations e testes
-├── frontend/    SPA Vue 3
-├── design/      Exportações do design (referência visual)
-├── openapi/     Snapshot do contrato da API
-├── deploy/      Dockerfiles, nginx e scripts
-└── docs/        Documentação técnica
+├── backend/     FastAPI app (prumo package), migrations and tests
+├── frontend/    Vue 3 SPA
+├── design/      Design exports (visual reference only)
+├── openapi/     Snapshot of the API contract
+├── deploy/      Dockerfiles, nginx configuration and backup scripts
+└── docs/        Technical documentation (Portuguese)
 ```
 
-## Documentação
+## Documentation
 
-- [Arquitetura](docs/arquitetura.md)
+- [Architecture](docs/arquitetura.md)
 - [API](docs/api.md)
-- [Domínio e regras de negócio](docs/dominio.md)
-- [Frontend e design](docs/frontend.md)
-- [Desenvolvimento](docs/desenvolvimento.md)
-- [Como criar um módulo](docs/novo-modulo.md)
-- [Decisões técnicas](docs/decisoes.md)
+- [Domain and business rules](docs/dominio.md)
+- [Frontend and design system](docs/frontend.md)
+- [Development](docs/desenvolvimento.md)
+- [Self-hosting](docs/instalacao.md)
+- [Creating a module](docs/novo-modulo.md)
+- [Technical decisions](docs/decisoes.md)
 
-## Contribuindo
+## Contributing
 
-Issues e sugestões são bem-vindas. Antes de abrir um pull request, leia a arquitetura e o guia de desenvolvimento. Ideias de novos módulos podem começar como issue.
+Issues and suggestions are welcome. Before opening a pull request, read the architecture and development guides. Ideas for new modules can start as an issue.
 
-## Licença
+## License
 
-[GNU Affero General Public License v3.0 ou posterior](LICENSE) (`AGPL-3.0-or-later`). Se você modificar o Prumo e oferecê-lo pela rede a outras pessoas, precisa disponibilizar o código-fonte modificado a elas.
+[GNU Affero General Public License v3.0 or later](LICENSE) (`AGPL-3.0-or-later`). If you modify Prumo and offer it to other people over a network, you must make your modified source code available to them.
 
 ---
 
-Feito por [Henrique Sebastião](https://henriquesebastiao.com).
+Made by [Henrique Sebastião](https://henriquesebastiao.com).

@@ -1,0 +1,14 @@
+# Builds the images from this checkout instead of pulling them from GHCR:
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+services:
+  api:
+    build:
+      context: .
+      dockerfile: deploy/api.Dockerfile
+    image: prumo-api:local
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+    image: prumo-web:local

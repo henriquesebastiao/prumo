@@ -21,6 +21,7 @@ O estado atual e a próxima tarefa estão sempre no `ROADMAP.md`.
 - Regras de negócio e modelo de dados: `docs/dominio.md`
 - Telas, componentes, tokens ou redesign: `docs/frontend.md`
 - Setup, comandos, testes e migrations: `docs/desenvolvimento.md`
+- Instalação, atualização e publicação de versões: `docs/instalacao.md`
 - O porquê de uma escolha: `docs/decisoes.md`
 
 ## Comandos
