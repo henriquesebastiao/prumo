@@ -15,7 +15,7 @@ from prumo.core.clock import utcnow
 from prumo.core.dates import add_months
 from prumo.core.errors import ConflictError, DomainError, NotFoundError
 from prumo.core.modules import ActivityItem, UpcomingItem
-from prumo.core.pagination import Page, PageParams, Sort, paginate
+from prumo.core.pagination import Page, PageParams, Sort, SortColumn, paginate
 from prumo.modules.garage import rules
 from prumo.modules.garage.models import (
     Fueling,
@@ -119,11 +119,12 @@ def list_vehicles(
     *,
     archived: Literal["false", "true", "all"] = "false",
     sort: Sort | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[VehicleRead]:
     stmt = select(Vehicle).where(Vehicle.user_id == user.id)
-    if archived == "false":
+    if archived == "false" and updated_since is None:
         stmt = stmt.where(Vehicle.archived_at.is_(None))
-    elif archived == "true":
+    elif archived == "true" and updated_since is None:
         stmt = stmt.where(Vehicle.archived_at.is_not(None))
     result = paginate(
         session,
@@ -132,6 +133,7 @@ def list_vehicles(
         sort=sort or Sort("created_at", descending=False),
         sort_columns=VEHICLE_SORT,
         tiebreaker=(Vehicle.id,),
+        updated_since=updated_since,
     )
     reads = vehicle_reads(session, user, result.items)
     return Page[VehicleRead](items=reads, total=result.total, limit=page.limit, offset=page.offset)
@@ -304,7 +306,12 @@ def _remove_reading(
 
 
 def list_readings(
-    session: Session, user: User, vehicle: Vehicle, page: PageParams
+    session: Session,
+    user: User,
+    vehicle: Vehicle,
+    page: PageParams,
+    *,
+    updated_since: datetime | None = None,
 ) -> Page[OdometerReading]:
     stmt = select(OdometerReading).where(
         OdometerReading.user_id == user.id, OdometerReading.vehicle_id == vehicle.id
@@ -316,6 +323,7 @@ def list_readings(
         sort=Sort("recorded_at", descending=True),
         sort_columns={"recorded_at": OdometerReading.recorded_at},
         tiebreaker=(OdometerReading.id.desc(),),
+        updated_since=updated_since,
     )
 
 
@@ -552,7 +560,12 @@ def _escape_like(text: str) -> str:
 
 
 def list_workshops(
-    session: Session, user: User, page: PageParams, *, q: str | None = None
+    session: Session,
+    user: User,
+    page: PageParams,
+    *,
+    q: str | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[WorkshopRead]:
     stmt = _workshop_stats(session, user)
     count_stmt = select(func.count()).select_from(Workshop).where(Workshop.user_id == user.id)
@@ -560,9 +573,12 @@ def list_workshops(
         pattern = f"%{_escape_like(q.strip())}%"
         stmt = stmt.where(Workshop.name.ilike(pattern, escape="\\"))
         count_stmt = count_stmt.where(Workshop.name.ilike(pattern, escape="\\"))
-    rows = session.execute(
-        stmt.order_by(func.lower(Workshop.name), Workshop.id).limit(page.limit).offset(page.offset)
-    ).all()
+    order: tuple[SortColumn, ...] = (func.lower(Workshop.name), Workshop.id)
+    if updated_since is not None:
+        stmt = stmt.where(Workshop.updated_at > updated_since)
+        count_stmt = count_stmt.where(Workshop.updated_at > updated_since)
+        order = (Workshop.updated_at, Workshop.id)
+    rows = session.execute(stmt.order_by(*order).limit(page.limit).offset(page.offset)).all()
     return Page[WorkshopRead](
         items=[_workshop_read(workshop, count, last) for workshop, count, last in rows],
         total=session.scalar(count_stmt) or 0,
@@ -690,6 +706,7 @@ def list_maintenances(
     kind: MaintenanceKind | None = None,
     workshop_id: UUID | None = None,
     sort: Sort | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[MaintenanceRead]:
     stmt = select(Maintenance).where(Maintenance.user_id == user.id)
     if vehicle_id is not None:
@@ -705,6 +722,7 @@ def list_maintenances(
         sort=sort or Sort("performed_at", descending=True),
         sort_columns=MAINTENANCE_SORT,
         tiebreaker=(Maintenance.id.desc(),),
+        updated_since=updated_since,
     )
     return Page[MaintenanceRead](
         items=maintenance_reads(session, result.items),
@@ -787,6 +805,8 @@ def update_maintenance(
         if name in changes:
             setattr(maintenance, name, changes[name])
     if data.items is not None:
+        # Items live in their own table: the maintenance is marked as changed for sync (D41).
+        maintenance.updated_at = utcnow()
         maintenance.items.clear()
         session.flush()
         maintenance.items.extend(_items(user, data.items))
@@ -915,6 +935,7 @@ def list_fuelings(
     from_day: date | None = None,
     to_day: date | None = None,
     sort: Sort | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[FuelingRead]:
     moment = moment_for(session, user)
     stmt = select(Fueling).where(Fueling.user_id == user.id)
@@ -931,6 +952,7 @@ def list_fuelings(
         sort=sort or Sort("fueled_at", descending=True),
         sort_columns=FUELING_SORT,
         tiebreaker=(Fueling.id.desc(),),
+        updated_since=updated_since,
     )
     return Page[FuelingRead](
         items=fueling_reads(session, result.items),

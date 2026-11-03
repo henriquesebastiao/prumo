@@ -1,7 +1,7 @@
 """Business rules of the reading module (docs/dominio.md, R1-R11)."""
 
 from collections.abc import Iterable, Sequence
-from datetime import date
+from datetime import date, datetime
 from uuid import UUID, uuid7
 from zoneinfo import ZoneInfo
 
@@ -324,6 +324,7 @@ def list_books(
     owned: bool | None = None,
     q: str | None = None,
     sort: Sort | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[BookRead]:
     stmt = select(Book).where(Book.user_id == user.id)
     if status is not None:
@@ -342,6 +343,7 @@ def list_books(
         sort=sort or Sort("created_at", descending=True),
         sort_columns=BOOK_SORT,
         tiebreaker=(Book.id.desc(),),
+        updated_since=updated_since,
     )
     return Page[BookRead](
         items=book_reads(session, user, result.items),
@@ -443,12 +445,17 @@ def delete_note(session: Session, note: BookNote) -> None:
 
 
 def list_notes(
-    session: Session, user: User, page: PageParams, *, q: str | None = None
+    session: Session,
+    user: User,
+    page: PageParams,
+    *,
+    q: str | None = None,
+    updated_since: datetime | None = None,
 ) -> Page[NoteRead]:
     stmt = select(BookNote).where(BookNote.user_id == user.id)
     if q and (text := q.strip()):
         stmt = stmt.where(BookNote.content.ilike(f"%{_escape_like(text)}%", escape="\\"))
-    result = paginate(session, stmt.order_by(*_NOTES_ORDER), page)
+    result = paginate(session, stmt.order_by(*_NOTES_ORDER), page, updated_since=updated_since)
     books = {
         book.id: book
         for book in session.scalars(

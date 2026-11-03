@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Query, Response, status
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
 from prumo.core.idempotency import create_once, created_responses
-from prumo.core.pagination import PageDep, Sort, sort_param
+from prumo.core.pagination import PageDep, Sort, UpdatedSince, sort_param
 from prumo.modules.finance import service
 from prumo.modules.finance.models import (
     Account,
@@ -256,6 +256,7 @@ def list_transactions(
     q: Annotated[
         str | None, Query(max_length=120, description="Description, notes or value (F13).")
     ] = None,
+    updated_since: UpdatedSince = None,
 ) -> TransactionPage:
     filters = service.TransactionFilters(
         date_from=date_from,
@@ -266,7 +267,9 @@ def list_transactions(
         category_id=category_id,
         q=q,
     )
-    return service.list_transactions(session, user, page, filters, sort=sort)
+    return service.list_transactions(
+        session, user, page, filters, sort=sort, updated_since=updated_since
+    )
 
 
 @router.post(

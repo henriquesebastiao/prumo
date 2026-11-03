@@ -223,6 +223,27 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/sync/deletions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Deletions
+     * @description Records deleted after `since`, oldest first, with the cursor of the next sync (D41).
+     *     Kept for 180 days; an older `since` answers 410 `sync.since_too_old`.
+     */
+    get: operations['sync_list_deletions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/finance/overview': {
     parameters: {
       query?: never
@@ -1726,6 +1747,41 @@ export interface components {
        * @description Recent records of the enabled modules, newest first.
        */
       activity: components['schemas']['ActivityItem'][]
+    }
+    /** DeletionPage */
+    DeletionPage: {
+      /** Items */
+      items: components['schemas']['DeletionRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+      /**
+       * Server Time
+       * Format: date-time
+       * @description Cursor of the next sync (use it as `since`).
+       */
+      server_time: string
+    }
+    /** DeletionRead */
+    DeletionRead: {
+      /**
+       * Resource
+       * @description `<module>.<table>`, as in the data export: `garage.vehicles`.
+       */
+      resource: string
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Deleted At
+       * Format: date-time
+       */
+      deleted_at: string
     }
     /** ErrorBody */
     ErrorBody: {
@@ -3758,6 +3814,67 @@ export interface operations {
       }
     }
   }
+  sync_list_deletions: {
+    parameters: {
+      query: {
+        /** @description The `server_time` of the last sync (without time zone: UTC). */
+        since: string
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeletionPage']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Gone */
+      410: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   finance_read_overview: {
     parameters: {
       query?: {
@@ -4777,6 +4894,8 @@ export interface operations {
         category_id?: string | null
         /** @description Description, notes or value (F13). */
         q?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -amount, -occurred_on, amount, occurred_on. A leading `-` sorts descending. */
@@ -5778,6 +5897,8 @@ export interface operations {
     parameters: {
       query?: {
         archived?: 'false' | 'true' | 'all'
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -created_at, -name, created_at, name. A leading `-` sorts descending. */
@@ -6209,6 +6330,8 @@ export interface operations {
   garage_list_odometer: {
     parameters: {
       query?: {
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
       }
@@ -6410,6 +6533,8 @@ export interface operations {
         vehicle_id?: string | null
         kind?: components['schemas']['MaintenanceKind'] | null
         workshop_id?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending. */
@@ -6472,6 +6597,8 @@ export interface operations {
     parameters: {
       query?: {
         kind?: components['schemas']['MaintenanceKind'] | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -km, -performed_at, km, performed_at. A leading `-` sorts descending. */
@@ -6858,6 +6985,8 @@ export interface operations {
         vehicle_id?: string | null
         from?: string | null
         to?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending. */
@@ -6919,6 +7048,8 @@ export interface operations {
   garage_list_fuelings: {
     parameters: {
       query?: {
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -fueled_at, -km, fueled_at, km. A leading `-` sorts descending. */
@@ -7242,6 +7373,8 @@ export interface operations {
     parameters: {
       query?: {
         q?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
       }
@@ -7566,6 +7699,8 @@ export interface operations {
         owned?: boolean | null
         /** @description Title or author. */
         q?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
         /** @description One of: -author, -created_at, -finished_on, -title, author, created_at, finished_on, title. A leading `-` sorts descending. */
@@ -8206,6 +8341,8 @@ export interface operations {
       query?: {
         /** @description Text of the note. */
         q?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
         limit?: number
         offset?: number
       }

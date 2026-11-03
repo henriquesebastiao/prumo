@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
 from prumo.core.idempotency import create_once, created_responses, find_existing
-from prumo.core.pagination import Page, PageDep, Sort, sort_param
+from prumo.core.pagination import Page, PageDep, Sort, UpdatedSince, sort_param
 from prumo.modules.reading import covers, service
 from prumo.modules.reading.models import Book, BookNote, BookStatus, ReadingProgress
 from prumo.modules.reading.schemas import (
@@ -65,8 +65,18 @@ def list_books(
     status: BookStatus | None = None,
     owned: bool | None = None,
     q: Annotated[str | None, Query(max_length=120, description="Title or author.")] = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[BookRead]:
-    return service.list_books(session, user, page, status=status, owned=owned, q=q, sort=sort)
+    return service.list_books(
+        session,
+        user,
+        page,
+        status=status,
+        owned=owned,
+        q=q,
+        sort=sort,
+        updated_since=updated_since,
+    )
 
 
 @router.post("/books", status_code=status.HTTP_201_CREATED, responses=created_responses(BookRead))
@@ -169,9 +179,10 @@ def list_notes(
     user: CurrentUser,
     page: PageDep,
     q: Annotated[str | None, Query(max_length=120, description="Text of the note.")] = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[NoteRead]:
     """R10: every note, newest first, with its book."""
-    return service.list_notes(session, user, page, q=q)
+    return service.list_notes(session, user, page, q=q, updated_since=updated_since)
 
 
 @router.get("/books/{book_id}/notes")

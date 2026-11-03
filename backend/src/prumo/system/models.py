@@ -2,6 +2,7 @@
 
 from prumo.system.auth.models import LoginAttempt, UserSession
 from prumo.system.preferences.models import UserPreferences
+from prumo.system.sync.models import SyncDeletion
 from prumo.system.users.models import User
 
-__all__ = ["LoginAttempt", "User", "UserPreferences", "UserSession"]
+__all__ = ["LoginAttempt", "SyncDeletion", "User", "UserPreferences", "UserSession"]

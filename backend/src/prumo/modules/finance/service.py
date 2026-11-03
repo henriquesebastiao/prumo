@@ -1187,8 +1187,11 @@ def list_transactions(
     filters: TransactionFilters,
     *,
     sort: Sort | None = None,
+    updated_since: datetime | None = None,
 ) -> TransactionPage:
     conditions = _conditions(user, filters)
+    if updated_since is not None:
+        conditions.append(Transaction.updated_at > updated_since)
     result = paginate(
         session,
         select(Transaction).where(*conditions),
@@ -1196,6 +1199,7 @@ def list_transactions(
         sort=sort or Sort("occurred_on", descending=True),
         sort_columns=TRANSACTION_SORT,
         tiebreaker=_NEWEST_FIRST[1:],
+        updated_since=updated_since,
     )
     income, expense = session.execute(
         select(

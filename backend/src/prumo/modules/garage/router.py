@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Query, Response, status
 from prumo.core.deps import SessionDep
 from prumo.core.errors import error_responses
 from prumo.core.idempotency import create_once, created_responses
-from prumo.core.pagination import Page, PageDep, Sort, sort_param
+from prumo.core.pagination import Page, PageDep, Sort, UpdatedSince, sort_param
 from prumo.modules.garage import service
 from prumo.modules.garage.models import (
     Fueling,
@@ -69,8 +69,11 @@ def list_vehicles(
     page: PageDep,
     sort: VehicleSort,
     archived: Literal["false", "true", "all"] = "false",
+    updated_since: UpdatedSince = None,
 ) -> Page[VehicleRead]:
-    return service.list_vehicles(session, user, page, archived=archived, sort=sort)
+    return service.list_vehicles(
+        session, user, page, archived=archived, sort=sort, updated_since=updated_since
+    )
 
 
 @router.post(
@@ -123,9 +126,15 @@ def unarchive_vehicle(vehicle: VehicleDep, session: SessionDep, user: CurrentUse
 
 @router.get("/vehicles/{vehicle_id}/odometer")
 def list_odometer(
-    vehicle: VehicleDep, session: SessionDep, user: CurrentUser, page: PageDep
+    vehicle: VehicleDep,
+    session: SessionDep,
+    user: CurrentUser,
+    page: PageDep,
+    updated_since: UpdatedSince = None,
 ) -> Page[OdometerReadingRead]:
-    return service.list_readings(session, user, vehicle, page)  # type: ignore[return-value]
+    return service.list_readings(  # type: ignore[return-value]
+        session, user, vehicle, page, updated_since=updated_since
+    )
 
 
 @router.post(
@@ -172,10 +181,18 @@ def list_all_maintenances(
     vehicle_id: UUID | None = None,
     kind: MaintenanceKind | None = None,
     workshop_id: UUID | None = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[MaintenanceRead]:
     """Maintenances of every vehicle."""
     return service.list_maintenances(
-        session, user, page, vehicle_id=vehicle_id, kind=kind, workshop_id=workshop_id, sort=sort
+        session,
+        user,
+        page,
+        vehicle_id=vehicle_id,
+        kind=kind,
+        workshop_id=workshop_id,
+        sort=sort,
+        updated_since=updated_since,
     )
 
 
@@ -187,9 +204,16 @@ def list_maintenances(
     page: PageDep,
     sort: MaintenanceSort,
     kind: MaintenanceKind | None = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[MaintenanceRead]:
     return service.list_maintenances(
-        session, user, page, vehicle_id=vehicle.id, kind=kind, sort=sort
+        session,
+        user,
+        page,
+        vehicle_id=vehicle.id,
+        kind=kind,
+        sort=sort,
+        updated_since=updated_since,
     )
 
 
@@ -272,18 +296,33 @@ def list_all_fuelings(
     vehicle_id: UUID | None = None,
     from_: Annotated[date | None, Query(alias="from")] = None,
     to: date | None = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[FuelingRead]:
     """Fuelings of every vehicle. `from` and `to` are days in the user's time zone."""
     return service.list_fuelings(
-        session, user, page, vehicle_id=vehicle_id, from_day=from_, to_day=to, sort=sort
+        session,
+        user,
+        page,
+        vehicle_id=vehicle_id,
+        from_day=from_,
+        to_day=to,
+        sort=sort,
+        updated_since=updated_since,
     )
 
 
 @router.get("/vehicles/{vehicle_id}/fuelings")
 def list_fuelings(
-    vehicle: VehicleDep, session: SessionDep, user: CurrentUser, page: PageDep, sort: FuelingSort
+    vehicle: VehicleDep,
+    session: SessionDep,
+    user: CurrentUser,
+    page: PageDep,
+    sort: FuelingSort,
+    updated_since: UpdatedSince = None,
 ) -> Page[FuelingRead]:
-    return service.list_fuelings(session, user, page, vehicle_id=vehicle.id, sort=sort)
+    return service.list_fuelings(
+        session, user, page, vehicle_id=vehicle.id, sort=sort, updated_since=updated_since
+    )
 
 
 @router.post(
@@ -345,10 +384,14 @@ def delete_fueling(
 
 @router.get("/workshops")
 def list_workshops(
-    session: SessionDep, user: CurrentUser, page: PageDep, q: str | None = None
+    session: SessionDep,
+    user: CurrentUser,
+    page: PageDep,
+    q: str | None = None,
+    updated_since: UpdatedSince = None,
 ) -> Page[WorkshopRead]:
     """Workshops with usage statistics, filtered by name (`q`)."""
-    return service.list_workshops(session, user, page, q=q)
+    return service.list_workshops(session, user, page, q=q, updated_since=updated_since)
 
 
 @router.post(

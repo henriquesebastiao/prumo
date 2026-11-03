@@ -21,6 +21,7 @@ from prumo.system.export.router import router as export_router
 from prumo.system.modules.router import router as modules_router
 from prumo.system.preferences.router import router as preferences_router
 from prumo.system.preferences.service import is_module_enabled
+from prumo.system.sync.router import router as sync_router
 from prumo.system.users.router import router as users_router
 
 API_V1 = "/api/v1"
@@ -75,6 +76,7 @@ def create_app(modules: Sequence[PrumoModule] | None = None) -> FastAPI:
     v1.include_router(preferences_router)
     v1.include_router(modules_router)
     v1.include_router(build_dashboard_router(registry))
+    v1.include_router(sync_router)
     for module in registry.modules:
         v1.include_router(module.router, prefix=f"/{module.id}", tags=[module.id])
     app.include_router(v1)

@@ -5,11 +5,12 @@ Endpoints declare the sortable fields with `sort_param(...)` and paginate with `
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from typing import Annotated, Any
 
 from fastapi import Depends, Query
 from fastapi.exceptions import RequestValidationError
-from pydantic import BaseModel
+from pydantic import AfterValidator, BaseModel
 from sqlalchemy import ColumnElement, Select, func, select
 from sqlalchemy.orm import QueryableAttribute, Session
 
@@ -33,6 +34,25 @@ def page_params(
 
 
 PageDep = Annotated[PageParams, Depends(page_params)]
+
+
+def as_utc[T: (datetime, datetime | None)](value: T) -> T:
+    """A moment without time zone is read as UTC."""
+    if isinstance(value, datetime) and value.tzinfo is None:
+        return value.replace(tzinfo=UTC)
+    return value
+
+
+UpdatedSince = Annotated[
+    datetime | None,
+    AfterValidator(as_utc),
+    Query(
+        description=(
+            "Only records created or changed after this moment, archived ones included, oldest "
+            "change first; `sort` is ignored (incremental sync, D41)."
+        )
+    ),
+]
 
 
 class Page[T](BaseModel):
@@ -87,7 +107,17 @@ def paginate[M](
     sort: Sort | None = None,
     sort_columns: Mapping[str, SortColumn] | None = None,
     tiebreaker: Sequence[SortColumn] = (),
+    updated_since: datetime | None = None,
 ) -> Page[M]:
+    """`updated_since` (D41) keeps the records of the selected entity changed after that moment,
+    ordered by `updated_at`, instead of the requested sort."""
+    if updated_since is not None:
+        entity = stmt.column_descriptions[0]["entity"]
+        stmt = stmt.where(entity.updated_at > updated_since)
+        total = session.scalar(select(func.count()).select_from(stmt.order_by(None).subquery()))
+        ordered = stmt.order_by(None).order_by(entity.updated_at, entity.id)
+        items = list(session.scalars(ordered.limit(page.limit).offset(page.offset)))
+        return Page[M](items=items, total=total or 0, limit=page.limit, offset=page.offset)
     total = session.scalar(select(func.count()).select_from(stmt.order_by(None).subquery())) or 0
     if sort is not None:
         if sort_columns is None or sort.field not in sort_columns:

@@ -700,6 +700,113 @@
         ]
       }
     },
+    "/api/v1/sync/deletions": {
+      "get": {
+        "tags": [
+          "sync"
+        ],
+        "summary": "List Deletions",
+        "description": "Records deleted after `since`, oldest first, with the cursor of the next sync (D41).\nKept for 180 days; an older `since` answers 410 `sync.since_too_old`.",
+        "operationId": "sync_list_deletions",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The `server_time` of the last sync (without time zone: UTC).",
+              "title": "Since"
+            },
+            "description": "The `server_time` of the last sync (without time zone: UTC)."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletionPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Gone",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/finance/overview": {
       "get": {
         "tags": [
@@ -2263,6 +2370,25 @@
             "description": "Description, notes or value (F13)."
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -3693,6 +3819,25 @@
             }
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -4311,6 +4456,25 @@
             }
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -4649,6 +4813,25 @@
             }
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -4779,6 +4962,25 @@
               ],
               "title": "Kind"
             }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
           },
           {
             "name": "limit",
@@ -5436,6 +5638,25 @@
             }
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -5550,6 +5771,25 @@
               "format": "uuid",
               "title": "Vehicle Id"
             }
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
           },
           {
             "name": "limit",
@@ -6056,6 +6296,25 @@
             }
           },
           {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -6539,6 +6798,25 @@
               "title": "Q"
             },
             "description": "Title or author."
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
           },
           {
             "name": "limit",
@@ -7444,6 +7722,25 @@
               "title": "Q"
             },
             "description": "Text of the note."
+          },
+          {
+            "name": "updated_since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41).",
+              "title": "Updated Since"
+            },
+            "description": "Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41)."
           },
           {
             "name": "limit",
@@ -9576,6 +9873,70 @@
           "activity"
         ],
         "title": "DashboardRead"
+      },
+      "DeletionPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeletionRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Server Time",
+            "description": "Cursor of the next sync (use it as `since`)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset",
+          "server_time"
+        ],
+        "title": "DeletionPage"
+      },
+      "DeletionRead": {
+        "properties": {
+          "resource": {
+            "type": "string",
+            "title": "Resource",
+            "description": "`<module>.<table>`, as in the data export: `garage.vehicles`."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "deleted_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deleted At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resource",
+          "id",
+          "deleted_at"
+        ],
+        "title": "DeletionRead"
       },
       "ErrorBody": {
         "properties": {
