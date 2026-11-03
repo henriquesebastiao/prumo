@@ -80,7 +80,7 @@ Acesse `http://localhost:5173`. O Vite encaminha `/api` para a API, então o com
 - Vitest para `lib/` (formatadores, cliente da API, utilitários), registro de módulos, composables e componentes de `src/ui/`.
 - Playwright para screenshots de comparação com o design (`make screenshots`, fora do `make check` porque exige o navegador) e, a partir da Fase 4, E2E dos fluxos principais. As telas de plataforma usam API simulada (`e2e/fixtures.ts`); as de módulo usam uma API real iniciada pelo próprio Playwright (`backend/scripts/e2e_server.py`, porta 8001), que recria o banco `prumo_e2e` no container de testes, semeia os dados das pranchas e roda com o relógio no momento delas (17/11/2026, 14:30). Usuário: `henrique` / `prumo-demo-01`.
 
-Os fluxos principais (login, Finanças, Veículos, Livros, exportação e `/api/docs`) ficam em `frontend/e2e/flows.spec.ts` e rodam contra a mesma API semeada das capturas, com a conta vazia `teste` (senha `prumo-teste-01`), sem tocar nos dados das pranchas: `pnpm exec playwright test e2e/flows.spec.ts` em `frontend/`. O CI roda esses fluxos a cada push.
+Os fluxos principais (login, Finanças, Veículos, Livros, exportação e `/api/docs`) ficam em `frontend/e2e/flows.spec.ts` e rodam contra a mesma API semeada das capturas, com a conta vazia `teste` (senha `prumo-teste-01`), sem tocar nos dados das pranchas: `pnpm exec playwright test e2e/flows.spec.ts` em `frontend/`. O CI roda esses fluxos a cada push. `e2e/responsive.spec.ts` verifica celular e tablet (sem rolagem horizontal) e grava as capturas em `e2e/output/responsive/`.
 
 ## Migrations
 

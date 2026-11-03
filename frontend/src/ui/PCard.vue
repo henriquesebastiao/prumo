@@ -97,15 +97,17 @@ withDefaults(
   padding: var(--space-8);
 }
 
+/* The actions drop below the title when both do not fit (a chart legend on a phone). */
 .p-card__header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
 }
 
 .p-card__titles {
-  flex: 1;
   min-width: 0;
+  flex: 1 1 8rem;
 }
 
 .p-card__title {

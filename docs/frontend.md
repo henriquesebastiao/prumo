@@ -232,3 +232,6 @@ Ainda abertas, a decidir na fase de cada módulo:
 
 - Desktop primeiro, responsivo até tablet e celular (ver Navegação).
 - Contraste AA nos dois temas, foco visível, navegação completa por teclado (garantida em boa parte pelos primitivos do Reka UI), link "Pular para o conteúdo", lista reordenável por teclado e anúncios para leitores de tela.
+- Em telas estreitas: abas numa linha que rola de lado, ações do cabeçalho do card abaixo do título quando não cabem, conteúdo à direita dos itens de lista em linha própria, tabelas como listas, chips de item que quebram linha.
+- `frontend/e2e/responsive.spec.ts` abre cada tela em 390 px (celular) e 820 px (tablet), falha se houver rolagem horizontal e grava capturas da página inteira em `e2e/output/responsive/` para revisão. Os fluxos (`flows.spec.ts`) localizam campos e botões pelo papel e pelo nome acessível, o que também verifica rótulos de campos, botões de ícone e diálogos.
+- Gráficos têm descrição (`aria-label`) e a lista de valores para leitores de tela; capas desenhadas e de imagem têm o título como texto alternativo.

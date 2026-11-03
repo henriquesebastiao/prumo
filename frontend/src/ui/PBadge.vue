@@ -58,8 +58,12 @@ withDefaults(
   border-color: var(--color-border-strong);
 }
 
+/* Item chips can hold long names: they wrap instead of overflowing narrow screens. */
 .p-badge.p-badge--tag {
+  display: inline-block;
+  max-width: 100%;
   padding: var(--space-1) var(--space-3);
+  white-space: normal;
   background: var(--color-surface-tint);
   color: var(--color-text);
   font-size: var(--text-sm);

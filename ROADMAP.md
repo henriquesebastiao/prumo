@@ -80,7 +80,7 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] Guia de instalação e atualização
 - [x] Documentação interativa da API (`/api/docs`) sem CDN: servir os arquivos do Swagger UI pela própria instância
 - [x] Exportação dos dados do usuário (JSON e CSV)
-- [ ] Revisão de responsividade (tablet e celular) e de acessibilidade
+- [x] Revisão de responsividade (tablet e celular) e de acessibilidade
 - [x] Testes E2E dos fluxos principais com Playwright
 - [x] Licença escolhida e arquivo `LICENSE`
 - [x] README em inglês

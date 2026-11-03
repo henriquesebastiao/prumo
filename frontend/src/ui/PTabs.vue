@@ -68,14 +68,23 @@ const model = defineModel<V>()
   flex: 1;
 }
 
+/* One row that scrolls sideways on narrow screens (five sections do not fit a phone). */
 .p-tabs {
   display: flex;
-  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
   gap: var(--space-1-5);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.p-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .p-tabs__tab {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: var(--space-1-5);
   height: var(--tab-height);

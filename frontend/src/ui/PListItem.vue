@@ -25,7 +25,7 @@ withDefaults(
           >
         </slot>
       </span>
-      <slot name="trailing" />
+      <span v-if="$slots.trailing" class="p-list-item__trailing"><slot name="trailing" /></span>
     </component>
   </li>
 </template>
@@ -51,8 +51,10 @@ withDefaults(
   background: var(--color-surface-inset);
 }
 
+/* On narrow screens the trailing content moves to its own line, aligned to the end. */
 .p-list-item__row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2-5) 0;
@@ -62,9 +64,17 @@ withDefaults(
 
 .p-list-item__body {
   display: flex;
-  flex: 1;
   min-width: 0;
+  flex: 1 1 10rem;
   flex-direction: column;
+}
+
+.p-list-item__trailing {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
 }
 
 .p-list-item__title {
