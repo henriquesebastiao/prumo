@@ -37,6 +37,7 @@ Acesse `http://localhost:5173`. O Vite encaminha `/api` para a API, então o com
 | `make user` | Cria usuário pela CLI |
 | `make backup` | Gera `backups/prumo-AAAAMMDD-HHMM.sql.gz` e, na stack de produção, `…-uploads.tar.gz` com as capas (`COMPOSE_FILE=docker-compose.dev.yml` para o banco de desenvolvimento) |
 | `make restore f=<arquivo>` | Restaura um backup (substitui o banco atual e, se houver o `…-uploads.tar.gz` correspondente, os arquivos; pede confirmação) |
+| `make changelog` | Gera o `CHANGELOG` a partir das issues, pull requests e tags do GitHub (exige o `github_changelog_generator`) |
 
 ## Variáveis de ambiente
 

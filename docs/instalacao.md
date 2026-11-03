@@ -105,6 +105,7 @@ docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 
 ## Publicar uma versão (mantenedores)
 
-1. Atualize a versão em `backend/pyproject.toml` e `frontend/package.json`, e as notas da versão.
+1. Atualize a versão em `backend/pyproject.toml` e `frontend/package.json`.
 2. Crie e envie uma tag sem prefixo: `git tag 0.1.0 && git push origin 0.1.0`.
-3. O workflow `release.yml` publica `ghcr.io/henriquesebastiao/prumo-api` e `prumo-web` com as tags `0.1.0`, `0.1` e `latest`, para amd64 e arm64. Na primeira publicação, torne os pacotes públicos nas configurações do GitHub.
+3. Gere o `CHANGELOG` com `make changelog` (depois da tag no GitHub).
+4. O workflow `release.yml` publica `ghcr.io/henriquesebastiao/prumo-api` e `prumo-web` com as tags `0.1.0`, `0.1` e `latest`, para amd64 e arm64. Na primeira publicação, torne os pacotes públicos nas configurações do GitHub.

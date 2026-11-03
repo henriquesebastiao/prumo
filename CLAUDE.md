@@ -38,6 +38,7 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 - `make openapi`: exporta `openapi/openapi.json` e regenera os tipos TypeScript do frontend
 - `make user`: cria usuário pela CLI
 - `make backup` / `make restore f=<arquivo>`
+- `make changelog`: gera o `CHANGELOG` a partir do GitHub (`github_changelog_generator`)
 
 ## Regras do projeto
 
