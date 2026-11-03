@@ -329,8 +329,7 @@ def test_overview(auth_client: TestClient) -> None:
 def test_dashboard_summary_upcoming_and_activity(auth_client: TestClient) -> None:
     _design_fleet(auth_client)
     body = auth_client.get("/api/v1/dashboard").json()
-    summary = body["modules"][0]
-    assert summary["module"] == "garage"
+    summary = next(m for m in body["modules"] if m["module"] == "garage")
     assert summary["vehicles_count"] == 2
     assert [v["vehicle"]["name"] for v in summary["vehicles"]] == [
         "Honda CG 160 Fan",

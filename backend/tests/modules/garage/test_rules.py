@@ -24,13 +24,6 @@ def change(km: int, on: date, next_km: int | None, next_on: date | None) -> Last
     )
 
 
-def test_add_months_clamps_to_end_of_month() -> None:
-    assert rules.add_months(date(2026, 11, 17), 3) == date(2027, 2, 17)
-    assert rules.add_months(date(2026, 1, 31), 1) == date(2026, 2, 28)
-    assert rules.add_months(date(2028, 1, 31), 1) == date(2028, 2, 29)
-    assert rules.add_months(date(2026, 12, 15), 12) == date(2027, 12, 15)
-
-
 def test_suggest_next_oil_change() -> None:
     assert rules.suggest_next_oil_change(
         km=18420, on=date(2026, 11, 17), interval_km=1000, interval_months=3

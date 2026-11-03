@@ -180,19 +180,34 @@ Erros do módulo: `garage.odometer_inconsistent` (com `details.conflict`, `km`, 
 ### Finanças (`/finance`)
 | Rota | Descrição |
 |---|---|
-| `GET /finance/overview?month=2026-11` | Saldo total, saldos por conta, receitas × despesas, despesas por categoria, faturas em aberto |
-| `GET, POST /finance/accounts` | Lista (com saldo atual) e cadastro |
-| `GET, PATCH /finance/accounts/{id}` | Detalhe e edição |
+| `GET /finance/overview?month=2026-11` | Visão geral do mês (F12); sem `month`, o mês atual |
+| `GET, POST /finance/accounts` | Lista `{items, total_balance_cents}` (cada conta com saldo, última movimentação e transações do mês; filtro `archived`) e cadastro |
+| `GET, PATCH, DELETE /finance/accounts/{id}` | Detalhe, edição, exclusão (só sem transações) |
 | `POST /finance/accounts/{id}/archive`, `/unarchive` | |
-| `GET, POST /finance/categories` | Lista (filtro `kind`) e cadastro |
+| `POST /finance/accounts/{id}/adjustments` | Ajuste de saldo (F11): `{ "balance_cents": …, "occurred_on": … }` |
+| `GET, POST /finance/categories` | Lista (filtros `kind`, `archived`; com quantidade e total no mês `month`) e cadastro |
 | `PATCH, DELETE /finance/categories/{id}` | Exclusão só sem uso; caso contrário, arquivar |
-| `GET, POST /finance/transactions` | Lista com filtros (`from`, `to`, `kind`, `account_id`, `credit_card_id`, `category_id`, `q`) e cadastro |
-| `GET, PATCH, DELETE /finance/transactions/{id}` | |
+| `POST /finance/categories/{id}/archive`, `/unarchive` | |
+| `GET, POST /finance/transactions` | Lista paginada com filtros (`from`, `to`, `kind`, `account_id`, `credit_card_id`, `category_id`, `q`) e os totais `income_cents` e `expense_cents` do filtro inteiro; cadastro (com `installments` para compra parcelada no cartão; devolve a primeira parcela) |
+| `GET, PATCH, DELETE /finance/transactions/{id}` | `DELETE ?installments=all` remove a compra parcelada inteira |
 | `GET, POST /finance/credit-cards` | Lista (com limite disponível e fatura atual) e cadastro |
-| `GET, PATCH /finance/credit-cards/{id}` | |
-| `GET /finance/credit-cards/{id}/invoices` | Faturas (abertas, fechadas, pagas) |
+| `GET, PATCH, DELETE /finance/credit-cards/{id}` | Exclusão só sem transações |
+| `POST /finance/credit-cards/{id}/archive`, `/unarchive` | |
+| `GET /finance/credit-cards/{id}/invoices` | Faturas (abertas, fechadas, pagas), mais recentes primeiro |
 | `GET /finance/credit-cards/{id}/invoices/{closing_on}` | Fatura com lançamentos |
 | `POST /finance/credit-cards/{id}/invoices/{closing_on}/payments` | Registra pagamento (total ou parcial) |
+
+Transações retornam `account`, `destination_account`, `credit_card` e `category` resumidos (`{ id, name, … }`), para listas sem consultas extras. Faturas retornam `closing_on`, `due_on`, `starts_on` (primeiro dia do período), `amount_cents`, `paid_cents`, `status`, `transactions_count` e o último pagamento (`last_payment_on`, `last_payment_account`). `kind` não pode ser alterado no `PATCH` de transação; `card_payment` criado por `POST /finance/transactions` exige `invoice_closing_on`.
+
+Itens do Início publicados pelo módulo:
+
+| `kind` | Onde | `subject` / `entity_id` | `data` |
+|---|---|---|---|
+| `finance.invoice_closing` | `upcoming` | cartão / cartão | `amount_cents`, `available_limit_cents` |
+| `finance.invoice_due` | `upcoming` | cartão / cartão | `amount_cents`, `paid_cents`, `status` |
+| `finance.transaction` | `activity` | descrição / transação | `transaction_kind`, `amount_cents`, `category`, `account`, `credit_card` |
+
+Erros do módulo: `finance.category_in_use`, `finance.account_in_use` e `finance.card_in_use` (com `details.transactions_count`), `finance.category_exists` (409), `finance.invalid_combination` (com `details.kind`, `details.missing` e `details.unexpected`: os campos que faltam ou sobram para o `kind`), `finance.invalid_amount`, `finance.category_kind_mismatch`, `finance.same_account`, `finance.installments_require_card`, `finance.invalid_invoice` e `finance.balance_unchanged` (ajuste sem diferença). Conta, categoria ou cartão de outro usuário citado no corpo responde 404.
 
 ### Livros (`/reading`)
 | Rota | Descrição |

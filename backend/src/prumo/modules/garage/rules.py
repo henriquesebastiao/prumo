@@ -1,12 +1,13 @@
 """Pure calculations of the garage rules (no database). See docs/dominio.md, G5-G13."""
 
 import math
-from calendar import monthrange
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from typing import Literal
 from uuid import UUID
+
+from prumo.core.dates import add_months
 
 DUE_SOON_KM_FRACTION = 0.10
 DUE_SOON_DAYS = 15
@@ -15,13 +16,6 @@ RECENT_CYCLES = 5
 
 type OilState = Literal["ok", "due_soon", "overdue", "unknown"]
 type Criterion = Literal["km", "date"]
-
-
-def add_months(day: date, months: int) -> date:
-    """`day` plus `months`, with the day limited to the end of the target month."""
-    years, month_index = divmod(day.month - 1 + months, 12)
-    year, month = day.year + years, month_index + 1
-    return date(year, month, min(day.day, monthrange(year, month)[1]))
 
 
 def suggest_next_oil_change(

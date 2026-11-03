@@ -61,37 +61,46 @@ Regras:
 
 **Account**: `name`, `kind` (`checking` | `savings` | `cash` | `investment` | `other`), `initial_balance_cents` (pode ser negativo), `color`, `icon`, `include_in_total` (bool), `archived_at?`.
 
-**Category**: `kind` (`income` | `expense`), `name` (único por usuário e `kind`), `color`, `icon`, `archived_at?`.
+**Category**: `kind` (`income` | `expense`), `name` (único por usuário e `kind`, sem diferenciar maiúsculas), `color`, `icon`, `archived_at?`.
 
 **CreditCard**: `name`, `limit_cents`, `closing_day` (1–31), `due_day` (1–31), `payment_account_id?`, `color`, `archived_at?`.
 
-**Transaction**: `kind`, `amount_cents` (> 0), `occurred_on` (data), `description`, `notes?`, `account_id?`, `destination_account_id?`, `credit_card_id?`, `category_id?`, `invoice_closing_on?`.
+**Transaction**: `kind`, `amount_cents`, `occurred_on` (data), `occurred_time?` (hora local, só para exibir e ordenar no dia), `description`, `notes?`, `account_id?`, `destination_account_id?`, `credit_card_id?`, `category_id?`, `invoice_closing_on?`, `installment_group_id?`, `installment_number?`, `installment_count?`.
+
+`color` é uma chave da paleta (`green`, `teal`, `cyan`, `blue`, `indigo`, `violet`, `pink`, `red`, `orange`, `amber`, `gray`); `icon` é o nome de um ícone da interface (`wallet`, `bank`, `utensils`…).
 
 Combinações válidas por `kind`:
 
-| kind | account_id | destination_account_id | credit_card_id | category_id |
-|---|---|---|---|---|
-| `income` | obrigatório | — | — | obrigatório (receita) |
-| `expense` na conta | obrigatório | — | — | obrigatório (despesa) |
-| `expense` no cartão | — | — | obrigatório | obrigatório (despesa) |
-| `transfer` | obrigatório (origem) | obrigatório (≠ origem) | — | — |
-| `card_payment` | obrigatório | — | obrigatório | — |
+| kind | account_id | destination_account_id | credit_card_id | category_id | amount_cents |
+|---|---|---|---|---|---|
+| `income` | obrigatório | — | — | obrigatório (receita) | > 0 |
+| `expense` na conta | obrigatório | — | — | obrigatório (despesa) | > 0 |
+| `expense` no cartão | — | — | obrigatório | obrigatório (despesa) | > 0 |
+| `transfer` | obrigatório (origem) | obrigatório (≠ origem) | — | — | > 0 |
+| `card_payment` | obrigatório | — | obrigatório | — | > 0 |
+| `adjustment` | obrigatório | — | — | — | ≠ 0 (com sinal) |
 
 Regras:
-- F1. Saldo da conta = inicial + receitas − despesas − transferências enviadas + transferências recebidas − pagamentos de fatura. Calculado, não armazenado.
+- F1. Saldo da conta = inicial + receitas − despesas − transferências enviadas + transferências recebidas − pagamentos de fatura + ajustes, considerando as transações até hoje (fuso do usuário). Calculado, não armazenado.
 - F2. Saldo total = soma das contas não arquivadas com `include_in_total`.
-- F3. Relatórios usam competência: despesa no cartão conta na data da compra. Pagamento de fatura nunca é despesa nem entra em relatórios por categoria (evita contar duas vezes).
+- F3. Relatórios usam competência: despesa no cartão conta na data da compra. Pagamento de fatura e ajuste nunca são receita nem despesa e não entram em relatórios por categoria (evita contar duas vezes).
 - F4. Fatura de uma compra no cartão:
   - A data de fechamento de um mês é `closing_day`, limitada ao último dia do mês.
-  - A compra na data `d` pertence à fatura cuja data de fechamento é a primeira **estritamente posterior** a `d` (compra no dia do fechamento cai na fatura seguinte).
+  - A compra na data `d` pertence à fatura cuja data de fechamento é a primeira **estritamente posterior** a `d` (compra no dia do fechamento cai na fatura seguinte). O período da fatura vai do fechamento anterior (inclusive) até a véspera do fechamento.
   - O vencimento é a primeira data com `due_day` (limitado ao fim do mês) depois do fechamento.
   - O backend calcula e grava `invoice_closing_on`. A regra varia entre bancos; se necessário, vira configuração do cartão no futuro.
 - F5. Faturas são calculadas, não armazenadas. Valor = Σ despesas do cartão com aquele `invoice_closing_on`; pago = Σ `card_payment` daquela fatura. Status: `open` (antes do fechamento), `closed` (fechada e pago < valor), `paid` (pago ≥ valor), `overdue` (vencida e pago < valor). Pagamento parcial é permitido.
-- F6. Limite disponível = `limit_cents` − (Σ despesas no cartão − Σ pagamentos do cartão).
-- F7. Categorias padrão são criadas para cada usuário novo e podem ser editadas, arquivadas ou complementadas pela web e pelo app. Despesa: Alimentação, Moradia, Transporte, Saúde, Educação, Lazer, Compras, Assinaturas, Outros. Receita: Salário, Freelance, Rendimentos, Outros.
+- F6. Limite disponível = `limit_cents` − (Σ despesas no cartão − Σ pagamentos do cartão), incluindo parcelas futuras.
+- F7. Categorias padrão são criadas para cada usuário novo (e, na migration do módulo, para os usuários que já existiam) e podem ser editadas, arquivadas ou complementadas pela web e pelo app. Despesa: Alimentação, Moradia, Transporte, Combustível, Saúde, Educação, Lazer, Compras, Assinaturas, Outros. Receita: Salário, Freelance, Rendimentos, Outros.
 - F8. Categoria, conta ou cartão com transações não podem ser excluídos, só arquivados (`finance.category_in_use`, `finance.account_in_use`, `finance.card_in_use`). Itens arquivados somem dos seletores, mas continuam nos relatórios.
 - F9. Moeda única por usuário (preferência `currency`), por enquanto.
-- F10. Compras parceladas (fim da Fase 2): uma compra gera N transações com `installment_group_id`, `installment_number` e `installment_count`, uma por fatura consecutiva.
+- F10. Compras parceladas: uma compra no cartão em N parcelas gera N transações com o mesmo `installment_group_id`, `installment_number` (1…N) e `installment_count`. A parcela k tem a data da compra mais k−1 meses (dia limitado ao fim do mês) e cai na k-ésima fatura a partir da fatura da compra (faturas consecutivas). O valor é dividido igualmente e os centavos que sobram vão para a primeira parcela. Editar uma parcela muda só ela; excluir pode remover só ela ou a compra inteira.
+- F11. Ajuste de saldo: informando o saldo real de uma conta, o backend cria uma transação `adjustment` com a diferença para o saldo calculado.
+- F12. Visão geral do mês: saldo total e saldos por conta (no último dia do mês, ou hoje no mês atual), receitas, despesas (e a fração das receitas), resultado, receitas × despesas dos 6 meses até o mês, despesas e receitas por categoria, faturas não pagas.
+- F16. Descrição obrigatória em receitas e despesas; em transferências, pagamentos de fatura e ajustes pode ficar vazia. O `kind` não muda depois de criada.
+- F13. Busca de transações: um texto procura na descrição e nas observações; um número também encontra transações com esse valor ("212,40" e "212.40" → R$ 212,40; "212" → de R$ 212,00 a R$ 212,99; "1.500" → R$ 1.500,00).
+- F14. Cada conta informa a data da última movimentação e a quantidade de transações no mês.
+- F15. "Vem aí" (Início): fechamento e vencimento das faturas não pagas. "Atividade recente": transações.
 
 ## Livros (`reading`)
 

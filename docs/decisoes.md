@@ -184,6 +184,30 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** `backend/scripts/e2e_server.py` cria um banco descartável, semeia os dados das pranchas pelos serviços (regras reais) e serve a API com o relógio congelado no momento do design. O Playwright o inicia junto com o Vite.
 **Consequências:** as capturas exercitam o backend de verdade. Cada módulo novo acrescenta seus dados ao script.
 
+## D31 — Divergências do design v1 em Finanças
+**Status:** aceita · 2026-11
+**Contexto:** as pranchas de Finanças mostram dados e ações que o domínio não previa.
+**Decisão:** transação ganha hora opcional (`occurred_time`, só para exibir e ordenar no dia; relatórios usam `occurred_on`); categorias padrão automáticas (F7), sem o botão "Usar categorias sugeridas"; o formulário de conta pede o saldo inicial e "Ajustar saldo" cria uma transação `adjustment` com a diferença (F11), fora de receitas, despesas e relatórios; a visão geral traz a série de 6 meses (F12) e navega entre meses; a busca aceita valor (F13); "Combustível" entra nas categorias padrão; contas informam última movimentação e transações do mês (F14).
+**Consequências:** mais valores derivados no backend; a interface só exibe.
+
+## D32 — Exclusão de categorias, contas e cartões
+**Status:** aceita · 2026-11
+**Contexto:** a prancha "Categorias" mostra "Excluir" deixando as transações sem categoria; isso quebraria F3 (relatórios por categoria) e a regra de que toda receita e despesa tem categoria.
+**Decisão:** categoria, conta ou cartão com transações não podem ser excluídos, só arquivados (F8). A interface troca "Excluir" por "Arquivar" quando há uso.
+**Consequências:** histórico sempre íntegro; itens arquivados saem dos seletores.
+
+## D33 — Saldos, tipo da transação e descrição
+**Status:** aceita · 2026-11
+**Contexto:** pontos que o domínio deixava em aberto.
+**Decisão:** o saldo de uma conta considera as transações até hoje (no fuso do usuário); a visão geral de um mês passado ou futuro usa o último dia daquele mês. O limite do cartão considera todas as compras, inclusive parcelas futuras. O `kind` de uma transação não muda depois de criada (para trocar, exclua e crie outra). A descrição é obrigatória em receitas e despesas e opcional (vazia) em transferências, pagamentos e ajustes, que os clientes rotulam pelo tipo. Um número inteiro na busca encontra os valores com aqueles reais (212 → de 212,00 a 212,99). Cores são chaves de uma paleta fixa; ícones são nomes livres (`[a-z0-9-]`), e o cliente usa um ícone genérico quando não conhece o nome.
+**Consequências:** lançamentos agendados não alteram o saldo de hoje; as categorias padrão nascem em pt-BR (dados do usuário, editáveis).
+
+## D34 — Totais na lista de transações
+**Status:** aceita · 2026-11
+**Contexto:** a prancha "Transações" mostra, para os filtros aplicados, a quantidade e os totais de receitas e despesas.
+**Decisão:** `GET /finance/transactions` devolve o formato padrão de página mais `income_cents` e `expense_cents` do filtro inteiro (não só da página). `GET /finance/accounts` devolve `{items, total_balance_cents}`.
+**Consequências:** extensão aditiva do formato de lista, documentada em `docs/api.md`.
+
 ---
 
 ## Modelo

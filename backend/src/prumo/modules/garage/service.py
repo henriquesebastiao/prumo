@@ -12,6 +12,7 @@ from sqlalchemy import Select, delete, func, select
 from sqlalchemy.orm import Session
 
 from prumo.core.clock import utcnow
+from prumo.core.dates import add_months
 from prumo.core.errors import ConflictError, DomainError, NotFoundError
 from prumo.core.modules import ActivityItem, UpcomingItem
 from prumo.core.pagination import Page, PageParams, Sort, paginate
@@ -79,7 +80,7 @@ class Moment:
 
     @property
     def next_month_start(self) -> datetime:
-        return datetime.combine(rules.add_months(self.today.replace(day=1), 1), time(), self.tz)
+        return datetime.combine(add_months(self.today.replace(day=1), 1), time(), self.tz)
 
     def day_of(self, moment: datetime) -> date:
         return moment.astimezone(self.tz).date()

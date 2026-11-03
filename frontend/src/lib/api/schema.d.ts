@@ -203,6 +203,366 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/finance/overview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Overview
+     * @description F12: balances, income and expenses of the month, 6-month series, categories, invoices.
+     */
+    get: operations['finance_read_overview']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/accounts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Accounts */
+    get: operations['finance_list_accounts']
+    put?: never
+    /** Create Account */
+    post: operations['finance_create_account']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/accounts/{account_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Account */
+    get: operations['finance_read_account']
+    put?: never
+    post?: never
+    /**
+     * Delete Account
+     * @description F8: only without transactions (`finance.account_in_use`); otherwise archive.
+     */
+    delete: operations['finance_delete_account']
+    options?: never
+    head?: never
+    /** Update Account */
+    patch: operations['finance_update_account']
+    trace?: never
+  }
+  '/api/v1/finance/accounts/{account_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Account */
+    post: operations['finance_archive_account']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/accounts/{account_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Account */
+    post: operations['finance_unarchive_account']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/accounts/{account_id}/adjustments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Adjust Balance
+     * @description F11: records an `adjustment` with the difference to the real balance.
+     */
+    post: operations['finance_adjust_balance']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/categories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Categories */
+    get: operations['finance_list_categories']
+    put?: never
+    /** Create Category */
+    post: operations['finance_create_category']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/categories/{category_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Category */
+    get: operations['finance_read_category']
+    put?: never
+    post?: never
+    /**
+     * Delete Category
+     * @description F8: only unused categories (`finance.category_in_use`); otherwise archive.
+     */
+    delete: operations['finance_delete_category']
+    options?: never
+    head?: never
+    /** Update Category */
+    patch: operations['finance_update_category']
+    trace?: never
+  }
+  '/api/v1/finance/categories/{category_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Category */
+    post: operations['finance_archive_category']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/categories/{category_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Category */
+    post: operations['finance_unarchive_category']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/transactions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Transactions */
+    get: operations['finance_list_transactions']
+    put?: never
+    /**
+     * Create Transaction
+     * @description Validates the fields of each `kind` (docs/dominio.md). With `installments`, creates every
+     *     installment and returns the first (F10).
+     */
+    post: operations['finance_create_transaction']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/transactions/{transaction_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Transaction */
+    get: operations['finance_read_transaction']
+    put?: never
+    post?: never
+    /** Delete Transaction */
+    delete: operations['finance_delete_transaction']
+    options?: never
+    head?: never
+    /** Update Transaction */
+    patch: operations['finance_update_transaction']
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Cards */
+    get: operations['finance_list_cards']
+    put?: never
+    /** Create Card */
+    post: operations['finance_create_card']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Card */
+    get: operations['finance_read_card']
+    put?: never
+    post?: never
+    /**
+     * Delete Card
+     * @description F8: only without transactions (`finance.card_in_use`); otherwise archive.
+     */
+    delete: operations['finance_delete_card']
+    options?: never
+    head?: never
+    /** Update Card */
+    patch: operations['finance_update_card']
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Card */
+    post: operations['finance_archive_card']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Card */
+    post: operations['finance_unarchive_card']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}/invoices': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Invoices
+     * @description Every invoice with transactions plus the current one, newest first (F5).
+     */
+    get: operations['finance_list_invoices']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}/invoices/{closing_on}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Invoice */
+    get: operations['finance_read_invoice']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/finance/credit-cards/{card_id}/invoices/{closing_on}/payments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Pay Invoice
+     * @description Records a `card_payment` (total or partial) from an account.
+     */
+    post: operations['finance_pay_invoice']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/garage/overview': {
     parameters: {
       query?: never
@@ -509,6 +869,155 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    /** AccountBalance */
+    AccountBalance: {
+      account: components['schemas']['AccountRef']
+      /** Balance Cents */
+      balance_cents: number
+    }
+    /** AccountCreate */
+    AccountCreate: {
+      /** Name */
+      name: string
+      kind: components['schemas']['AccountKind']
+      /**
+       * Initial Balance Cents
+       * @description Balance when the account starts being tracked (F1).
+       * @default 0
+       */
+      initial_balance_cents?: number
+      /**
+       * Color
+       * @default green
+       * @enum {string}
+       */
+      color?:
+        | 'green'
+        | 'teal'
+        | 'cyan'
+        | 'blue'
+        | 'indigo'
+        | 'violet'
+        | 'pink'
+        | 'red'
+        | 'orange'
+        | 'amber'
+        | 'gray'
+      /**
+       * Icon
+       * @description Defaults to an icon for the kind.
+       */
+      icon?: string | null
+      /**
+       * Include In Total
+       * @default true
+       */
+      include_in_total?: boolean
+    }
+    /**
+     * AccountKind
+     * @enum {string}
+     */
+    AccountKind: 'checking' | 'savings' | 'cash' | 'investment' | 'other'
+    /** AccountList */
+    AccountList: {
+      /** Items */
+      items: components['schemas']['AccountRead'][]
+      /**
+       * Total Balance Cents
+       * @description F2: active accounts with `include_in_total`.
+       */
+      total_balance_cents: number
+    }
+    /** AccountRead */
+    AccountRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      kind: components['schemas']['AccountKind']
+      /** Initial Balance Cents */
+      initial_balance_cents: number
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /** Include In Total */
+      include_in_total: boolean
+      /** Archived At */
+      archived_at: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Balance Cents
+       * @description F1: balance today.
+       */
+      balance_cents: number
+      /**
+       * Last Transaction On
+       * @description F14: last movement up to today.
+       */
+      last_transaction_on: string | null
+      /**
+       * Month Transactions Count
+       * @description F14: transactions this month.
+       */
+      month_transactions_count: number
+      /**
+       * Transactions Count
+       * @description All transactions; deletion needs zero (F8).
+       */
+      transactions_count: number
+    }
+    /** AccountRef */
+    AccountRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      kind: components['schemas']['AccountKind']
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+    }
+    /** AccountUpdate */
+    AccountUpdate: {
+      /** Name */
+      name?: string | null
+      kind?: components['schemas']['AccountKind'] | null
+      /** Initial Balance Cents */
+      initial_balance_cents?: number | null
+      /** Color */
+      color?:
+        | (
+            | 'green'
+            | 'teal'
+            | 'cyan'
+            | 'blue'
+            | 'indigo'
+            | 'violet'
+            | 'pink'
+            | 'red'
+            | 'orange'
+            | 'amber'
+            | 'gray'
+          )
+        | null
+      /** Icon */
+      icon?: string | null
+      /** Include In Total */
+      include_in_total?: boolean | null
+    }
     /**
      * ActivityItem
      * @description A recent record ("Atividade recente" on Início).
@@ -535,6 +1044,150 @@ export interface components {
         [key: string]: components['schemas']['EventValue']
       }
     }
+    /** AdjustmentCreate */
+    AdjustmentCreate: {
+      /**
+       * Balance Cents
+       * @description The real balance on `occurred_on`.
+       */
+      balance_cents: number
+      /**
+       * Occurred On
+       * @description Defaults to today.
+       */
+      occurred_on?: string | null
+      /**
+       * Description
+       * @default
+       */
+      description?: string
+    }
+    /** CardRef */
+    CardRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Color */
+      color: string
+    }
+    /** CategoryCreate */
+    CategoryCreate: {
+      kind: components['schemas']['CategoryKind']
+      /** Name */
+      name: string
+      /**
+       * Color
+       * @default gray
+       * @enum {string}
+       */
+      color?:
+        | 'green'
+        | 'teal'
+        | 'cyan'
+        | 'blue'
+        | 'indigo'
+        | 'violet'
+        | 'pink'
+        | 'red'
+        | 'orange'
+        | 'amber'
+        | 'gray'
+      /**
+       * Icon
+       * @description Interface icon name; clients fall back to a generic icon.
+       * @default tag
+       */
+      icon?: string
+    }
+    /**
+     * CategoryKind
+     * @enum {string}
+     */
+    CategoryKind: 'income' | 'expense'
+    /** CategoryList */
+    CategoryList: {
+      /** Month */
+      month: string
+      /** Items */
+      items: components['schemas']['CategoryRead'][]
+    }
+    /** CategoryRead */
+    CategoryRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      kind: components['schemas']['CategoryKind']
+      /** Name */
+      name: string
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /** Archived At */
+      archived_at: string | null
+      /** Transactions Count */
+      transactions_count: number
+      /** Month Transactions Count */
+      month_transactions_count: number
+      /** Month Total Cents */
+      month_total_cents: number
+    }
+    /** CategoryRef */
+    CategoryRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      kind: components['schemas']['CategoryKind']
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+    }
+    /** CategoryShare */
+    CategoryShare: {
+      category: components['schemas']['CategoryRef']
+      /** Amount Cents */
+      amount_cents: number
+      /** Percent */
+      percent: number
+      /** Transactions Count */
+      transactions_count: number
+    }
+    /** CategoryUpdate */
+    CategoryUpdate: {
+      /** @description Only while unused. */
+      kind?: components['schemas']['CategoryKind'] | null
+      /** Name */
+      name?: string | null
+      /** Color */
+      color?:
+        | (
+            | 'green'
+            | 'teal'
+            | 'cyan'
+            | 'blue'
+            | 'indigo'
+            | 'violet'
+            | 'pink'
+            | 'red'
+            | 'orange'
+            | 'amber'
+            | 'gray'
+          )
+        | null
+      /** Icon */
+      icon?: string | null
+    }
     /** ConsumptionPoint */
     ConsumptionPoint: {
       /**
@@ -550,13 +1203,120 @@ export interface components {
       /** Km L */
       km_l: number
     }
+    /** CreditCardCreate */
+    CreditCardCreate: {
+      /** Name */
+      name: string
+      /** Limit Cents */
+      limit_cents: number
+      /** Closing Day */
+      closing_day: number
+      /** Due Day */
+      due_day: number
+      /**
+       * Payment Account Id
+       * @description Account suggested when paying the invoice.
+       */
+      payment_account_id?: string | null
+      /**
+       * Color
+       * @default violet
+       * @enum {string}
+       */
+      color?:
+        | 'green'
+        | 'teal'
+        | 'cyan'
+        | 'blue'
+        | 'indigo'
+        | 'violet'
+        | 'pink'
+        | 'red'
+        | 'orange'
+        | 'amber'
+        | 'gray'
+    }
+    /** CreditCardList */
+    CreditCardList: {
+      /** Items */
+      items: components['schemas']['CreditCardRead'][]
+    }
+    /** CreditCardRead */
+    CreditCardRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Limit Cents */
+      limit_cents: number
+      /** Closing Day */
+      closing_day: number
+      /** Due Day */
+      due_day: number
+      payment_account: components['schemas']['AccountRef'] | null
+      /** Color */
+      color: string
+      /** Archived At */
+      archived_at: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Used Cents
+       * @description F6: purchases minus payments, future installments too.
+       */
+      used_cents: number
+      /** Available Limit Cents */
+      available_limit_cents: number
+      /** @description The invoice that receives today's purchases. */
+      current_invoice: components['schemas']['InvoiceRead']
+      /** Transactions Count */
+      transactions_count: number
+    }
+    /** CreditCardUpdate */
+    CreditCardUpdate: {
+      /** Name */
+      name?: string | null
+      /** Limit Cents */
+      limit_cents?: number | null
+      /**
+       * Closing Day
+       * @description Applies to new purchases; existing ones keep their invoice.
+       */
+      closing_day?: number | null
+      /** Due Day */
+      due_day?: number | null
+      /** Payment Account Id */
+      payment_account_id?: string | null
+      /** Color */
+      color?:
+        | (
+            | 'green'
+            | 'teal'
+            | 'cyan'
+            | 'blue'
+            | 'indigo'
+            | 'violet'
+            | 'pink'
+            | 'red'
+            | 'orange'
+            | 'amber'
+            | 'gray'
+          )
+        | null
+    }
     /** DashboardRead */
     DashboardRead: {
       /**
        * Modules
        * @description Summaries of the enabled modules, in the user's order.
        */
-      modules: components['schemas']['GarageSummary'][]
+      modules: (components['schemas']['FinanceSummary'] | components['schemas']['GarageSummary'])[]
       /**
        * Upcoming
        * @description Due items of the enabled modules (next 60 days), by date.
@@ -595,6 +1355,68 @@ export interface components {
       error: components['schemas']['ErrorBody']
     }
     EventValue: string | number | boolean | null
+    /** FinanceOverview */
+    FinanceOverview: {
+      /** Month */
+      month: string
+      /**
+       * Until
+       * Format: date
+       * @description Values count transactions up to this day (F12).
+       */
+      until: string
+      /** Total Balance Cents */
+      total_balance_cents: number
+      /** Accounts Count */
+      accounts_count: number
+      /** Accounts */
+      accounts: components['schemas']['AccountBalance'][]
+      /** Income Cents */
+      income_cents: number
+      /** Expense Cents */
+      expense_cents: number
+      /**
+       * Expense Percent
+       * @description Expenses as a percentage of income.
+       */
+      expense_percent: number | null
+      /** Result Cents */
+      result_cents: number
+      /**
+       * Series
+       * @description The 6 months up to `month`, oldest first.
+       */
+      series: components['schemas']['MonthPoint'][]
+      /** Expenses By Category */
+      expenses_by_category: components['schemas']['CategoryShare'][]
+      /** Income By Category */
+      income_by_category: components['schemas']['CategoryShare'][]
+      /** Open Invoices */
+      open_invoices: components['schemas']['OpenInvoice'][]
+    }
+    /** FinanceSummary */
+    FinanceSummary: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      module: 'finance'
+      /** Month */
+      month: string
+      /** Total Balance Cents */
+      total_balance_cents: number
+      /** Accounts */
+      accounts: components['schemas']['AccountBalance'][]
+      /** Income Cents */
+      income_cents: number
+      /** Expense Cents */
+      expense_cents: number
+      /** Expense Percent */
+      expense_percent: number | null
+      /** Expenses By Category */
+      expenses_by_category: components['schemas']['CategoryShare'][]
+      next_invoice: components['schemas']['OpenInvoice'] | null
+    }
     /**
      * FuelType
      * @enum {string}
@@ -704,11 +1526,10 @@ export interface components {
     /** GarageSummary */
     GarageSummary: {
       /**
-       * Module
-       * @default garage
-       * @constant
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
        */
-      module?: 'garage'
+      module: 'garage'
       /** Vehicles Count */
       vehicles_count: number
       next_due: components['schemas']['NextDue'] | null
@@ -732,6 +1553,114 @@ export interface components {
       /** Version */
       version: string
     }
+    /** InvoiceDetail */
+    InvoiceDetail: {
+      /**
+       * Closing On
+       * Format: date
+       */
+      closing_on: string
+      /**
+       * Due On
+       * Format: date
+       */
+      due_on: string
+      /**
+       * Starts On
+       * Format: date
+       * @description First day of the period (previous closing).
+       */
+      starts_on: string
+      /**
+       * Ends On
+       * Format: date
+       * @description Last day of the period (day before the closing).
+       */
+      ends_on: string
+      /** Amount Cents */
+      amount_cents: number
+      /** Paid Cents */
+      paid_cents: number
+      /** Remaining Cents */
+      remaining_cents: number
+      status: components['schemas']['InvoiceStatus']
+      /** Transactions Count */
+      transactions_count: number
+      /** Last Payment On */
+      last_payment_on: string | null
+      last_payment_account: components['schemas']['AccountRef'] | null
+      card: components['schemas']['CardRef']
+      /** Transactions */
+      transactions: components['schemas']['TransactionRead'][]
+      /** Payments */
+      payments: components['schemas']['TransactionRead'][]
+    }
+    /** InvoiceList */
+    InvoiceList: {
+      /** Items */
+      items: components['schemas']['InvoiceRead'][]
+    }
+    /** InvoicePaymentCreate */
+    InvoicePaymentCreate: {
+      /** Amount Cents */
+      amount_cents: number
+      /**
+       * Account Id
+       * Format: uuid
+       */
+      account_id: string
+      /**
+       * Occurred On
+       * @description Defaults to today.
+       */
+      occurred_on?: string | null
+      /** Occurred Time */
+      occurred_time?: string | null
+      /**
+       * Description
+       * @default
+       */
+      description?: string
+    }
+    /** InvoiceRead */
+    InvoiceRead: {
+      /**
+       * Closing On
+       * Format: date
+       */
+      closing_on: string
+      /**
+       * Due On
+       * Format: date
+       */
+      due_on: string
+      /**
+       * Starts On
+       * Format: date
+       * @description First day of the period (previous closing).
+       */
+      starts_on: string
+      /**
+       * Ends On
+       * Format: date
+       * @description Last day of the period (day before the closing).
+       */
+      ends_on: string
+      /** Amount Cents */
+      amount_cents: number
+      /** Paid Cents */
+      paid_cents: number
+      /** Remaining Cents */
+      remaining_cents: number
+      status: components['schemas']['InvoiceStatus']
+      /** Transactions Count */
+      transactions_count: number
+      /** Last Payment On */
+      last_payment_on: string | null
+      last_payment_account: components['schemas']['AccountRef'] | null
+    }
+    /** @enum {string} */
+    InvoiceStatus: 'open' | 'closed' | 'paid' | 'overdue'
     /** LastFuelingRead */
     LastFuelingRead: {
       /**
@@ -972,6 +1901,15 @@ export interface components {
        */
       position: number
     }
+    /** MonthPoint */
+    MonthPoint: {
+      /** Month */
+      month: string
+      /** Income Cents */
+      income_cents: number
+      /** Expense Cents */
+      expense_cents: number
+    }
     /** NextDue */
     NextDue: {
       vehicle: components['schemas']['VehicleRef']
@@ -1101,6 +2039,15 @@ export interface components {
        * @description Oils used before, most recent first.
        */
       previous_oil_types: string[]
+    }
+    /** OpenInvoice */
+    OpenInvoice: {
+      card: components['schemas']['CardRef']
+      /** Limit Cents */
+      limit_cents: number
+      /** Available Limit Cents */
+      available_limit_cents: number
+      invoice: components['schemas']['InvoiceRead']
     }
     /** Page[FuelingRead] */
     Page_FuelingRead_: {
@@ -1288,6 +2235,147 @@ export interface components {
      * @enum {string}
      */
     Theme: 'system' | 'light' | 'dark'
+    /** TransactionCreate */
+    TransactionCreate: {
+      kind: components['schemas']['TransactionKind']
+      /**
+       * Amount Cents
+       * @description Positive; only `adjustment` is signed. With `installments`, the total.
+       */
+      amount_cents: number
+      /**
+       * Occurred On
+       * Format: date
+       */
+      occurred_on: string
+      /**
+       * Occurred Time
+       * @description Local time, only to show and order within the day.
+       */
+      occurred_time?: string | null
+      /**
+       * Description
+       * @description Required for income and expenses (F16).
+       * @default
+       */
+      description?: string
+      /** Notes */
+      notes?: string | null
+      /** Account Id */
+      account_id?: string | null
+      /** Destination Account Id */
+      destination_account_id?: string | null
+      /** Credit Card Id */
+      credit_card_id?: string | null
+      /** Category Id */
+      category_id?: string | null
+      /**
+       * Invoice Closing On
+       * @description Only for `card_payment`: the invoice being paid.
+       */
+      invoice_closing_on?: string | null
+      /**
+       * Installments
+       * @description Card expense split in installments (F10).
+       */
+      installments?: number | null
+    }
+    /**
+     * TransactionKind
+     * @enum {string}
+     */
+    TransactionKind: 'income' | 'expense' | 'transfer' | 'card_payment' | 'adjustment'
+    /** TransactionPage */
+    TransactionPage: {
+      /** Items */
+      items: components['schemas']['TransactionRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+      /**
+       * Income Cents
+       * @description Sum of the income of the whole filter.
+       */
+      income_cents: number
+      /**
+       * Expense Cents
+       * @description Sum of the expenses of the whole filter.
+       */
+      expense_cents: number
+    }
+    /** TransactionRead */
+    TransactionRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      kind: components['schemas']['TransactionKind']
+      /** Amount Cents */
+      amount_cents: number
+      /**
+       * Occurred On
+       * Format: date
+       */
+      occurred_on: string
+      /** Occurred Time */
+      occurred_time: string | null
+      /** Description */
+      description: string
+      /** Notes */
+      notes: string | null
+      account: components['schemas']['AccountRef'] | null
+      destination_account: components['schemas']['AccountRef'] | null
+      credit_card: components['schemas']['CardRef'] | null
+      category: components['schemas']['CategoryRef'] | null
+      /** Invoice Closing On */
+      invoice_closing_on: string | null
+      /** Installment Group Id */
+      installment_group_id: string | null
+      /** Installment Number */
+      installment_number: number | null
+      /** Installment Count */
+      installment_count: number | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /**
+     * TransactionUpdate
+     * @description `kind` cannot change (F16). Send `null` to clear an optional reference.
+     */
+    TransactionUpdate: {
+      /** Amount Cents */
+      amount_cents?: number | null
+      /** Occurred On */
+      occurred_on?: string | null
+      /** Occurred Time */
+      occurred_time?: string | null
+      /** Description */
+      description?: string | null
+      /** Notes */
+      notes?: string | null
+      /** Account Id */
+      account_id?: string | null
+      /** Destination Account Id */
+      destination_account_id?: string | null
+      /** Credit Card Id */
+      credit_card_id?: string | null
+      /** Category Id */
+      category_id?: string | null
+      /** Invoice Closing On */
+      invoice_closing_on?: string | null
+    }
     /**
      * UpcomingItem
      * @description Something due on a day ("Vem aí" on Início): an oil change, an invoice closing…
@@ -2045,6 +3133,1867 @@ export interface operations {
       }
       /** @description Unauthorized */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_overview: {
+    parameters: {
+      query?: {
+        /** @description `YYYY-MM`; the current month if absent. */
+        month?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FinanceOverview']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_list_accounts: {
+    parameters: {
+      query?: {
+        archived?: 'false' | 'true' | 'all'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_create_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AccountCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_delete_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_update_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AccountUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_archive_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_unarchive_account: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AccountRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_adjust_balance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        account_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdjustmentCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_list_categories: {
+    parameters: {
+      query?: {
+        kind?: components['schemas']['CategoryKind'] | null
+        archived?: 'false' | 'true' | 'all'
+        /** @description Month of the counts and totals. */
+        month?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_create_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CategoryCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_delete_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_update_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CategoryUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_archive_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_unarchive_category: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CategoryRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_list_transactions: {
+    parameters: {
+      query?: {
+        from?: string | null
+        to?: string | null
+        kind?: components['schemas']['TransactionKind'] | null
+        /** @description Source or destination account. */
+        account_id?: string | null
+        credit_card_id?: string | null
+        category_id?: string | null
+        /** @description Description, notes or value (F13). */
+        q?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -amount, -occurred_on, amount, occurred_on. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionPage']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_create_transaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransactionCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_transaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        transaction_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_delete_transaction: {
+    parameters: {
+      query?: {
+        /** @description `all` removes the whole installment purchase. */
+        installments?: 'one' | 'all'
+      }
+      header?: never
+      path: {
+        transaction_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_update_transaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        transaction_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransactionUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_list_cards: {
+    parameters: {
+      query?: {
+        archived?: 'false' | 'true' | 'all'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_create_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreditCardCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_delete_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_update_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreditCardUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_archive_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_unarchive_card: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CreditCardRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_list_invoices: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InvoiceList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_read_invoice: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        closing_on: string
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InvoiceDetail']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  finance_pay_invoice: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        closing_on: string
+        card_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['InvoicePaymentCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TransactionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
         headers: {
           [name: string]: unknown
         }
