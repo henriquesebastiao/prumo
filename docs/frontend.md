@@ -101,8 +101,8 @@ Componentes base (`src/ui/`, exportados por `@/ui`):
 | Grupo | Componentes |
 |---|---|
 | Ações | `PButton` (primary, outline, tonal, ghost, danger, chip; md/lg), `PIconButton`, `PFab` (trilho ou flutuante), `PLink` |
-| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos; `lg` para o valor em destaque), `PTextarea`, `PSelect` (campo ou filtro em pílula), `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PChipChoice` (chips com ícone), `PStepper`, `PMonthNav` (‹ mês ›), `PSwatchPicker`, `PIconPicker`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
-| Exibição | `PText`, `PCard`, `PPanel`, `PStatCard`, `PTile` (quadrado ou círculo), `PBadge`, `PStatus`, `PKbd`, `PAvatar`, `PProgress`, `PRing`, `PDateBadge`, `PDescriptionList`, `PDivider`, `PCardFace` (face do cartão de crédito), `PLogo` |
+| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos; `lg` para o valor em destaque), `PTextarea`, `PSelect` (campo ou filtro em pílula), `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PChipChoice` (chips com ícone), `PStepper`, `PMonthNav` (‹ mês ›), `PSwatchPicker`, `PIconPicker`, `PFileButton`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
+| Exibição | `PText`, `PCard`, `PPanel`, `PStatCard`, `PTile` (quadrado ou círculo), `PBadge`, `PStatus`, `PKbd`, `PAvatar`, `PProgress`, `PRing`, `PDateBadge`, `PDescriptionList`, `PDivider`, `PCardFace` (face do cartão de crédito), `PBookCover` (capa enviada ou desenhada; vira link), `PLogo` |
 | Navegação e listas | `PPageHeader`, `PTabs` + `PTabPanel`, `PNavList`, `PList` + `PListItem` (com destaque do item em edição), `PTable` (vira lista em contêiner estreito), `PSortableList` (arrastar ou setas) |
 | Sobreposições | `PDialog` (tela cheia no celular), `PConfirmDialog`, `PPopover`, `PMenu`, `PCommand`, `PDrawer`, `PToaster` + `useToast()` |
 | Estados | `PEmptyState` (simples ou card), `PSkeleton`, `PSpinner`, `PAlert`, `PNote`, `PQueryState` (carregando, erro com "Tentar de novo", vazio) |
@@ -206,8 +206,8 @@ Ainda abertas, a decidir na fase de cada módulo:
 
 - **Veículos (Fase 1, D27):** resolvidas. Diferenças que ficaram: sem busca na lista de veículos (D22); o formulário de abastecimento não mostra a prévia "Consumo deste tanque" (seria cálculo de regra no cliente; o consumo aparece depois de salvar); o cadastro de peça tem quantidade (padrão 1); o diálogo de km é um popover só no detalhe do veículo.
 - **Finanças (Fase 2, D31–D34):** resolvidas. Diferenças que ficaram: o formulário de transação tem o campo opcional "Hora" e, no cartão, "Parcelas"; "Excluir" categoria vira "Arquivar" quando ela tem transações (D32); a lista de categorias mostra as usadas no mês e um botão para as demais; o cadastro de conta tem "Somar no saldo total"; os seletores de ícone têm mais opções que a prancha (as das categorias padrão); "Últimas transações" e as faturas mostram lançamentos agendados (como a parcela futura) só onde fazem sentido: a lista de transações e a fatura mostram, a visão geral não.
-- **Livros:** previsão de término e ritmo de leitura; lista de todas as anotações; data editável na anotação; `owned` ("tenho") sem lugar na interface.
-- **Início:** seções "Vem aí" e "Atividade recente" (agregações entre módulos que o dashboard ainda não tem).
+- **Livros (Fase 3, D35–D36):** resolvidas. Diferenças que ficaram: o cadastro tem "Tenho este livro" e, no status "Lendo", página atual e início; a estante ganhou o filtro "Tenho / Não tenho" na linha das abas e o selo "Tenho"; "Lidos" filtra por ano num seletor; a capa desenhada segue o status (tom do módulo lendo, papel na fila, tinta lido); o menu "⋯" do livro tem "Remover capa" e "Excluir livro".
+- **Início:** "Vem aí" e "Atividade recente" resolvidas (D28). Os cards e os atalhos seguem a ordem dos módulos escolhida pelo usuário (Finanças, Veículos, Livros por padrão), não a das pranchas.
 
 ## Como fazer um redesign
 

@@ -1,0 +1,63 @@
+/* Layout shared by the reading forms (layout only: appearance comes from src/ui). */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-3-5) var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+}
+
+.form__split {
+  display: grid;
+  align-items: start;
+  gap: var(--space-6);
+  grid-template-columns: 184px minmax(0, 1fr);
+}
+
+.form__cover {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form__pages {
+  max-width: 240px;
+}
+
+.form__switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.form__switch-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.form__footer-start {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  margin-right: auto;
+}
+
+.form__stepper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media (width < 700px) {
+  .form__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

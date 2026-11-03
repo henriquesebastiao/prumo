@@ -42,3 +42,9 @@ pair "Finanças · Categorias.png" finance-categories.png finance-categories
 pair "Finanças · Nova transação.png" finance-dialog-expense.png finance-dialog-expense
 pair "Finanças · Nova transação.png" finance-dialog-transfer.png finance-dialog-transfer
 pair "Início — claro.png" finance-home-light.png finance-home-light
+pair "Livros · Estante — claro.png" reading-shelf-light.png reading-shelf-light
+pair "Livros · Estante — escuro.png" reading-shelf-dark.png reading-shelf-dark
+pair "Livros · Detalhe do livro.png" reading-detail.png reading-detail
+pair "Livros · Cadastro de livro.png" reading-dialog-book.png reading-dialog-book
+pair "Livros · Nova anotação.png" reading-dialog-note.png reading-dialog-note
+pair "Início — claro.png" reading-home-light.png reading-home-light

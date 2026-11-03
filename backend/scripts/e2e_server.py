@@ -204,7 +204,101 @@ def seed() -> None:
             service.add_manual_reading(session, user, cg, OdometerReadingCreate(km=18420))
         with time_machine.travel(at("2026-11-17T17:20:00")):
             seed_finance(session, user)
+        seed_reading(session, user)
     engine.dispose()
+
+
+def seed_reading(session: Session, user: object) -> None:
+    """The Livros boards: "Código Limpo" at page 212 of 425 since 26/10 (62, 71 and 79 pages per
+    week, about 10 a day, ending around 08/12), "Dom Casmurro" read and "O Hobbit" to read."""
+    from prumo.modules.reading import service as reading
+    from prumo.modules.reading.models import BookStatus
+    from prumo.modules.reading.schemas import BookCreate, NoteCreate
+    from prumo.system.users.models import User
+
+    assert isinstance(user, User)
+
+    def local(value: str) -> datetime:
+        return datetime.fromisoformat(f"{value}-03:00")
+
+    with time_machine.travel(local("2026-09-25T20:00:00")):
+        casmurro = reading.create_book(
+            session,
+            user,
+            BookCreate(
+                title="Dom Casmurro",
+                author="Machado de Assis",
+                total_pages=256,
+                status=BookStatus.READ,
+                owned=True,
+                started_on=date(2026, 9, 25),
+                finished_on=date(2026, 10, 18),
+            ),
+        )
+    for day, content in (
+        ("2026-09-27", "Bentinho conta a história já velho: tudo passa pelo filtro da memória."),
+        ("2026-10-02", "Olhos de cigana oblíqua e dissimulada."),
+        ("2026-10-09", "O capítulo dos olhos de ressaca."),
+        ("2026-10-18", "O narrador não é confiável; a dúvida fica com o leitor."),
+    ):
+        with time_machine.travel(local(f"{day}T21:00:00")):
+            reading.create_note(session, user, casmurro, NoteCreate(content=content))
+
+    with time_machine.travel(local("2026-10-26T20:30:00")):
+        clean = reading.create_book(
+            session,
+            user,
+            BookCreate(
+                title="Código Limpo", author="Robert C. Martin", total_pages=425, owned=True
+            ),
+        )
+    for moment, page in (
+        ("2026-10-26T21:00:00", 20),
+        ("2026-10-28T22:00:00", 41),
+        ("2026-10-31T20:00:00", 62),
+        ("2026-11-02T22:00:00", 66),
+        ("2026-11-05T21:00:00", 98),
+        ("2026-11-08T20:00:00", 133),
+        ("2026-11-10T22:00:00", 176),
+        ("2026-11-13T21:00:00", 198),
+        ("2026-11-15T22:05:00", 212),
+    ):
+        with time_machine.travel(local(moment)):
+            reading.add_progress(session, user, clean, page)
+    notes: tuple[tuple[str, int | None, str], ...] = (
+        (
+            "2026-10-27T22:00:00",
+            None,
+            "Ir juntando exemplos de nomes ruins que encontro no código do dia a dia.",
+        ),
+        (
+            "2026-11-02T22:10:00",
+            98,
+            "Funções pequenas, com um só nível de abstração. Testar isso no próximo refactor.",
+        ),
+        (
+            "2026-11-10T22:10:00",
+            176,
+            "Objetos escondem dados e mostram comportamento; estruturas de dados fazem o "
+            "contrário. Bom critério para separar models de schemas.",
+        ),
+        (
+            "2026-11-15T22:10:00",
+            212,
+            "Capítulo sobre tratamento de erros: revisar como a minha API devolve falhas e "
+            "trocar códigos de retorno por exceções específicas.",
+        ),
+    )
+    for moment, note_page, content in notes:
+        with time_machine.travel(local(moment)):
+            reading.create_note(session, user, clean, NoteCreate(content=content, page=note_page))
+
+    with time_machine.travel(local("2026-11-02T19:00:00")):
+        reading.create_book(
+            session,
+            user,
+            BookCreate(title="O Hobbit", author="J.R.R. Tolkien", total_pages=336),
+        )
 
 
 def seed_finance(session: Session, user: object) -> None:

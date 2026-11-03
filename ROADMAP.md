@@ -68,12 +68,12 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] Compras parceladas no cartão
 
 ## Fase 3 — Livros (`reading`)
-- [ ] Livros: CRUD, status de leitura e "tenho / não tenho"
-- [ ] Progresso de leitura com histórico
-- [ ] Anotações por livro
-- [ ] Upload de capa
-- [ ] Widget do Início e ações rápidas
-- [ ] Revisão visual contra `design/v1/`
+- [x] Livros: CRUD, status de leitura e "tenho / não tenho"
+- [x] Progresso de leitura com histórico
+- [x] Anotações por livro
+- [x] Upload de capa
+- [x] Widget do Início e ações rápidas
+- [x] Revisão visual contra `design/v1/`
 
 ## Fase 4 — Versão 0.1 (self-host)
 - [ ] Imagens Docker publicadas
