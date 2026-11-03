@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Restores a backup made by backup.sh, replacing the current database.
+# Restores a backup made by backup.sh, replacing the current database and, when the matching
+# ...-uploads.tar.gz exists next to it, the uploads volume (covers).
 # Usage: deploy/restore.sh backups/prumo-20261117-1430.sql.gz
 #        PRUMO_RESTORE_CONFIRM=yes deploy/restore.sh <file>   (no prompt)
 set -euo pipefail
@@ -26,6 +27,13 @@ fi
 
 gunzip -c "$file" | docker compose -f "$compose_file" exec -T db sh -c \
   'psql --quiet --set ON_ERROR_STOP=1 --username="$POSTGRES_USER" --dbname="$POSTGRES_DB"' > /dev/null
+
+uploads="${file%.sql.gz}-uploads.tar.gz"
+if [[ -f "$uploads" ]] && docker compose -f "$compose_file" config --services | grep -qx api; then
+  docker compose -f "$compose_file" run --rm --no-deps -T --entrypoint sh api \
+    -c 'find /data/uploads -mindepth 1 -delete && tar -C /data/uploads -xzf -' < "$uploads"
+  echo "Arquivos restaurados de $uploads."
+fi
 
 if [[ "$has_api" == true ]]; then
   docker compose -f "$compose_file" start api

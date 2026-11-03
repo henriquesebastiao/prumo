@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Dumps the PostgreSQL database of the compose stack to backups/prumo-YYYYMMDD-HHMM.sql.gz.
+# Dumps the PostgreSQL database of the compose stack to backups/prumo-YYYYMMDD-HHMM.sql.gz and,
+# when the stack has the api service, the uploads volume (covers) to ...-uploads.tar.gz.
 # Usage: deploy/backup.sh            (production stack, docker-compose.yml)
 #        COMPOSE_FILE=docker-compose.dev.yml deploy/backup.sh
 set -euo pipefail
@@ -15,3 +16,11 @@ docker compose -f "$compose_file" exec -T db sh -c \
   | gzip -9 > "$tmp"
 mv "$tmp" "$target"
 echo "$target"
+
+if docker compose -f "$compose_file" config --services | grep -qx api; then
+  uploads="${target%.sql.gz}-uploads.tar.gz"
+  docker compose -f "$compose_file" run --rm --no-deps -T --entrypoint tar api \
+    -C /data/uploads -czf - . > "${uploads}.partial"
+  mv "${uploads}.partial" "$uploads"
+  echo "$uploads"
+fi

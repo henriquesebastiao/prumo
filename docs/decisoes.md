@@ -208,6 +208,18 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** `GET /finance/transactions` devolve o formato padrão de página mais `income_cents` e `expense_cents` do filtro inteiro (não só da página). `GET /finance/accounts` devolve `{items, total_balance_cents}`.
 **Consequências:** extensão aditiva do formato de lista, documentada em `docs/api.md`.
 
+## D35 — Divergências do design v1 em Livros
+**Status:** aceita · 2026-11
+**Contexto:** as pranchas de Livros mostram dados que o domínio não tinha.
+**Decisão:** entram no domínio e na API: ritmo de leitura e previsão de término (R7, R8), páginas por semana (R9), a aba "Anotações" com todas as anotações (`GET /reading/notes`), a data editável da anotação (`noted_on`) e o "tenho" no cadastro, como selo na estante e como filtro.
+**Consequências:** valores derivados no backend, iguais para web e Android; `ReadingProgress` guarda a página anterior para medir o avanço.
+
+## D36 — Processamento da capa
+**Status:** aceita · 2026-11
+**Contexto:** R6 pede upload `multipart/form-data` e redimensionamento no servidor.
+**Decisão:** dependências `python-multipart` (uploads no FastAPI) e Pillow. A imagem é validada pelo conteúdo, tem a orientação EXIF aplicada, é reduzida a 800 px no maior lado e regravada em WebP em `PRUMO_UPLOADS_DIR/reading/covers/<id do livro>.webp`.
+**Consequências:** metadados (como GPS) não ficam guardados; o backup inclui o volume de uploads.
+
 ---
 
 ## Modelo

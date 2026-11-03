@@ -6,6 +6,6 @@ Current order: finance, garage, reading.
 """
 
 from prumo.core.modules import PrumoModule
-from prumo.modules import finance, garage
+from prumo.modules import finance, garage, reading
 
-INSTALLED_MODULES: list[PrumoModule] = [finance.module, garage.module]
+INSTALLED_MODULES: list[PrumoModule] = [finance.module, garage.module, reading.module]

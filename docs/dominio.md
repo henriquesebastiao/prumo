@@ -104,16 +104,21 @@ Regras:
 
 ## Livros (`reading`)
 
-**Book**: `title`, `author`, `total_pages` (> 0), `current_page` (0 a `total_pages`), `status` (`want_to_read` | `reading` | `read`), `owned` (bool: "tenho"), `started_on?`, `finished_on?`, `cover_path?`.
+**Book**: `title`, `author`, `total_pages` (> 0), `current_page` (0 a `total_pages`), `status` (`want_to_read` | `reading` | `read`), `owned` (bool: "tenho"), `started_on?`, `finished_on?`, capa opcional.
 
-**ReadingProgress**: `book_id`, `page`, `recorded_at`.
+**ReadingProgress**: `book_id`, `page`, `previous_page`, `recorded_at`.
 
-**BookNote**: `book_id`, `content` (texto com markdown simples), `page?`.
+**BookNote**: `book_id`, `content` (texto com markdown simples), `page?`, `noted_on` (data, padrão hoje).
 
 Regras:
 - R1. Status de leitura e posse são independentes: dá para ter um livro que se quer ler e querer ler um livro que não se tem.
-- R2. Atualizar o progresso grava uma `ReadingProgress` e atualiza `current_page`.
-- R3. Se o status é `want_to_read` e a página passa de 0, o status vira `reading` e `started_on` recebe hoje (se vazio).
-- R4. Se a página chega a `total_pages`, o status vira `read` e `finished_on` recebe hoje (se vazio). O usuário pode corrigir editando o livro.
-- R5. `progress_percent` = `current_page ÷ total_pages × 100`, calculado pelo backend.
-- R6. Capa: JPEG, PNG ou WebP até 5 MB, redimensionada no servidor para no máximo 800 px no maior lado e servida por endpoint autenticado.
+- R2. Atualizar o progresso grava uma `ReadingProgress` (com a página anterior) e atualiza `current_page`. Página igual à atual não grava nada.
+- R3. Se o status é `want_to_read` e a página passa de 0, o status vira `reading` e `started_on` recebe hoje (se vazio). "Começar a ler" muda o status para `reading` mesmo na página 0.
+- R4. Se a página chega a `total_pages`, o status vira `read` e `finished_on` recebe hoje (se vazio). "Marcar como lido" leva a página ao total. O usuário pode corrigir status e datas editando o livro; `current_page` nunca passa de `total_pages`.
+- R5. `progress_percent` = `current_page ÷ total_pages × 100`, arredondado (100 só quando termina), calculado pelo backend.
+- R6. Capa: JPEG, PNG ou WebP até 5 MB, validada pelo conteúdo, com a orientação EXIF aplicada, redimensionada no servidor para no máximo 800 px no maior lado, regravada em WebP (sem metadados) e servida por endpoint autenticado. Sem capa, os clientes desenham uma com título e autor.
+- R7. Ritmo: páginas por dia = páginas avançadas nos últimos 14 dias (página atual menos a página do último registro anterior à janela, ou 0) ÷ dias da janela (14, ou os dias desde o primeiro registro, se forem menos). Sem avanço, não há ritmo.
+- R8. Previsão de término: só para livros `reading` com ritmo; hoje + ⌈páginas restantes ÷ ritmo⌉ dias.
+- R9. Páginas por semana (semanas de segunda a domingo, no fuso do usuário): avanço de cada semana, da semana do primeiro registro até a do último, no máximo as 8 últimas.
+- R10. Anotações são ordenadas por `noted_on` e, no mesmo dia, pela criação, das mais recentes para as mais antigas. A lista geral de anotações busca no texto.
+- R11. "Atividade recente" (Início): registros de progresso (com o avanço em páginas) e anotações. Livros não publicam itens em "Vem aí".

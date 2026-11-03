@@ -7,7 +7,9 @@ Database: PRUMO_E2E_DATABASE_URL, default prumo_e2e on the test container (port 
 """
 
 import os
+import shutil
 from datetime import UTC, date, datetime, time
+from pathlib import Path
 
 import psycopg
 import time_machine
@@ -26,8 +28,11 @@ DATABASE_URL = os.environ.get(
 PORT = int(os.environ.get("PRUMO_E2E_PORT", "8001"))
 NOW = "2026-11-17T17:30:00Z"
 
+UPLOADS = Path(__file__).resolve().parents[2] / "data" / "e2e-uploads"
+
 os.environ["PRUMO_DATABASE_URL"] = DATABASE_URL
 os.environ["PRUMO_COOKIE_SECURE"] = "false"
+os.environ["PRUMO_UPLOADS_DIR"] = str(UPLOADS)
 
 
 def at(value: str) -> datetime:
@@ -35,6 +40,7 @@ def at(value: str) -> datetime:
 
 
 def reset_database() -> None:
+    shutil.rmtree(UPLOADS, ignore_errors=True)
     with psycopg.connect(ADMIN_URL, autocommit=True) as connection:
         connection.execute("DROP DATABASE IF EXISTS prumo_e2e WITH (FORCE)")
         connection.execute("CREATE DATABASE prumo_e2e")

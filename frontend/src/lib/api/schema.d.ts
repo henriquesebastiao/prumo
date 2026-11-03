@@ -865,6 +865,162 @@ export interface paths {
     patch: operations['garage_update_workshop']
     trace?: never
   }
+  '/api/v1/reading/overview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Overview
+     * @description Books by status and the number of notes.
+     */
+    get: operations['reading_read_overview']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/books': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Books */
+    get: operations['reading_list_books']
+    put?: never
+    /** Create Book */
+    post: operations['reading_create_book']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/books/{book_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Book */
+    get: operations['reading_read_book']
+    put?: never
+    post?: never
+    /**
+     * Delete Book
+     * @description Removes the book with its progress, notes and cover.
+     */
+    delete: operations['reading_delete_book']
+    options?: never
+    head?: never
+    /** Update Book */
+    patch: operations['reading_update_book']
+    trace?: never
+  }
+  '/api/v1/reading/books/{book_id}/progress': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Progress */
+    get: operations['reading_list_progress']
+    put?: never
+    /**
+     * Add Progress
+     * @description R2-R4: records the current page; the status and dates follow.
+     */
+    post: operations['reading_add_progress']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/books/{book_id}/cover': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Cover */
+    get: operations['reading_read_cover']
+    /** Set Cover */
+    put: operations['reading_set_cover']
+    post?: never
+    /** Delete Cover */
+    delete: operations['reading_delete_cover']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/notes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Notes
+     * @description R10: every note, newest first, with its book.
+     */
+    get: operations['reading_list_notes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/books/{book_id}/notes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Book Notes */
+    get: operations['reading_list_book_notes']
+    put?: never
+    /** Create Note */
+    post: operations['reading_create_note']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/reading/books/{book_id}/notes/{note_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Note */
+    delete: operations['reading_delete_note']
+    options?: never
+    head?: never
+    /** Update Note */
+    patch: operations['reading_update_note']
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -1061,6 +1217,200 @@ export interface components {
        * @default
        */
       description?: string
+    }
+    /** Body_reading_set_cover */
+    Body_reading_set_cover: {
+      /**
+       * File
+       * @description JPEG, PNG or WebP up to 5 MB.
+       */
+      file: string
+    }
+    /** BookCreate */
+    BookCreate: {
+      /** Title */
+      title: string
+      /** Author */
+      author: string
+      /** Total Pages */
+      total_pages: number
+      /** @default want_to_read */
+      status?: components['schemas']['BookStatus']
+      /**
+       * Owned
+       * @description 'Tenho': independent from the status (R1).
+       * @default false
+       */
+      owned?: boolean
+      /**
+       * Current Page
+       * @description For a book already started (R3, R4).
+       * @default 0
+       */
+      current_page?: number
+      /**
+       * Started On
+       * @description Defaults to today when reading.
+       */
+      started_on?: string | null
+      /**
+       * Finished On
+       * @description Defaults to today when read.
+       */
+      finished_on?: string | null
+    }
+    /** BookDetail */
+    BookDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Title */
+      title: string
+      /** Author */
+      author: string
+      /** Total Pages */
+      total_pages: number
+      /** Current Page */
+      current_page: number
+      status: components['schemas']['BookStatus']
+      /** Owned */
+      owned: boolean
+      /** Started On */
+      started_on: string | null
+      /** Finished On */
+      finished_on: string | null
+      /** Has Cover */
+      has_cover: boolean
+      /**
+       * Cover Updated At
+       * @description Changes when the cover changes.
+       */
+      cover_updated_at: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Progress Percent
+       * @description R5.
+       */
+      progress_percent: number
+      /** Remaining Pages */
+      remaining_pages: number
+      /**
+       * Pace Pages Per Day
+       * @description R7: last 14 days.
+       */
+      pace_pages_per_day: number | null
+      /**
+       * Forecast Finish On
+       * @description R8.
+       */
+      forecast_finish_on: string | null
+      /** Last Progress At */
+      last_progress_at: string | null
+      /** Notes Count */
+      notes_count: number
+      /**
+       * Weekly Pages
+       * @description R9.
+       */
+      weekly_pages: components['schemas']['WeekPages'][]
+    }
+    /** BookRead */
+    BookRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Title */
+      title: string
+      /** Author */
+      author: string
+      /** Total Pages */
+      total_pages: number
+      /** Current Page */
+      current_page: number
+      status: components['schemas']['BookStatus']
+      /** Owned */
+      owned: boolean
+      /** Started On */
+      started_on: string | null
+      /** Finished On */
+      finished_on: string | null
+      /** Has Cover */
+      has_cover: boolean
+      /**
+       * Cover Updated At
+       * @description Changes when the cover changes.
+       */
+      cover_updated_at: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Progress Percent
+       * @description R5.
+       */
+      progress_percent: number
+      /** Remaining Pages */
+      remaining_pages: number
+      /**
+       * Pace Pages Per Day
+       * @description R7: last 14 days.
+       */
+      pace_pages_per_day: number | null
+      /**
+       * Forecast Finish On
+       * @description R8.
+       */
+      forecast_finish_on: string | null
+      /** Last Progress At */
+      last_progress_at: string | null
+      /** Notes Count */
+      notes_count: number
+    }
+    /** BookRef */
+    BookRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Title */
+      title: string
+      /** Author */
+      author: string
+    }
+    /**
+     * BookStatus
+     * @enum {string}
+     */
+    BookStatus: 'want_to_read' | 'reading' | 'read'
+    /**
+     * BookUpdate
+     * @description Status changes fill empty dates like the progress does (R3, R4).
+     */
+    BookUpdate: {
+      /** Title */
+      title?: string | null
+      /** Author */
+      author?: string | null
+      /** Total Pages */
+      total_pages?: number | null
+      status?: components['schemas']['BookStatus'] | null
+      /** Owned */
+      owned?: boolean | null
+      /** Started On */
+      started_on?: string | null
+      /** Finished On */
+      finished_on?: string | null
     }
     /** CardRef */
     CardRef: {
@@ -1310,13 +1660,31 @@ export interface components {
           )
         | null
     }
+    /** CurrentBook */
+    CurrentBook: {
+      book: components['schemas']['BookRef']
+      /** Current Page */
+      current_page: number
+      /** Total Pages */
+      total_pages: number
+      /** Progress Percent */
+      progress_percent: number
+      /** Has Cover */
+      has_cover: boolean
+      /** Cover Updated At */
+      cover_updated_at: string | null
+    }
     /** DashboardRead */
     DashboardRead: {
       /**
        * Modules
        * @description Summaries of the enabled modules, in the user's order.
        */
-      modules: (components['schemas']['FinanceSummary'] | components['schemas']['GarageSummary'])[]
+      modules: (
+        | components['schemas']['FinanceSummary']
+        | components['schemas']['GarageSummary']
+        | components['schemas']['ReadingSummary']
+      )[]
       /**
        * Upcoming
        * @description Due items of the enabled modules (next 60 days), by date.
@@ -1935,6 +2303,63 @@ export interface components {
        */
       due_on: string | null
     }
+    /** NoteCreate */
+    NoteCreate: {
+      /**
+       * Content
+       * @description Simple markdown.
+       */
+      content: string
+      /** Page */
+      page?: number | null
+      /**
+       * Noted On
+       * @description Defaults to today.
+       */
+      noted_on?: string | null
+    }
+    /** NoteList */
+    NoteList: {
+      /** Items */
+      items: components['schemas']['NoteRead'][]
+    }
+    /** NoteRead */
+    NoteRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      book: components['schemas']['BookRef']
+      /** Content */
+      content: string
+      /** Page */
+      page: number | null
+      /**
+       * Noted On
+       * Format: date
+       */
+      noted_on: string
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** NoteUpdate */
+    NoteUpdate: {
+      /** Content */
+      content?: string | null
+      /** Page */
+      page?: number | null
+      /** Noted On */
+      noted_on?: string | null
+    }
     /** OdometerReadingCreate */
     OdometerReadingCreate: {
       /** Km */
@@ -2049,6 +2474,17 @@ export interface components {
       available_limit_cents: number
       invoice: components['schemas']['InvoiceRead']
     }
+    /** Page[BookRead] */
+    Page_BookRead_: {
+      /** Items */
+      items: components['schemas']['BookRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
     /** Page[FuelingRead] */
     Page_FuelingRead_: {
       /** Items */
@@ -2064,6 +2500,17 @@ export interface components {
     Page_MaintenanceRead_: {
       /** Items */
       items: components['schemas']['MaintenanceRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[NoteRead] */
+    Page_NoteRead_: {
+      /** Items */
+      items: components['schemas']['NoteRead'][]
       /** Total */
       total: number
       /** Limit */
@@ -2163,11 +2610,73 @@ export interface components {
        */
       enabled_modules?: string[] | null
     }
+    /** ProgressCreate */
+    ProgressCreate: {
+      /** Page */
+      page: number
+    }
+    /** ProgressList */
+    ProgressList: {
+      /** Items */
+      items: components['schemas']['ProgressRead'][]
+    }
+    /** ProgressRead */
+    ProgressRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Page */
+      page: number
+      /** Previous Page */
+      previous_page: number
+      /**
+       * Pages
+       * @description Pages advanced (negative for a correction).
+       */
+      pages: number
+      /**
+       * Recorded At
+       * Format: date-time
+       */
+      recorded_at: string
+    }
+    /** ReadingOverview */
+    ReadingOverview: {
+      /** Books Count */
+      books_count: number
+      /** Want To Read Count */
+      want_to_read_count: number
+      /** Reading Count */
+      reading_count: number
+      /** Read Count */
+      read_count: number
+      /** Notes Count */
+      notes_count: number
+    }
     /**
      * ReadingSource
      * @enum {string}
      */
     ReadingSource: 'manual' | 'maintenance' | 'fueling'
+    /** ReadingSummary */
+    ReadingSummary: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      module: 'reading'
+      /** Books Count */
+      books_count: number
+      /** @description The book read most recently. */
+      current: components['schemas']['CurrentBook'] | null
+      /**
+       * Shelf
+       * @description Last book read and next one to read.
+       */
+      shelf: components['schemas']['ShelfBook'][]
+    }
     /**
      * SessionClient
      * @enum {string}
@@ -2213,6 +2722,15 @@ export interface components {
        * Format: date-time
        */
       updated_at: string
+    }
+    /** ShelfBook */
+    ShelfBook: {
+      book: components['schemas']['BookRef']
+      status: components['schemas']['BookStatus']
+      /** Total Pages */
+      total_pages: number
+      /** Finished On */
+      finished_on: string | null
     }
     /** SummaryVehicle */
     SummaryVehicle: {
@@ -2578,6 +3096,17 @@ export interface components {
       oil_interval_months?: number | null
       /** Notes */
       notes?: string | null
+    }
+    /** WeekPages */
+    WeekPages: {
+      /**
+       * Week Start
+       * Format: date
+       * @description Monday of the week.
+       */
+      week_start: string
+      /** Pages */
+      pages: number
     }
     /** WorkshopCreate */
     WorkshopCreate: {
@@ -6689,6 +7218,969 @@ export interface operations {
       }
       /** @description Conflict */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_read_overview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReadingOverview']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_list_books: {
+    parameters: {
+      query?: {
+        status?: components['schemas']['BookStatus'] | null
+        owned?: boolean | null
+        /** @description Title or author. */
+        q?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -author, -created_at, -finished_on, -title, author, created_at, finished_on, title. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_BookRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_create_book: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BookCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_read_book: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookDetail']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_delete_book: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_update_book: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BookUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_list_progress: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProgressList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_add_progress: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProgressCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_read_cover: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The cover (WebP). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'image/webp': unknown
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_set_cover: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['Body_reading_set_cover']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BookRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Content Too Large */
+      413: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_delete_cover: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_list_notes: {
+    parameters: {
+      query?: {
+        /** @description Text of the note. */
+        q?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_NoteRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_list_book_notes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NoteList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_create_note: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NoteCreate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NoteRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_delete_note: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        note_id: string
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  reading_update_note: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        note_id: string
+        book_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NoteUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['NoteRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
         headers: {
           [name: string]: unknown
         }

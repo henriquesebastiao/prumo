@@ -35,8 +35,8 @@ Acesse `http://localhost:5173`. O Vite encaminha `/api` para a API, então o com
 | `make migrate` | Aplica migrations |
 | `make openapi` | Exporta `openapi/openapi.json` e regenera `frontend/src/lib/api/schema.d.ts` |
 | `make user` | Cria usuário pela CLI |
-| `make backup` | Gera `backups/prumo-AAAAMMDD-HHMM.sql.gz` (stack de produção; `COMPOSE_FILE=docker-compose.dev.yml` para o banco de desenvolvimento) |
-| `make restore f=<arquivo>` | Restaura um backup (substitui o banco atual; pede confirmação) |
+| `make backup` | Gera `backups/prumo-AAAAMMDD-HHMM.sql.gz` e, na stack de produção, `…-uploads.tar.gz` com as capas (`COMPOSE_FILE=docker-compose.dev.yml` para o banco de desenvolvimento) |
+| `make restore f=<arquivo>` | Restaura um backup (substitui o banco atual e, se houver o `…-uploads.tar.gz` correspondente, os arquivos; pede confirmação) |
 
 ## Variáveis de ambiente
 
@@ -97,4 +97,4 @@ Workflow em `.github/workflows/ci.yml` (sintaxe compatível com Forgejo Actions)
 
 ## Backup e restauração
 
-`make backup` (`deploy/backup.sh`) executa `pg_dump --clean --if-exists` no container `db` e grava um arquivo compactado em `backups/` (fora do controle de versão). Em produção, agende o mesmo script (por exemplo, com cron) e copie os arquivos para fora do servidor. `make restore f=<arquivo>` (`deploy/restore.sh`) para a API, recria os objetos do banco a partir do backup e religa a API; `PRUMO_RESTORE_CONFIRM=yes` dispensa a confirmação.
+`make backup` (`deploy/backup.sh`) executa `pg_dump --clean --if-exists` no container `db` e grava um arquivo compactado em `backups/` (fora do controle de versão); na stack de produção, também empacota o volume `uploads` (capas) num `.tar.gz` com o mesmo nome. `make restore` restaura os dois quando encontra o par. Em produção, agende o mesmo script (por exemplo, com cron) e copie os arquivos para fora do servidor. `make restore f=<arquivo>` (`deploy/restore.sh`) para a API, recria os objetos do banco a partir do backup e religa a API; `PRUMO_RESTORE_CONFIRM=yes` dispensa a confirmação.

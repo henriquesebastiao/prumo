@@ -212,12 +212,25 @@ Erros do módulo: `finance.category_in_use`, `finance.account_in_use` e `finance
 ### Livros (`/reading`)
 | Rota | Descrição |
 |---|---|
-| `GET, POST /reading/books` | Lista (filtros `status`, `owned`, `q`) e cadastro |
-| `GET, PATCH, DELETE /reading/books/{id}` | Detalhe (com `progress_percent`), edição, exclusão |
-| `GET, POST /reading/books/{id}/progress` | Histórico e nova página atual |
-| `GET, POST /reading/books/{id}/notes` | Anotações |
+| `GET, POST /reading/books` | Lista paginada (filtros `status`, `owned`, `q` em título e autor; `sort`) e cadastro |
+| `GET, PATCH, DELETE /reading/books/{id}` | Detalhe (com `weekly_pages`, R9), edição, exclusão (com histórico, anotações e capa) |
+| `GET, POST /reading/books/{id}/progress` | Histórico e nova página atual (R2–R4) |
+| `GET, POST /reading/books/{id}/notes` | Anotações do livro (`{items}`) |
 | `PATCH, DELETE /reading/books/{id}/notes/{note_id}` | |
-| `GET, PUT, DELETE /reading/books/{id}/cover` | Capa (upload `multipart/form-data`) |
+| `GET /reading/notes` | Todas as anotações, paginadas, com o livro resumido (busca `q`) |
+| `GET, PUT, DELETE /reading/books/{id}/cover` | Capa: `PUT` com `multipart/form-data` (campo `file`), `GET` devolve `image/webp` |
+| `GET /reading/overview` | Contagens da estante por status |
+
+Livros retornam `progress_percent` (R5), `remaining_pages`, `pace_pages_per_day` (R7), `forecast_finish_on` (R8), `last_progress_at`, `notes_count` e `has_cover`. Anotações retornam `book` resumido (`{ id, title, author }`).
+
+Itens do Início publicados pelo módulo:
+
+| `kind` | Onde | `subject` / `entity_id` | `data` |
+|---|---|---|---|
+| `reading.progress` | `activity` | título / livro | `page`, `pages` (avanço), `total_pages`, `status` |
+| `reading.note` | `activity` | título / livro | `page`, `excerpt` |
+
+Erros do módulo: `reading.page_out_of_range`, `reading.invalid_cover` (tipo ou conteúdo), `reading.cover_too_large` (413), `reading.invalid_dates` (término antes do início).
 
 ## OpenAPI e clientes gerados
 
