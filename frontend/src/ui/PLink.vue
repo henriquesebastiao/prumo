@@ -11,7 +11,8 @@ withDefaults(defineProps<{ to?: RouteLocationRaw; href?: string; chevron?: boole
 </script>
 
 <template>
-  <component :is="to ? RouterLink : 'a'" :to="to" :href="href" class="p-link">
+  <!-- Only one of `to` and `href` is bound: an undefined `href` would replace RouterLink's. -->
+  <component :is="to ? RouterLink : 'a'" v-bind="to ? { to } : { href }" class="p-link">
     <slot />
     <PIcon v-if="chevron" name="chevron-right" size="sm" />
   </component>

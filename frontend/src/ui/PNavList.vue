@@ -31,9 +31,7 @@ defineProps<{
       <component
         :is="item.to ? RouterLink : item.href ? 'a' : 'button'"
         v-else
-        :to="item.to"
-        :href="item.href"
-        :type="item.to || item.href ? undefined : 'button'"
+        v-bind="item.to ? { to: item.to } : item.href ? { href: item.href } : { type: 'button' }"
         class="p-nav-list__item"
         :class="{
           'p-nav-list__item--danger': item.danger,
