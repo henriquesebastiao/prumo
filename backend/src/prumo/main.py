@@ -16,6 +16,7 @@ from prumo.system import health
 from prumo.system.auth.deps import CLIENT_HEADER
 from prumo.system.auth.router import router as auth_router
 from prumo.system.dashboard.router import build_router as build_dashboard_router
+from prumo.system.docs import install_docs
 from prumo.system.modules.router import router as modules_router
 from prumo.system.preferences.router import router as preferences_router
 from prumo.system.preferences.service import is_module_enabled
@@ -48,9 +49,8 @@ def create_app(modules: Sequence[PrumoModule] | None = None) -> FastAPI:
         version=__version__,
         description="API of Prumo. The web app and the Android app are clients of this contract.",
         openapi_url="/api/openapi.json",
-        docs_url="/api/docs",
+        docs_url=None,
         redoc_url=None,
-        swagger_ui_oauth2_redirect_url="/api/docs/oauth2-redirect",
         generate_unique_id_function=operation_id,
     )
     install_error_handlers(app)
@@ -65,6 +65,7 @@ def create_app(modules: Sequence[PrumoModule] | None = None) -> FastAPI:
         )
 
     app.include_router(health.router, prefix="/api")
+    install_docs(app)
 
     v1 = APIRouter(prefix=API_V1)
     v1.include_router(auth_router)

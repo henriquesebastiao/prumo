@@ -220,6 +220,24 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** dependências `python-multipart` (uploads no FastAPI) e Pillow. A imagem é validada pelo conteúdo, tem a orientação EXIF aplicada, é reduzida a 800 px no maior lado e regravada em WebP em `PRUMO_UPLOADS_DIR/reading/covers/<id do livro>.webp`.
 **Consequências:** metadados (como GPS) não ficam guardados; o backup inclui o volume de uploads.
 
+## D37 — Publicação das imagens
+**Status:** aceita · 2026-11
+**Contexto:** a versão 0.1 pede imagens Docker publicadas.
+**Decisão:** GitHub Container Registry (`ghcr.io/henriquesebastiao/prumo-api` e `prumo-web`), publicadas pelo GitHub Actions quando uma tag de versão sem prefixo (`0.1.0`) chega ao repositório. Cada versão gera as tags `0.1.0`, `0.1` e `latest`, para amd64 e arm64. O `docker-compose.yml` usa essas imagens; `docker-compose.build.yml` constrói localmente.
+**Consequências:** quem instala não precisa do código-fonte; a tag do git é a versão.
+
+## D38 — Exportação dos dados do usuário
+**Status:** aceita · 2026-11
+**Contexto:** a versão 0.1 pede exportação em JSON e CSV.
+**Decisão:** `GET /api/v1/me/export` devolve um `.zip` com `data.json` (perfil, preferências e os dados de cada módulo ativo ou não), um CSV por tabela (`<módulo>/<tabela>.csv`) e os arquivos enviados (capas). Não inclui senha, sessões nem tentativas de login. Cada módulo declara o que exporta (`PrumoModule.export`).
+**Consequências:** o usuário leva os próprios dados sem acesso ao servidor; a importação fica para depois.
+
+## D39 — Swagger UI sem CDN
+**Status:** aceita · 2026-11
+**Contexto:** o FastAPI carrega o Swagger UI do jsDelivr. O pacote `swagger-ui-bundle` traz só o Swagger UI 4, que não abre OpenAPI 3.1.
+**Decisão:** os arquivos do `swagger-ui-dist` 5 (bundle, CSS, favicon, licença) ficam em `backend/src/prumo/static/swagger-ui/`, copiados por `backend/scripts/update-swagger-ui.sh` com versão e checksum fixos, e a API os serve em `/api/docs/static`.
+**Consequências:** `/api/docs` funciona offline; atualizar é rodar o script com a nova versão.
+
 ---
 
 ## Modelo

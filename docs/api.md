@@ -5,7 +5,7 @@ A API é o produto. A web e o app Android são clientes dela, e o contrato publi
 ## Base e versionamento
 
 - Base: `/api/v1`. Exceção: `GET /api/health` (sem versão, sem autenticação).
-- Documentação interativa em `/api/docs` e esquema em `/api/openapi.json`.
+- Documentação interativa em `/api/docs` (Swagger UI servido pela própria instância, sem CDN; D39) e esquema em `/api/openapi.json`.
 - A v1 só recebe mudanças aditivas: endpoints novos, campos novos opcionais na entrada, campos novos na saída, valores novos de enum.
 - Mudança incompatível significa `/api/v2` convivendo com a v1 por um período de transição.
 - Clientes devem ignorar campos desconhecidos e tratar valores de enum desconhecidos sem quebrar.
