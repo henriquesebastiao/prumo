@@ -7,6 +7,7 @@ import { useSessionStore } from '@/app/stores/session'
 import { PCard, PNavList, PPageHeader } from '@/ui'
 
 import AppearanceSection from './AppearanceSection.vue'
+import DataSection from './DataSection.vue'
 import ModulesSection from './ModulesSection.vue'
 import ProfileSection from './ProfileSection.vue'
 import SessionsSection from './SessionsSection.vue'
@@ -26,6 +27,7 @@ const sections = [
   { hash: '#aparencia', label: 'settings.appearance.nav', icon: 'appearance' },
   { hash: '#modulos', label: 'settings.modules.title', icon: 'modules' },
   { hash: '#sessoes', label: 'settings.sessions.title', icon: 'laptop' },
+  { hash: '#dados', label: 'settings.data.title', icon: 'download' },
 ] as const
 
 const navItems = computed(() => [
@@ -57,6 +59,7 @@ const navItems = computed(() => [
       <AppearanceSection id="aparencia" />
       <ModulesSection id="modulos" />
       <SessionsSection id="sessoes" />
+      <DataSection id="dados" />
     </div>
   </div>
 </template>

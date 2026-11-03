@@ -145,6 +145,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/v1/me/export': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Export Data
+     * @description Every record of the user (D38): `data.json`, one CSV per table and the uploaded files.
+     */
+    get: operations['users_export_data']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/me/preferences': {
     parameters: {
       query?: never
@@ -3506,6 +3526,44 @@ export interface operations {
       }
       /** @description Unprocessable Content */
       422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  users_export_data: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The ZIP archive. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/zip': unknown
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
         headers: {
           [name: string]: unknown
         }

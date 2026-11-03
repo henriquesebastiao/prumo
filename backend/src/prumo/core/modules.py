@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from prumo.core.events import Event, EventHandler, bus
+from prumo.core.export import ModuleExport
 
 MODULE_ID = re.compile(r"^[a-z][a-z0-9_]{1,31}$")
 
@@ -26,6 +27,7 @@ type SummaryProvider = Callable[[Session, Any], "ModuleSummary"]
 type UserHook = Callable[[Session, Any], None]
 type UpcomingProvider = Callable[[Session, Any], list["UpcomingItem"]]
 type ActivityProvider = Callable[[Session, Any], list["ActivityItem"]]
+type ExportProvider = Callable[[Session, Any], ModuleExport]
 
 type EventValue = str | int | float | bool | None
 
@@ -71,6 +73,7 @@ class PrumoModule:
     event_handlers: Mapping[type[Event], EventHandler] = field(default_factory=dict)
     upcoming: UpcomingProvider | None = None
     activity: ActivityProvider | None = None
+    export: ExportProvider | None = None
 
     def __post_init__(self) -> None:
         if not MODULE_ID.match(self.id):

@@ -36,6 +36,7 @@ Content-Type: application/json
 | `GET /me` | Usuário atual |
 | `PATCH /me` | Atualiza nome de exibição |
 | `PUT /me/password` | Troca a senha (exige a atual; revoga as outras sessões) |
+| `GET /me/export` | Exportação dos dados do usuário (D38): `.zip` com `data.json`, um CSV por tabela (`<módulo>/<tabela>.csv`) e os arquivos enviados; sem senha nem sessões |
 | `GET /me/preferences`, `PATCH /me/preferences` | Tema, idioma, fuso, moeda, módulos ativos e ordem |
 
 Validade padrão: 30 dias para web, 180 dias para app (configurável). Login com falhas repetidas responde `429` com `Retry-After` (5 falhas em 15 minutos bloqueiam usuário + IP por 15 minutos; D24). Usuário ou senha errados respondem o mesmo `401 auth.invalid_credentials`.

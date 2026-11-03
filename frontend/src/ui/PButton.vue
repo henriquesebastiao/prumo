@@ -20,6 +20,9 @@ const props = withDefaults(
     disabled?: boolean
     type?: 'button' | 'submit' | 'reset'
     to?: RouteLocationRaw
+    /** A plain link (a file to download, such as the data export). */
+    href?: string
+    download?: boolean
   }>(),
   {
     variant: 'outline',
@@ -29,19 +32,20 @@ const props = withDefaults(
     iconRight: undefined,
     type: 'button',
     to: undefined,
+    href: undefined,
   },
 )
 
-const attrs = computed(() =>
-  props.to
-    ? { to: props.to, 'aria-disabled': props.disabled ? 'true' : undefined }
-    : { type: props.type, disabled: props.disabled || props.loading },
-)
+const attrs = computed(() => {
+  if (props.to) return { to: props.to, 'aria-disabled': props.disabled ? 'true' : undefined }
+  if (props.href) return { href: props.href, download: props.download || undefined }
+  return { type: props.type, disabled: props.disabled || props.loading }
+})
 </script>
 
 <template>
   <component
-    :is="to ? RouterLink : 'button'"
+    :is="to ? RouterLink : href ? 'a' : 'button'"
     v-bind="attrs"
     class="p-button"
     :class="[`p-button--${variant}`, `p-button--${size}`, { 'p-button--block': block }]"

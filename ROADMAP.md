@@ -78,8 +78,8 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 ## Fase 4 — Versão 0.1 (self-host)
 - [ ] Imagens Docker publicadas
 - [ ] Guia de instalação e atualização
-- [ ] Documentação interativa da API (`/api/docs`) sem CDN: servir os arquivos do Swagger UI pela própria instância
-- [ ] Exportação dos dados do usuário (JSON e CSV)
+- [x] Documentação interativa da API (`/api/docs`) sem CDN: servir os arquivos do Swagger UI pela própria instância
+- [x] Exportação dos dados do usuário (JSON e CSV)
 - [ ] Revisão de responsividade (tablet e celular) e de acessibilidade
 - [ ] Testes E2E dos fluxos principais com Playwright
 - [x] Licença escolhida e arquivo `LICENSE`

@@ -17,6 +17,7 @@ from prumo.system.auth.deps import CLIENT_HEADER
 from prumo.system.auth.router import router as auth_router
 from prumo.system.dashboard.router import build_router as build_dashboard_router
 from prumo.system.docs import install_docs
+from prumo.system.export.router import router as export_router
 from prumo.system.modules.router import router as modules_router
 from prumo.system.preferences.router import router as preferences_router
 from prumo.system.preferences.service import is_module_enabled
@@ -70,6 +71,7 @@ def create_app(modules: Sequence[PrumoModule] | None = None) -> FastAPI:
     v1 = APIRouter(prefix=API_V1)
     v1.include_router(auth_router)
     v1.include_router(users_router)
+    v1.include_router(export_router)
     v1.include_router(preferences_router)
     v1.include_router(modules_router)
     v1.include_router(build_dashboard_router(registry))

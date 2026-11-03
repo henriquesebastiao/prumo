@@ -141,6 +141,11 @@
       "confirmDescription": "{device} será desconectado e precisará entrar de novo.",
       "ended": "Sessão encerrada",
       "loadFailed": "Não foi possível carregar as sessões"
+    },
+    "data": {
+      "title": "Seus dados",
+      "description": "Baixe tudo o que você registrou: um arquivo .zip com os dados em JSON, uma planilha CSV por tabela e as capas dos livros. Senha e sessões não entram.",
+      "export": "Exportar dados"
     }
   },
   "notFound": {

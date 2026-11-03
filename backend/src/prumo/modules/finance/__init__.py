@@ -2,6 +2,7 @@
 
 from prumo.core.modules import PrumoModule
 from prumo.modules.finance import service
+from prumo.modules.finance.data_export import build_export
 from prumo.modules.finance.router import router
 from prumo.modules.finance.summary import build_activity, build_summary, build_upcoming
 
@@ -13,4 +14,5 @@ module = PrumoModule(
     on_user_created=service.create_default_categories,
     upcoming=build_upcoming,
     activity=build_activity,
+    export=build_export,
 )

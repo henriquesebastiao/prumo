@@ -448,6 +448,52 @@
         ]
       }
     },
+    "/api/v1/me/export": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Export Data",
+        "description": "Every record of the user (D38): `data.json`, one CSV per table and the uploaded files.",
+        "operationId": "users_export_data",
+        "responses": {
+          "200": {
+            "description": "The ZIP archive.",
+            "content": {
+              "application/zip": {}
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
     "/api/v1/me/preferences": {
       "get": {
         "tags": [

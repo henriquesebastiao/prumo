@@ -1,6 +1,7 @@
 """Livros: books, reading progress, notes and covers."""
 
 from prumo.core.modules import PrumoModule
+from prumo.modules.reading.data_export import build_export
 from prumo.modules.reading.router import router
 from prumo.modules.reading.summary import build_activity, build_summary
 
@@ -10,4 +11,5 @@ module = PrumoModule(
     router=router,
     summary=build_summary,
     activity=build_activity,
+    export=build_export,
 )
