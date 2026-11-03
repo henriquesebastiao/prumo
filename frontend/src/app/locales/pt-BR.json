@@ -200,6 +200,16 @@
       "installments_require_card": "Parcelas só valem para compras no cartão.",
       "invalid_invoice": "Esta fatura não existe para o cartão.",
       "balance_unchanged": "O saldo já está correto."
+    },
+    "id_conflict": "Esse identificador já está em uso. Tente de novo.",
+    "reading": {
+      "page_out_of_range": "A página passa do total de páginas do livro.",
+      "invalid_cover": "Use uma imagem JPEG, PNG ou WebP.",
+      "cover_too_large": "A imagem pode ter no máximo 5 MB.",
+      "invalid_dates": "O término não pode ser antes do início."
+    },
+    "sync": {
+      "since_too_old": "A sincronização ficou antiga demais: os dados serão recarregados."
     }
   },
   "fieldErrors": {

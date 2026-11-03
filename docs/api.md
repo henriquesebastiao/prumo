@@ -103,9 +103,13 @@ Erros de validação incluem os campos:
 | 401 | Não autenticado ou sessão expirada (`auth.required`, `auth.session_expired`, `auth.invalid_credentials`) |
 | 403 | Mutação por cookie sem `X-Prumo-Client: web` (`auth.client_header_required`) |
 | 404 | Recurso inexistente **ou de outro usuário** (`not_found`) |
-| 409 | Conflito de unicidade (`finance.category_exists`) |
-| 422 | Validação de entrada ou violação de regra de negócio |
-| 429 | Limite de tentativas (`auth.rate_limited`) |
+| 409 | Conflito de unicidade (`conflict`, `finance.category_exists`, `garage.workshop_exists`, `users.username_taken`) ou `id` de outro usuário numa criação (`id_conflict`, D40) |
+| 410 | Cursor de sincronização mais antigo que 180 dias (`sync.since_too_old`, D41) |
+| 413 | Arquivo grande demais (`reading.cover_too_large`) |
+| 422 | Validação de entrada (`validation_error`, com `fields`) ou violação de regra de negócio (códigos de cada módulo, abaixo) |
+| 429 | Limite de tentativas (`auth.rate_limited`; `rate_limited` nos demais casos) |
+
+Códigos da plataforma em 422: `auth.wrong_password` (senha atual incorreta na troca), `users.invalid_username`, `users.invalid_name`, `users.password_too_short` e `users.password_too_long` (com `details.min_length` / `max_length`). `forbidden` (403) cobre as demais ações não permitidas.
 
 ## Rotas
 
@@ -187,7 +191,7 @@ Erros do módulo: `garage.odometer_inconsistent` (com `details.conflict`, `km`, 
 | `POST /finance/accounts/{id}/archive`, `/unarchive` | |
 | `POST /finance/accounts/{id}/adjustments` | Ajuste de saldo (F11): `{ "balance_cents": …, "occurred_on": … }` |
 | `GET, POST /finance/categories` | Lista (filtros `kind`, `archived`; com quantidade e total no mês `month`) e cadastro |
-| `PATCH, DELETE /finance/categories/{id}` | Exclusão só sem uso; caso contrário, arquivar |
+| `GET, PATCH, DELETE /finance/categories/{id}` | Exclusão só sem uso; caso contrário, arquivar |
 | `POST /finance/categories/{id}/archive`, `/unarchive` | |
 | `GET, POST /finance/transactions` | Lista paginada com filtros (`from`, `to`, `kind`, `account_id`, `credit_card_id`, `category_id`, `q`) e os totais `income_cents` e `expense_cents` do filtro inteiro; cadastro (com `installments` para compra parcelada no cartão; devolve a primeira parcela) |
 | `GET, PATCH, DELETE /finance/transactions/{id}` | `DELETE ?installments=all` remove a compra parcelada inteira |
