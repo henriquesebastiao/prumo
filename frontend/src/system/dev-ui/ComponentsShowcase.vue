@@ -10,6 +10,7 @@ import {
   PAlert,
   PAvatar,
   PBadge,
+  PBookCover,
   PButton,
   PCard,
   PCardFace,
@@ -29,6 +30,7 @@ import {
   PEmptyState,
   PFab,
   PField,
+  PFileButton,
   PIcon,
   PIconButton,
   PIconPicker,
@@ -401,6 +403,11 @@ const networkError = ApiError.network(new Error('offline'))
         <PField label="Chips com ícone" label-as="span">
           <PChipChoice v-model="chip" :options="chips" label="Categoria" tone="finance" />
         </PField>
+        <PField label="Arquivo" label-as="span">
+          <PFileButton accept="image/*" @select="(file) => toast.show({ title: file.name })"
+            >Enviar imagem</PFileButton
+          >
+        </PField>
         <PField label="Mês" label-as="span">
           <PMonthNav v-model="month" label="Mês" />
         </PField>
@@ -465,6 +472,12 @@ const networkError = ApiError.network(new Error('offline'))
           ]"
         />
       </div>
+      <ShowcaseRow label="book cover">
+        <PBookCover title="Código Limpo" author="Robert C. Martin" size="lg" />
+        <PBookCover title="O Hobbit" author="J.R.R. Tolkien" variant="paper" />
+        <PBookCover title="Dom Casmurro" author="Machado de Assis" variant="ink" />
+        <PBookCover title="Código Limpo" size="sm" />
+      </ShowcaseRow>
       <div class="showcase__card-face">
         <PCardFace name="Nubank" caption="Fecha dia 3 · vence dia 10" tone="swatch-green" />
       </div>
