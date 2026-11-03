@@ -182,6 +182,19 @@
       "workshop_exists": "Já existe uma oficina com esse nome.",
       "oil_fields_require_oil_change": "Os dados de óleo só valem para trocas de óleo.",
       "fuel_type_required": "Escolha o combustível."
+    },
+    "finance": {
+      "category_in_use": "Esta categoria tem transações. Arquive-a para tirá-la dos seletores.",
+      "account_in_use": "Esta conta tem transações. Arquive-a para tirá-la dos seletores.",
+      "card_in_use": "Este cartão tem transações. Arquive-o para tirá-lo dos seletores.",
+      "category_exists": "Já existe uma categoria com esse nome.",
+      "invalid_combination": "Confira os campos da transação.",
+      "invalid_amount": "Informe um valor maior que zero.",
+      "category_kind_mismatch": "Escolha uma categoria do mesmo tipo da transação.",
+      "same_account": "Escolha contas diferentes para a transferência.",
+      "installments_require_card": "Parcelas só valem para compras no cartão.",
+      "invalid_invoice": "Esta fatura não existe para o cartão.",
+      "balance_unchanged": "O saldo já está correto."
     }
   },
   "fieldErrors": {

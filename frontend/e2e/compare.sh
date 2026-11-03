@@ -33,3 +33,12 @@ pair "Veículos · Atualizar km.png" garage-dialog-km.png garage-dialog-km
 pair "Veículos · Cadastro edição.png" garage-dialog-vehicle.png garage-dialog-vehicle
 magick "$DESIGN/Início — celular.png" +repage "$OUT/design-mobile-full.png"
 pair "../output/design-mobile-full.png" garage-home-phone.png garage-home-phone
+pair "Finanças · Visão geral — claro.png" finance-overview-light.png finance-overview-light
+pair "Finanças · Visão geral — escuro.png" finance-overview-dark.png finance-overview-dark
+pair "Finanças · Transações.png" finance-transactions.png finance-transactions
+pair "Finanças · Contas.png" finance-accounts.png finance-accounts
+pair "Finanças · Cartões de crédito.png" finance-cards.png finance-cards
+pair "Finanças · Categorias.png" finance-categories.png finance-categories
+pair "Finanças · Nova transação.png" finance-dialog-expense.png finance-dialog-expense
+pair "Finanças · Nova transação.png" finance-dialog-transfer.png finance-dialog-transfer
+pair "Início — claro.png" finance-home-light.png finance-home-light

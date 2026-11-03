@@ -58,14 +58,14 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] "Vem aí" e "Atividade recente" no Início
 
 ## Fase 2 — Finanças (`finance`)
-- [ ] Contas e saldos
-- [ ] Categorias: padrões criadas por usuário e CRUD
-- [ ] Transações: receita, despesa, transferência; filtros e busca
-- [ ] Cartões de crédito: faturas, limite disponível e pagamento
-- [ ] Visão geral do mês com gráficos
-- [ ] Widget do Início e ações rápidas
-- [ ] Revisão visual contra `design/v1/`
-- [ ] Compras parceladas no cartão
+- [x] Contas e saldos
+- [x] Categorias: padrões criadas por usuário e CRUD
+- [x] Transações: receita, despesa, transferência; filtros e busca
+- [x] Cartões de crédito: faturas, limite disponível e pagamento
+- [x] Visão geral do mês com gráficos
+- [x] Widget do Início e ações rápidas
+- [x] Revisão visual contra `design/v1/`
+- [x] Compras parceladas no cartão
 
 ## Fase 3 — Livros (`reading`)
 - [ ] Livros: CRUD, status de leitura e "tenho / não tenho"

@@ -7,7 +7,7 @@ Database: PRUMO_E2E_DATABASE_URL, default prumo_e2e on the test container (port 
 """
 
 import os
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, time
 
 import psycopg
 import time_machine
@@ -196,7 +196,187 @@ def seed() -> None:
             service.add_manual_reading(session, user, strada, OdometerReadingCreate(km=52300))
         with time_machine.travel(at("2026-11-17T10:42:00")):
             service.add_manual_reading(session, user, cg, OdometerReadingCreate(km=18420))
+        with time_machine.travel(at("2026-11-17T17:20:00")):
+            seed_finance(session, user)
     engine.dispose()
+
+
+def seed_finance(session: Session, user: object) -> None:
+    """The Finanças boards: balances 4.812,37 · 2.156,90 · 185,00, November with R$ 5.300,00 of
+    income and R$ 2.564,19 of expenses, and the open Nubank invoice of R$ 1.284,60."""
+    from prumo.modules.finance import service as finance
+    from prumo.modules.finance.models import AccountKind, TransactionKind
+    from prumo.modules.finance.schemas import (
+        AccountCreate,
+        CreditCardCreate,
+        InvoicePaymentCreate,
+        TransactionCreate,
+    )
+    from prumo.system.users.models import User
+
+    assert isinstance(user, User)
+    nubank = finance.create_account(
+        session, user, AccountCreate(name="Nubank", kind=AccountKind.CHECKING, color="violet")
+    )
+    inter = finance.create_account(
+        session, user, AccountCreate(name="Inter", kind=AccountKind.CHECKING, color="orange")
+    )
+    wallet = finance.create_account(
+        session, user, AccountCreate(name="Carteira", kind=AccountKind.CASH, color="green")
+    )
+    card = finance.create_card(
+        session,
+        user,
+        CreditCardCreate(
+            name="Nubank",
+            limit_cents=500000,
+            closing_day=3,
+            due_day=10,
+            payment_account_id=nubank.id,
+            color="green",
+        ),
+    )
+    categories = {
+        (c.kind.value, c.name): c.id for c in finance.lookup_for(session, user).categories.values()
+    }
+    accounts = {"nubank": nubank.id, "inter": inter.id, "wallet": wallet.id}
+
+    def tx(
+        kind: str,
+        cents: int,
+        on: str,
+        text: str = "",
+        *,
+        category: str | None = None,
+        account: str | None = None,
+        to: str | None = None,
+        on_card: bool = False,
+        at_time: str | None = None,
+        installments: int | None = None,
+    ) -> None:
+        finance.create_transaction(
+            session,
+            user,
+            TransactionCreate(
+                kind=TransactionKind(kind),
+                amount_cents=cents,
+                occurred_on=date.fromisoformat(on),
+                occurred_time=time.fromisoformat(at_time) if at_time else None,
+                description=text,
+                account_id=accounts[account] if account else None,
+                destination_account_id=accounts[to] if to else None,
+                credit_card_id=card.id if on_card else None,
+                category_id=categories[(kind, category)] if category else None,
+                installments=installments,
+            ),
+        )
+
+    def spend(
+        cents: int,
+        on: str,
+        text: str,
+        category: str,
+        *,
+        account: str | None = None,
+        on_card: bool = False,
+        at_time: str | None = None,
+    ) -> None:
+        tx(
+            "expense",
+            cents,
+            on,
+            text,
+            category=category,
+            account=account,
+            on_card=on_card,
+            at_time=at_time,
+        )
+
+    def pay(closing: str, cents: int, on: str) -> None:
+        finance.pay_invoice(
+            session,
+            user,
+            card,
+            date.fromisoformat(closing),
+            InvoicePaymentCreate(
+                amount_cents=cents, account_id=nubank.id, occurred_on=date.fromisoformat(on)
+            ),
+        )
+
+    # June to October: the bars of the income and expenses chart.
+    for month, freelance in (
+        ("06", 120000),
+        ("07", 160000),
+        ("08", 110000),
+        ("09", 180000),
+        ("10", 130000),
+    ):
+        tx("income", 380000, f"2026-{month}-05", "Salário", category="Salário", account="nubank")
+        tx(
+            "income",
+            freelance,
+            f"2026-{month}-12",
+            "Projeto",
+            category="Freelance",
+            account="inter",
+        )
+        spend(110000, f"2026-{month}-10", "Aluguel", "Moradia", account="inter")
+    spend(90000, "2026-06-14", "Supermercado", "Alimentação", account="nubank")
+    spend(30000, "2026-06-18", "Posto", "Combustível", account="nubank")
+    spend(20000, "2026-06-21", "Show", "Lazer", account="nubank")
+    spend(80000, "2026-06-25", "Dentista", "Saúde", account="nubank")
+    spend(95000, "2026-07-14", "Supermercado", "Alimentação", account="nubank")
+    spend(32000, "2026-07-18", "Posto", "Combustível", account="nubank")
+    spend(23000, "2026-07-21", "Cinema", "Lazer", account="nubank")
+    spend(100000, "2026-07-25", "Curso", "Educação", account="nubank")
+    tx("expense", 130540, "2026-08-20", "Celular", category="Compras", on_card=True, installments=4)
+    spend(50000, "2026-08-15", "Supermercado", "Alimentação", on_card=True)
+    spend(28000, "2026-08-16", "Posto", "Combustível", on_card=True)
+    spend(12000, "2026-08-17", "Cinema", "Lazer", on_card=True)
+    spend(67365, "2026-08-24", "Supermercado", "Alimentação", account="nubank")
+    pay("2026-09-03", 122635, "2026-09-10")
+    spend(70000, "2026-09-15", "Supermercado", "Alimentação", on_card=True)
+    spend(29210, "2026-09-16", "Posto", "Combustível", on_card=True)
+    spend(40000, "2026-09-17", "Show", "Lazer", on_card=True)
+    spend(98155, "2026-09-24", "Exames", "Saúde", account="nubank")
+    pay("2026-10-03", 171845, "2026-10-09")
+    spend(80583, "2026-10-15", "Supermercado", "Alimentação", on_card=True)
+    spend(30000, "2026-10-16", "Posto", "Combustível", on_card=True)
+    spend(50000, "2026-10-17", "Viagem curta", "Lazer", on_card=True)
+    spend(36782, "2026-10-24", "Supermercado", "Alimentação", account="nubank")
+
+    # November.
+    tx("income", 380000, "2026-11-05", "Salário", category="Salário", account="nubank")
+    tx("income", 150000, "2026-11-12", "Site institucional", category="Freelance", account="inter")
+    tx("transfer", 20000, "2026-11-04", account="nubank", to="wallet")
+    tx("transfer", 50000, "2026-11-12", account="inter", to="nubank")
+    spend(110000, "2026-11-10", "Aluguel", "Moradia", account="inter")
+    spend(18640, "2026-11-09", "Energia elétrica", "Moradia", on_card=True)
+    spend(9990, "2026-11-05", "Internet", "Moradia", on_card=True)
+    spend(12000, "2026-11-03", "Mercado", "Alimentação", account="nubank")
+    spend(3824, "2026-11-03", "Hortifruti", "Alimentação", account="nubank")
+    spend(2200, "2026-11-04", "Lanche", "Alimentação", account="wallet")
+    spend(3050, "2026-11-07", "iFood", "Alimentação", account="nubank")
+    spend(6430, "2026-11-08", "Feira", "Alimentação", account="wallet")
+    spend(9260, "2026-11-11", "Restaurante", "Alimentação", on_card=True)
+    spend(14431, "2026-11-15", "Padaria e açougue", "Alimentação", on_card=True)
+    spend(21240, "2026-11-16", "Supermercado", "Alimentação", account="nubank", at_time="11:25")
+    spend(1850, "2026-11-17", "Padaria", "Alimentação", account="wallet", at_time="08:10")
+    spend(4434, "2026-11-06", "Posto · CG 160", "Combustível", on_card=True)
+    spend(18034, "2026-11-13", "Posto · Strada", "Combustível", on_card=True, at_time="18:00")
+    spend(4636, "2026-11-16", "Posto · CG 160", "Combustível", on_card=True, at_time="18:10")
+    spend(3510, "2026-11-07", "Livraria", "Lazer", on_card=True)
+    spend(2500, "2026-11-08", "Sorvete", "Lazer", on_card=True)
+    spend(6400, "2026-11-14", "Cinema", "Lazer", on_card=True)
+    spend(3990, "2026-11-15", "Streaming", "Lazer", on_card=True)
+    pay("2026-11-03", 193218, "2026-11-10")
+
+    # Initial balances that end on the balances of the boards.
+    targets = {nubank.id: 481237, inter.id: 215690, wallet.id: 18500}
+    current = finance.balances(session, user, [nubank, inter, wallet], date(2026, 11, 17))
+    for account in (nubank, inter, wallet):
+        account.initial_balance_cents = targets[account.id] - current[account.id]
+    session.commit()
 
 
 def main() -> None:

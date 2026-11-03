@@ -101,9 +101,9 @@ Componentes base (`src/ui/`, exportados por `@/ui`):
 | Grupo | Componentes |
 |---|---|
 | Ações | `PButton` (primary, outline, tonal, ghost, danger, chip; md/lg), `PIconButton`, `PFab` (trilho ou flutuante), `PLink` |
-| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos), `PTextarea`, `PSelect`, `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PStepper`, `PSwatchPicker`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
-| Exibição | `PText`, `PCard`, `PPanel`, `PStatCard`, `PTile` (quadrado ou círculo), `PBadge`, `PStatus`, `PKbd`, `PAvatar`, `PProgress`, `PRing`, `PDateBadge`, `PDescriptionList`, `PDivider`, `PLogo` |
-| Navegação e listas | `PPageHeader`, `PTabs` + `PTabPanel`, `PNavList`, `PList` + `PListItem`, `PTable` (vira lista em contêiner estreito), `PSortableList` (arrastar ou setas) |
+| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos; `lg` para o valor em destaque), `PTextarea`, `PSelect` (campo ou filtro em pílula), `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PChipChoice` (chips com ícone), `PStepper`, `PMonthNav` (‹ mês ›), `PSwatchPicker`, `PIconPicker`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
+| Exibição | `PText`, `PCard`, `PPanel`, `PStatCard`, `PTile` (quadrado ou círculo), `PBadge`, `PStatus`, `PKbd`, `PAvatar`, `PProgress`, `PRing`, `PDateBadge`, `PDescriptionList`, `PDivider`, `PCardFace` (face do cartão de crédito), `PLogo` |
+| Navegação e listas | `PPageHeader`, `PTabs` + `PTabPanel`, `PNavList`, `PList` + `PListItem` (com destaque do item em edição), `PTable` (vira lista em contêiner estreito), `PSortableList` (arrastar ou setas) |
 | Sobreposições | `PDialog` (tela cheia no celular), `PConfirmDialog`, `PPopover`, `PMenu`, `PCommand`, `PDrawer`, `PToaster` + `useToast()` |
 | Estados | `PEmptyState` (simples ou card), `PSkeleton`, `PSpinner`, `PAlert`, `PNote`, `PQueryState` (carregando, erro com "Tentar de novo", vazio) |
 | Base | `PIcon`, `PChart` (barras com destaque e média, barras agrupadas, rosca, barra empilhada) |
@@ -148,7 +148,11 @@ Cada módulo tem cinco tokens: principal, container, texto sobre o container, `-
 | Veículos (`garage`) | `#E4672E` · `#FBE9DF` · `#8A3A12` · `#F3C2A6` · `#FBE9DF` | `#F08A55` · `#3A2418` · `#F6B892` · `#7A4127` · `#3A2418` |
 | Livros (`reading`) | `#6F57E8` · `#ECE8FD` · `#4A34B5` · `#C9BEF8` · `#ECE8FD` | `#9C8BFF` · `#262047` · `#C3B8FF` · `#4B3F8F` · `#262047` |
 
-Um módulo novo escolhe um matiz livre, gera os cinco tokens com a mesma luminosidade dos atuais nos dois temas e adiciona um bloco `[data-tone='<id>']` em `tones.css`. No Android, o trio vira primary / primaryContainer / onPrimaryContainer do esquema do módulo. Cores de usuário (contas, categorias) usam `--color-swatch-*`.
+Um módulo novo escolhe um matiz livre, gera os cinco tokens com a mesma luminosidade dos atuais nos dois temas e adiciona um bloco `[data-tone='<id>']` em `tones.css`. No Android, o trio vira primary / primaryContainer / onPrimaryContainer do esquema do módulo.
+
+### Cores de usuário
+
+Contas, categorias e cartões guardam uma chave da paleta da API (`green`, `teal`, `cyan`, `blue`, `indigo`, `violet`, `pink`, `red`, `orange`, `amber`, `gray`). Cada chave tem um token `--color-swatch-<cor>` por tema e vira o tom `swatch-<cor>`, cuja rampa é derivada com `color-mix` (fundo misturado à superfície, ícone misturado ao texto), então funciona nos dois temas sem tokens extras. Os seletores oferecem as sete cores do design (azul, violeta, laranja, verde, rosa, ciano, cinza) e mantêm a cor atual quando ela é outra.
 
 ### Tipografia
 
@@ -178,7 +182,7 @@ Também existem `--text-2xs` (11), `--text-2xl-plus` (24, título no celular) e 
 
 ### Ícones e gráficos
 
-- **Ícones:** Lucide, traço 2 (1,8 no tamanho xl), 16/20/28/36 px. Os nomes semânticos (`car`, `wallet`, `book`, `fuel`, `gauge`…) ficam em `src/ui/icons.ts`. O logotipo (prumo) é um SVG próprio em `PLogo`.
+- **Ícones:** Lucide, traço 2 (1,8 no tamanho xl), 16/20/28/36 px. Os nomes semânticos (`car`, `wallet`, `book`, `fuel`, `gauge`…) ficam em `src/ui/icons.ts`. O logotipo (prumo) é um SVG próprio em `PLogo`. Ícones escolhidos pelo usuário chegam da API com nomes do Lucide (`landmark`, `utensils`…); cada módulo os mapeia para os nomes semânticos e usa um ícone genérico para nomes desconhecidos (D33).
 - **Gráficos:** a cor do módulo marca o dado principal (última barra, série principal), o tom `-soft` marca o histórico, o neutro marca a segunda série, e categorias usam a rampa do tom (texto, principal, soft, softer). Média em linha tracejada com rótulo. Todo gráfico tem descrição acessível e lista de valores para leitores de tela.
 
 ### Navegação
@@ -188,7 +192,7 @@ Também existem `--text-2xs` (11), `--text-2xl-plus` (24, título no celular) e 
 
 ### Overlays
 
-Componentes cujo conteúdo o Reka leva para um portal (`PDialog`, `PPopover`, `PDrawer`, `PToaster`) usam CSS não escopado com classes `p-*` únicas: o Reka não repassa o atributo de escopo ao conteúdo. Diálogos de formulário abrem com o foco no primeiro campo.
+Componentes cujo conteúdo o Reka leva para um portal (`PDialog`, `PPopover`, `PDrawer`, `PToaster`) usam CSS não escopado com classes `p-*` únicas: o Reka não repassa o atributo de escopo ao conteúdo. Diálogos de formulário abrem com o foco no primeiro campo, ou no campo marcado com `data-autofocus` (o valor de uma transação).
 
 ### Comparação com o design
 
@@ -201,7 +205,7 @@ Decididas na Fase 0 (D22): login só por usuário (sem e-mail), sem foto de perf
 Ainda abertas, a decidir na fase de cada módulo:
 
 - **Veículos (Fase 1, D27):** resolvidas. Diferenças que ficaram: sem busca na lista de veículos (D22); o formulário de abastecimento não mostra a prévia "Consumo deste tanque" (seria cálculo de regra no cliente; o consumo aparece depois de salvar); o cadastro de peça tem quantidade (padrão 1); o diálogo de km é um popover só no detalhe do veículo.
-- **Finanças:** hora na transação (`occurred_on` é data); excluir categoria em uso (F8 proíbe); categorias sugeridas como escolha no primeiro uso (F7 cria automaticamente); "saldo atual" no cadastro e "Ajustar saldo"; histórico de 6 meses na visão geral; busca por valor.
+- **Finanças (Fase 2, D31–D34):** resolvidas. Diferenças que ficaram: o formulário de transação tem o campo opcional "Hora" e, no cartão, "Parcelas"; "Excluir" categoria vira "Arquivar" quando ela tem transações (D32); a lista de categorias mostra as usadas no mês e um botão para as demais; o cadastro de conta tem "Somar no saldo total"; os seletores de ícone têm mais opções que a prancha (as das categorias padrão); "Últimas transações" e as faturas mostram lançamentos agendados (como a parcela futura) só onde fazem sentido: a lista de transações e a fatura mostram, a visão geral não.
 - **Livros:** previsão de término e ritmo de leitura; lista de todas as anotações; data editável na anotação; `owned` ("tenho") sem lugar na interface.
 - **Início:** seções "Vem aí" e "Atividade recente" (agregações entre módulos que o dashboard ainda não tem).
 
