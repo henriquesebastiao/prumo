@@ -205,6 +205,10 @@ def seed() -> None:
         with time_machine.travel(at("2026-11-17T17:20:00")):
             seed_finance(session, user)
         seed_reading(session, user)
+        # Empty account for the end-to-end flows (e2e/flows.spec.ts), apart from the boards.
+        create_user(
+            session, username="teste", display_name="Teste Fluxos", password="prumo-teste-01"
+        )
     engine.dispose()
 
 
