@@ -73,12 +73,12 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 - Toda regra de negócio tem teste de serviço. Todo endpoint tem teste de API, incluindo o caso "outro usuário recebe 404".
 - Testes de backend usam PostgreSQL real, nunca SQLite.
 - Ao implementar ou alterar uma tela, compare com as imagens da versão ativa em `design/` (screenshot com Playwright).
-- Pronto significa: `make check` verde, documentação afetada atualizada e item marcado no `ROADMAP.md`.
+- Pronto significa: `make check` verde, documentação afetada atualizada, item marcado no `ROADMAP.md` e `commit-message.md` descrevendo a mudança.
 - Ambiguidade nos docs durante a execução: escolha a opção mais simples que não feche portas, registre em `docs/decisoes.md` e siga.
 
 ### Convenções
 - Código, identificadores, commits e comentários em inglês. Documentação e textos de interface em pt-BR.
-- Conventional Commits com escopo do módulo (`feat(garage): add fueling endpoints`). Commits locais pequenos ao concluir cada etapa verificada. Nunca faça push.
+- Conventional Commits com escopo do módulo (`feat(garage): add fueling endpoints`), escritos em `commit-message.md` e nunca commitados por você (veja "Servidor e app juntos").
 - Python: type hints em tudo, ruff (lint e format), mypy. Gerenciador: uv.
 - TypeScript em modo strict, `<script setup lang="ts">`, ESLint, Prettier, Stylelint. Gerenciador: pnpm.
 
@@ -87,3 +87,15 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 - Contrariar uma decisão registrada em `docs/decisoes.md`
 - Fazer uma mudança incompatível na API v1
 - Criar migration que apague ou transforme dados existentes
+
+## Servidor e app juntos
+
+O app Android fica em `~/git/prumo-android`; o servidor (API e web), aqui em `~/git/prumo`. Os dois evoluem como um produto só: quando uma tarefa num repositório precisa de uma mudança no outro (um endpoint ou campo novo da v1, um bug do servidor que o app encontrou, documentação de contrato errada), faça a mudança no outro repositório na mesma tarefa, sem parar para perguntar. Uma sessão aberta no app pode mudar este repositório do mesmo jeito.
+
+- Antes de editar o outro repositório, leia o `CLAUDE.md` dele e siga-o lá (ferramentas, testes, documentação, critério de pronto). Uma mudança do servidor de que o app depende leva testes, documentação (`docs/api.md`, `docs/dominio.md`) e o snapshot do OpenAPI na mesma mudança.
+- Apps instalados continuam chamando o formato antigo: na v1, só mudanças aditivas. A lista "Pergunte antes de" vale nos dois lados.
+- **Não faça commit, stage nem push em nenhum dos dois repositórios.** O mantenedor faz os commits. Exceção: numa sessão na nuvem, em que o trabalho só sobrevive no GitHub, o mantenedor pode pedir commit e push num branch de trabalho, nunca na `main`; o `commit-message.md` continua descrevendo tudo o que está pendente de revisão.
+- **Nenhuma mudança sem descrição.** Toda edição em arquivo versionado (código, testes, docs, configuração) é descrita em `commit-message.md` na raiz do repositório que ela tocou (ignorado pelo git nos dois). Uma tarefa que tocou os dois repositórios deixa uma mensagem em cada um, e cada mensagem cita o outro lado ("Needs the server's …" / "Used by the Android app's …").
+- Escreva a mensagem antes da resposta final, em inglês e em Conventional Commits com o escopo do módulo: assunto no imperativo com até 72 caracteres, corpo dizendo o porquê e, depois, o que mudou por arquivo ou área.
+- O arquivo pode ter uma mensagem antiga. Se o `git log` já tem o assunto dela, ela foi commitada: substitua. Se ela descreve mudanças ainda não commitadas, mantenha: amplie a mensagem para cobrir tudo o que está pendente ou acrescente outra para um trabalho não relacionado, separada por uma linha `---` e citando os arquivos que cobre.
+- Termine a resposta final citando cada repositório alterado e o seu `commit-message.md`.

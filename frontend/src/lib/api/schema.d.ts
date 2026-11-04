@@ -1998,6 +1998,12 @@ export interface components {
     /** Health */
     Health: {
       /**
+       * Service
+       * @description Always `prumo`: tells clients this address is a Prumo server.
+       * @constant
+       */
+      service: 'prumo'
+      /**
        * Status
        * @enum {string}
        */

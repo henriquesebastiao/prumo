@@ -4,4 +4,9 @@ from fastapi.testclient import TestClient
 def test_health_reports_database(client: TestClient) -> None:
     response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "database": "ok", "version": "0.0.0"}
+    assert response.json() == {
+        "service": "prumo",
+        "status": "ok",
+        "database": "ok",
+        "version": "0.0.0",
+    }

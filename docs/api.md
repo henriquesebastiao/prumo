@@ -5,6 +5,7 @@ A API é o produto. A web e o app Android são clientes dela, e o contrato publi
 ## Base e versionamento
 
 - Base: `/api/v1`. Exceção: `GET /api/health` (sem versão, sem autenticação).
+- `GET /api/health` responde `{ "service": "prumo", "status": "ok", "database": "ok", "version": "0.1.0" }`, ou `503` com `status: "degraded"` e `database: "unavailable"` quando o banco não responde. `service` é sempre `prumo`: é como o app confirma que o endereço digitado é um servidor Prumo (D44).
 - Documentação interativa em `/api/docs` (Swagger UI servido pela própria instância, sem CDN; D39) e esquema em `/api/openapi.json`.
 - A v1 só recebe mudanças aditivas: endpoints novos, campos novos opcionais na entrada, campos novos na saída, valores novos de enum.
 - Mudança incompatível significa `/api/v2` convivendo com a v1 por um período de transição.

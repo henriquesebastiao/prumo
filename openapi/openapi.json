@@ -10572,6 +10572,12 @@
       },
       "Health": {
         "properties": {
+          "service": {
+            "type": "string",
+            "const": "prumo",
+            "title": "Service",
+            "description": "Always `prumo`: tells clients this address is a Prumo server."
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -10595,6 +10601,7 @@
         },
         "type": "object",
         "required": [
+          "service",
           "status",
           "database",
           "version"

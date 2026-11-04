@@ -256,6 +256,18 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** as mudanças da API entram no `CHANGELOG` do projeto, gerado do GitHub (`make changelog`), sem arquivo separado. O repositório `prumo-android` começa em outra sessão.
 **Consequências:** mudanças de contrato precisam de issue ou pull request descritivos para aparecer no changelog.
 
+## D43 — Servidor e app no mesmo fluxo de trabalho
+**Status:** aceita · 2026-11
+**Contexto:** o app Android (`prumo-android`) consome esta API e revela lacunas dela enquanto é construído. O `CLAUDE.md` pedia commits locais, e o mantenedor prefere revisar e commitar à mão nos dois repositórios.
+**Decisão:** seção "Servidor e app juntos" no `CLAUDE.md` dos dois repositórios: a mudança que um lado precisa é feita no outro na mesma tarefa, seguindo o `CLAUDE.md` de lá; ninguém faz commit, stage nem push (exceto num branch de trabalho, quando o mantenedor pede numa sessão na nuvem); toda mudança é descrita em `commit-message.md` na raiz do repositório, ignorado pelo git.
+**Consequências:** substitui a regra de "commits locais pequenos". O histórico passa pelas mãos do mantenedor, e cada lado de uma mudança conjunta cita o outro na mensagem.
+
+## D44 — O health identifica o servidor
+**Status:** aceita · 2026-11
+**Contexto:** no primeiro acesso, o app testa o endereço digitado e precisa distinguir "não é um servidor Prumo" de "servidor fora do ar" (lacuna A5 do design do app). Inferir pelo formato da resposta (`status`, `database`, `version`) aceitaria qualquer serviço com um JSON parecido.
+**Decisão:** `GET /api/health` ganha `service`, sempre `"prumo"`, também na resposta `503`. Mudança aditiva, sem migration.
+**Consequências:** o app trata como "não é um servidor Prumo" uma resposta com outro `service` ou sem o formato do health. Nenhuma versão foi publicada sem o campo, mas o app ainda aceita uma resposta sem `service` e com os outros três campos (servidores de desenvolvimento anteriores a esta mudança).
+
 ---
 
 ## Modelo
