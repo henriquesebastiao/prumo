@@ -89,7 +89,9 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] Criação idempotente: aceitar `id` gerado pelo cliente nos `POST`
 - [x] Sincronização incremental: `updated_since` e registro de exclusões
 - [x] Revisão do contrato v1 e início do `CHANGELOG` da API (mudanças no `CHANGELOG` do projeto, D42)
-- [ ] Repositório `prumo-android` (Material 3 Expressive, design system Henrique Sebastião — Android Design System; em outra sessão, D42)
+- [x] Repositório `prumo-android` (Material 3 Expressive, design system Henrique Sebastião — Android Design System; em outra sessão, D42). O andamento do app fica no `ROADMAP.md` de lá
+- [x] Fluxo de trabalho conjunto com o app: seção "Servidor e app juntos" no `CLAUDE.md` e `commit-message.md` (D43)
+- [x] `service: "prumo"` no `GET /api/health`, para o app reconhecer um servidor Prumo (D44)
 
 ## Ideias (sem ordem definida)
 

@@ -39,3 +39,6 @@ data/
 
 # Last claude session command
 claude-session.md
+
+# Commit message drafts (see "Servidor e app juntos" in CLAUDE.md)
+commit-message.md

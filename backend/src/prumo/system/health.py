@@ -2,7 +2,7 @@ from typing import Literal
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -13,6 +13,9 @@ router = APIRouter(tags=["system"])
 
 
 class Health(BaseModel):
+    service: Literal["prumo"] = Field(
+        description="Always `prumo`: tells clients this address is a Prumo server."
+    )
     status: Literal["ok", "degraded"]
     database: Literal["ok", "unavailable"]
     version: str
@@ -28,6 +31,8 @@ def health(session: SessionDep) -> Health | JSONResponse:
     try:
         session.execute(text("SELECT 1"))
     except SQLAlchemyError:
-        body = Health(status="degraded", database="unavailable", version=__version__)
+        body = Health(
+            service="prumo", status="degraded", database="unavailable", version=__version__
+        )
         return JSONResponse(body.model_dump(), status_code=503)
-    return Health(status="ok", database="ok", version=__version__)
+    return Health(service="prumo", status="ok", database="ok", version=__version__)
