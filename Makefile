@@ -18,8 +18,8 @@ help: ## List available commands
 dev: db-up migrate ## Database in Docker + API with reload (:8000) + Vite (:5173)
 	@trap 'kill 0' EXIT; \
 	( $(API) env PRUMO_COOKIE_SECURE=false PRUMO_UPLOADS_DIR=../data/uploads \
-		uvicorn prumo.main:create_app --factory --reload --port 8000 ) & \
-	( $(WEB) dev ) & \
+		uvicorn prumo.main:create_app --factory --reload --host 0.0.0.0 --port 8000 ) & \
+	( $(WEB) dev --host 0.0.0.0 ) & \
 	wait
 
 db-up: ## Start the development and test databases
