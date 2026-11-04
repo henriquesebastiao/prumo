@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "henriquesebastiao"
+
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "henriquesebastiao"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "henriquesebastiao"
+
+  - package-ecosystem: "uv"
+    directory: "/backend/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "henriquesebastiao"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "henriquesebastiao"
