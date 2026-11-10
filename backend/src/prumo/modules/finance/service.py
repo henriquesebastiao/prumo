@@ -1419,6 +1419,7 @@ def build_upcoming(session: Session, user: User) -> list[UpcomingItem]:
                 data={
                     "amount_cents": invoice.amount_cents,
                     "paid_cents": invoice.paid_cents,
+                    "remaining_cents": invoice.remaining_cents,
                     "status": invoice.status,
                 },
             )
