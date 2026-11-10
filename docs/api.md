@@ -210,8 +210,8 @@ Itens do Início publicados pelo módulo:
 | `kind` | Onde | `subject` / `entity_id` | `data` |
 |---|---|---|---|
 | `finance.invoice_closing` | `upcoming` | cartão / cartão | `amount_cents`, `available_limit_cents` |
-| `finance.invoice_due` | `upcoming` | cartão / cartão | `amount_cents`, `paid_cents`, `status` |
-| `finance.transaction` | `activity` | descrição / transação | `transaction_kind`, `amount_cents`, `category`, `account`, `credit_card` |
+| `finance.invoice_due` | `upcoming` | cartão / cartão | `amount_cents`, `paid_cents`, `remaining_cents` (o que falta pagar, F5), `status` |
+| `finance.transaction` | `activity` | descrição / transação | `transaction_kind`, `amount_cents`, `category`, `account`, `destination_account` (transferência), `credit_card` (nomes ou `null`), `occurred_time` (`HH:MM` ou `null`) |
 
 Erros do módulo: `finance.category_in_use`, `finance.account_in_use` e `finance.card_in_use` (com `details.transactions_count`), `finance.category_exists` (409), `finance.invalid_combination` (com `details.kind`, `details.missing` e `details.unexpected`: os campos que faltam ou sobram para o `kind`), `finance.invalid_amount`, `finance.category_kind_mismatch`, `finance.same_account`, `finance.installments_require_card`, `finance.invalid_invoice` e `finance.balance_unchanged` (ajuste sem diferença). Conta, categoria ou cartão de outro usuário citado no corpo responde 404.
 

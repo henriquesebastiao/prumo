@@ -24,7 +24,7 @@ export function describeUpcoming(item: Schemas['UpcomingItem'], t: Translate): E
     }
   }
   if (item.kind === 'finance.invoice_due') {
-    const remaining = money(cents(data.amount_cents) - cents(data.paid_cents))
+    const remaining = money(cents(data.remaining_cents))
     let subtitle = t('finance.events.dueAmount', { value: money(cents(data.amount_cents)) })
     if (data.status === 'overdue') subtitle = t('finance.events.overdue', { value: remaining })
     else if (cents(data.paid_cents) > 0)

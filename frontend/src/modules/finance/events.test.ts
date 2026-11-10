@@ -32,7 +32,10 @@ describe('finance items on Início', async () => {
     expect(
       plain(
         describeUpcoming(
-          { ...due, data: { amount_cents: 128460, paid_cents: 0, status: 'open' } },
+          {
+            ...due,
+            data: { amount_cents: 128460, paid_cents: 0, remaining_cents: 128460, status: 'open' },
+          },
           t,
         )?.subtitle,
       ),
@@ -40,7 +43,15 @@ describe('finance items on Início', async () => {
     expect(
       plain(
         describeUpcoming(
-          { ...due, data: { amount_cents: 128460, paid_cents: 28460, status: 'overdue' } },
+          {
+            ...due,
+            data: {
+              amount_cents: 128460,
+              paid_cents: 28460,
+              remaining_cents: 100000,
+              status: 'overdue',
+            },
+          },
           t,
         )?.subtitle,
       ),

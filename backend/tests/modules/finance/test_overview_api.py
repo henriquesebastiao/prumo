@@ -101,6 +101,7 @@ def test_dashboard_summary_upcoming_and_activity(auth_client: TestClient) -> Non
     ]
     assert finance_upcoming[0]["data"]["available_limit_cents"] == 500000 - 4636
     assert finance_upcoming[1]["data"]["status"] == "open"
+    assert finance_upcoming[1]["data"]["remaining_cents"] == 4636
 
     activity = [i for i in body["activity"] if i["module"] == "finance"]
     assert "Agendada" not in [i["subject"] for i in activity]
