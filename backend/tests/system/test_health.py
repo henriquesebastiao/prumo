@@ -8,5 +8,5 @@ def test_health_reports_database(client: TestClient) -> None:
         "service": "prumo",
         "status": "ok",
         "database": "ok",
-        "version": "0.0.0",
+        "version": "0.2.0",
     }

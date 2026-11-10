@@ -18,7 +18,7 @@ function clientReturning(response: Response) {
 describe('api client', () => {
   it('returns data on success', async () => {
     const { client } = clientReturning(
-      json(200, { status: 'ok', database: 'ok', version: '0.0.0' }),
+      json(200, { status: 'ok', database: 'ok', version: '0.2.0' }),
     )
     await expect(unwrap(client.GET('/api/health'))).resolves.toMatchObject({ status: 'ok' })
   })
