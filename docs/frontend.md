@@ -182,7 +182,7 @@ Também existem `--text-2xs` (11), `--text-2xl-plus` (24, título no celular) e 
 
 ### Ícones e gráficos
 
-- **Ícones:** Lucide, traço 2 (1,8 no tamanho xl), 16/20/28/36 px. Os nomes semânticos (`car`, `wallet`, `book`, `fuel`, `gauge`…) ficam em `src/ui/icons.ts`. O logotipo (prumo) é um SVG próprio em `PLogo`. Ícones escolhidos pelo usuário chegam da API com nomes do Lucide (`landmark`, `utensils`…); cada módulo os mapeia para os nomes semânticos e usa um ícone genérico para nomes desconhecidos (D33).
+- **Ícones:** Lucide, traço 2 (1,8 no tamanho xl), 16/20/28/36 px. Os nomes semânticos (`car`, `wallet`, `book`, `fuel`, `gauge`…) ficam em `src/ui/icons.ts`. O logotipo (prumo) é um SVG próprio em `PLogo`. Ícones escolhidos pelo usuário chegam da API com nomes do Lucide (`landmark`, `utensils`…); cada módulo os mapeia para os nomes semânticos e usa um ícone genérico para nomes desconhecidos (D33). As categorias oferecem 80 ícones em oito grupos (`CATEGORY_ICONS` em `modules/finance/helpers.ts`), os mesmos do app Android (D45).
 - **Gráficos:** a cor do módulo marca o dado principal (última barra, série principal), o tom `-soft` marca o histórico, o neutro marca a segunda série, e categorias usam a rampa do tom (texto, principal, soft, softer). Média em linha tracejada com rótulo. Todo gráfico tem descrição acessível e lista de valores para leitores de tela.
 
 ### Navegação

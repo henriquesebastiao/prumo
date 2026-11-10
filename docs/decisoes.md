@@ -268,6 +268,12 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** `GET /api/health` ganha `service`, sempre `"prumo"`, também na resposta `503`. Mudança aditiva, sem migration.
 **Consequências:** o app trata como "não é um servidor Prumo" uma resposta com outro `service` ou sem o formato do health. Nenhuma versão foi publicada sem o campo, mas o app ainda aceita uma resposta sem `service` e com os outros três campos (servidores de desenvolvimento anteriores a esta mudança).
 
+## D45 — Mais ícones de categoria, os mesmos na web e no app
+**Status:** aceita · 2026-11
+**Contexto:** o seletor de ícone das categorias oferecia 14 ícones na web e 19 no app, pouco para separar as despesas de uma casa (mercado, aluguel, energia, farmácia, academia…). O ícone é um nome livre (`[a-z0-9-]`, D33), então ampliar não muda a API.
+**Decisão:** 80 ícones de categoria em oito grupos (casa, alimentação, transporte, saúde e cuidado, lazer, pessoal e família, trabalho e estudo, dinheiro e contas), com nomes do Lucide da versão instalada (`shopping-cart`, `key`, `pill`, `square-parking`…). A web lista todos em `CATEGORY_ICONS`, na ordem dos grupos, e mapeia cada nome para um nome semântico de `src/ui/icons.ts`; o app Android mostra os mesmos nomes por grupo, com busca, e desenha cada um com o Material Symbol mais próximo (D23 do app). Os ícones de conta continuam os cinco de antes. O ícone `ticket` (Lazer) continua o mesmo nome.
+**Consequências:** um nome novo precisa entrar nos dois clientes (aqui: `icons.ts`, `ICONS`, `CATEGORY_ICONS` e o rótulo em `locales/pt-BR.json`); um cliente que não o conhece mostra o ícone genérico, como antes.
+
 ---
 
 ## Modelo
