@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.2.0](https://github.com/henriquesebastiao/prumo/tree/0.2.0) (2026-11-10)
+
+[Full Changelog](https://github.com/henriquesebastiao/prumo/compare/0.1.0...0.2.0)
+
+**Implemented enhancements:**
+
+- Setup dependabot action [\#1](https://github.com/henriquesebastiao/prumo/issues/1)
+
+**Merged pull requests:**
+
+- build\(deps\): bump @tanstack/vue-query from 5.105.3 to 5.107.1 in /frontend [\#23](https://github.com/henriquesebastiao/prumo/pull/23) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump @playwright/test from 1.64.1 to 1.65.0 in /frontend [\#22](https://github.com/henriquesebastiao/prumo/pull/22) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): update psycopg\[binary\] requirement from \>=3.3.7 to \>=3.3.8 in /backend [\#21](https://github.com/henriquesebastiao/prumo/pull/21) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump pydantic from 2.14.2 to 2.14.3 in /backend [\#19](https://github.com/henriquesebastiao/prumo/pull/19) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump vue from 3.5.44 to 3.5.45 in /frontend [\#18](https://github.com/henriquesebastiao/prumo/pull/18) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump sqlalchemy from 2.1.6 to 2.1.8 in /backend [\#17](https://github.com/henriquesebastiao/prumo/pull/17) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump @lucide/vue from 1.67.0 to 1.70.0 in /frontend [\#16](https://github.com/henriquesebastiao/prumo/pull/16) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump ruff from 0.17.3 to 0.17.4 in /backend [\#15](https://github.com/henriquesebastiao/prumo/pull/15) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump vitest from 5.0.5 to 5.1.0 in /frontend [\#14](https://github.com/henriquesebastiao/prumo/pull/14) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): update psycopg\[binary\] requirement from \>=3.3.6 to \>=3.3.7 in /backend [\#13](https://github.com/henriquesebastiao/prumo/pull/13) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump @lucide/vue from 1.66.0 to 1.67.0 in /frontend [\#12](https://github.com/henriquesebastiao/prumo/pull/12) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): update uv-build requirement from \<0.14,\>=0.13.6 to \>=0.13.7,\<0.14 in /backend [\#11](https://github.com/henriquesebastiao/prumo/pull/11) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump @tanstack/vue-query from 5.105.1 to 5.105.3 in /frontend [\#10](https://github.com/henriquesebastiao/prumo/pull/10) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(system\): identify the server in health and work with the app [\#9](https://github.com/henriquesebastiao/prumo/pull/9) ([henriquesebastiao](https://github.com/henriquesebastiao))
+- build\(deps\): bump docker/login-action from 3 to 4 [\#8](https://github.com/henriquesebastiao/prumo/pull/8) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): update uv-build requirement from \<0.14,\>=0.13 to \>=0.13.6,\<0.14 in /backend [\#7](https://github.com/henriquesebastiao/prumo/pull/7) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump docker/setup-qemu-action from 3 to 4 [\#6](https://github.com/henriquesebastiao/prumo/pull/6) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump docker/metadata-action from 5 to 6 [\#5](https://github.com/henriquesebastiao/prumo/pull/5) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump docker/setup-buildx-action from 3 to 4 [\#4](https://github.com/henriquesebastiao/prumo/pull/4) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump docker/build-push-action from 6 to 7 [\#3](https://github.com/henriquesebastiao/prumo/pull/3) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Add dependabot.yml file [\#2](https://github.com/henriquesebastiao/prumo/pull/2) ([henriquesebastiao](https://github.com/henriquesebastiao))
+
 ## [0.1.0](https://github.com/henriquesebastiao/prumo/tree/0.1.0) (2026-11-03)
 
 [Full Changelog](https://github.com/henriquesebastiao/prumo/compare/87d9d95998062e4eea4324fa71ffc7dfe7a7d36f...0.1.0)
