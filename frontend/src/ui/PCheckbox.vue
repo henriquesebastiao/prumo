@@ -1,12 +1,21 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ disabled?: boolean; id?: string }>(), { id: undefined })
+withDefaults(
+  defineProps<{
+    disabled?: boolean
+    id?: string
+    /** Read by screen readers only, for a box without visible text (a list's toggle). */
+    label?: string
+  }>(),
+  { id: undefined, label: undefined },
+)
 const model = defineModel<boolean>({ default: false })
 </script>
 
 <template>
   <label class="p-checkbox">
     <input :id="id" v-model="model" type="checkbox" :disabled="disabled" />
-    <span><slot /></span>
+    <span v-if="label" class="p-sr-only">{{ label }}</span>
+    <span v-else><slot /></span>
   </label>
 </template>
 

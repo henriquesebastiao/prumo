@@ -152,13 +152,13 @@ Regras:
 
 ## Hábitos (`habits`)
 
-Planejado para a Fase 7 (D47); as regras abaixo foram aprovadas com o plano e entram na API quando o módulo for implementado.
+Hábitos a praticar (`build`) e a abandonar (`quit`), D47. O tipo e a medida de um hábito não mudam depois de criados.
 
 **Habit**: `name` (1–60), `kind` (`build` praticar | `quit` abandonar), `color`, `icon` (nome livre), `started_on` (data, padrão hoje), `archived_at?`; só em `build`: `measure` (`check` | `quantity`), `target_value` (> 0) e `unit` (1–12) quando `quantity`.
 
 **HabitFrequency** (só `build`): `habit_id`, `valid_from`, `kind` (`daily` | `weekly` | `weekdays`), `times_per_week` (1–7, em `weekly`), `weekdays` (em `weekdays`); única por hábito e data.
 
-**HabitEntry** (só `build`): `habit_id`, `on` (data), `value` (≥ 0; em `check` sempre 1); única por hábito e data. Desmarcar é excluir.
+**HabitEntry** (só `build`): `habit_id`, `on` (data; a coluna é `day`), `value` (≥ 0; em `check` sempre 1); única por hábito e data. Desmarcar é excluir.
 
 **HabitPause** (só `build`): `habit_id`, `starts_on`, `ends_on?` (≥ `starts_on`); sem fim, em aberto. Pausas não se sobrepõem.
 
@@ -166,10 +166,10 @@ Planejado para a Fase 7 (D47); as regras abaixo foram aprovadas com o plano e en
 
 Regras:
 - H1. Dia cumprido: em `check`, existe marcação; em `quantity`, `value ≥ target_value`. Um dia parcial mostra valor e meta e não cumpre.
-- H2. Agendado: `daily` todo dia; `weekdays` os dias marcados; `weekly` a unidade é a semana (segunda a domingo, fuso do usuário), cumprida com `times_per_week` dias cumpridos. Não contam dias em pausa, antes de `started_on` nem futuros. A frequência vigente numa data é a de maior `valid_from` ≤ data; mudar cria uma versão (`valid_from` ≥ hoje; passada é imutável, `422 habits.frequency_locked`; repetida, `409 habits.frequency_date_taken`). Em `weekly`, a semana em que a frequência começa conta só os dias desde `valid_from` e exige o menor entre `times_per_week` e os dias restantes.
+- H2. Agendado: `daily` todo dia; `weekdays` os dias marcados; `weekly` a unidade é a semana (segunda a domingo, fuso do usuário), cumprida com `times_per_week` dias cumpridos. Não contam dias em pausa, antes de `started_on` nem futuros. A frequência vigente numa data é a de maior `valid_from` ≤ data; mudar cria uma versão (`valid_from` ≥ hoje; passada é imutável, `422 habits.frequency_locked`; repetida, `409 habits.frequency_date_taken`). A primeira versão nasce com o hábito, em `started_on`, e não pode ser excluída; um `started_on` mais cedo a leva junto. Em `weekly`, a semana em que a frequência começa conta só os dias desde `valid_from` e exige o menor entre `times_per_week` e os dias restantes.
 - H3. Marcação só de `started_on` até hoje, no fuso do usuário: futuro `422 habits.future_date`, antes do início `422 habits.before_start`. Marcação, pausa e frequência só em `build` (`422 habits.not_build`); recaída só em `quit` (`422 habits.not_quit`).
 - H4. Sequência atual, estrita: unidades agendadas consecutivas e cumpridas, de hoje para trás. Hoje não cumprido e a semana `weekly` em andamento não quebram; se já cumpridos, contam. A pausa não quebra nem conta. `best_streak` é a maior já feita.
-- H5. Taxa: cumpridos ÷ agendados nos últimos 30 dias, hoje inclusive; em `weekly`, nas últimas 4 semanas completas. Sem nada agendado na janela, `null`.
+- H5. Taxa: cumpridos ÷ agendados nos últimos 30 dias, hoje inclusive quando já cumprido (hoje aberto não pesa, como em H4); em `weekly`, nas últimas 4 semanas completas. Sem nada agendado na janela, `null`. A API dá a porcentagem arredondada (`rate_percent`).
 - H6. Semana atual em `weekly`: dias cumpridos sobre `times_per_week`.
 - H7. Maus hábitos: `clean_since` = última recaída ou `started_on` às 00:00 no fuso; `clean_days` = dias inteiros até agora; `best_clean_days` = maior intervalo entre início, recaídas e agora; `relapses_30d`. Recaída antes do início (`habits.before_start`) ou no futuro (`habits.future_date`) é recusada.
 - H8. Hábito arquivado sai das listas, do Hoje e do Início; o histórico fica.

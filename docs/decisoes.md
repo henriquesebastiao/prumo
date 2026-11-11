@@ -281,10 +281,11 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Consequências:** o módulo fica fora do MVP para provas e prazos, cronômetro, revisão espaçada e nota na sessão. Hábitos não registra estudo; os dois módulos não se integram.
 
 ## D47 — Hábitos: marcação idempotente por data, sequência estrita e frequência versionada
-**Status:** aceita (plano) · 2026-11
+**Status:** aceita · 2026-11
 **Contexto:** aprovado junto com D46, para a Fase 7. A marcação de um hábito é uma por dia e o valor muda (`quantity`), o que não cabe na criação idempotente por `id` (D40).
 **Decisão:** a marcação é `PUT /habits/{id}/entries/{on}` com `{value}`: a chave natural (hábito e data) já é única e repetir a requisição devolve o mesmo estado; desmarcar é `DELETE`. A sequência é estrita (H4): hoje não cumprido e a semana `weekly` em andamento não quebram; a pausa não quebra nem conta. A taxa (H5) usa 30 dias ou as 4 últimas semanas completas. A frequência é versionada por `valid_from` como o plano de estudos (H2). `started_on` existe nos dois tipos (o `build` precisa dele para não contar dias anteriores). Hábitos não publica itens em "Atividade recente": as marcações diárias tirariam os outros módulos dos 10 itens.
 **Consequências:** o app marca e desmarca sem id do cliente. Hábito com teto, nota na marcação, lembretes e widget ficam fora do MVP.
+**Na implementação (Fase 7):** as rotas ficam curtas (`/habits`, `/habits/{id}`, com `/habits/today` e `/habits/entries` declaradas antes). `PUT` e `DELETE` da marcação e o `POST` de recaída respondem o `HabitRead` atualizado, para a tela se atualizar sem calcular. O dia de hoje entra na taxa (H5) só quando cumprido, como na sequência (H4): uma taxa que cai toda manhã e sobe ao marcar diria pouco. O calendário ganhou o status `pending` (hoje agendado e ainda aberto), que o plano não tinha. O tipo e a medida não mudam depois de criados (como o `kind` da transação, D33); a primeira versão da frequência nasce em `started_on` e acompanha um início mais cedo. Os ícones são nomes livres (D33), escolhidos pelos clientes numa lista de hábitos.
 
 ---
 

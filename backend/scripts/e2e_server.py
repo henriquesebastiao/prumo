@@ -206,6 +206,7 @@ def seed() -> None:
             seed_finance(session, user)
         seed_reading(session, user)
         seed_studies(session, user)
+        seed_habits(session, user)
         # Empty account for the end-to-end flows (e2e/flows.spec.ts), apart from the boards.
         create_user(
             session, username="teste", display_name="Teste Fluxos", password="prumo-teste-01"
@@ -447,6 +448,156 @@ def seed_studies(session: Session, user: object) -> None:
                     started_at=local(start),
                     duration_minutes=minutes,
                 ),
+            )
+
+
+def seed_habits(session: Session, user: object) -> None:
+    """Hábitos: "Ler a Bíblia" every day since 01/09 (a missed 02/10, a pause from 20 to 24/10,
+    then a 40-day streak), "Beber água" 2000 ml (today 1250), "Academia" 3x a week since 05/10
+    (one week short, this week 1 of 3), "Anki" daily from 15/10 and Monday to Friday from 01/11
+    (13/11 missed), "Meditar" archived, and "Redes sociais antes de dormir" to quit since 01/08,
+    with three relapses and their notes."""
+    from prumo.modules.habits import service as habits
+    from prumo.modules.habits.rules import HabitFrequencyKind
+    from prumo.modules.habits.schemas import (
+        HabitCreate,
+        HabitEntryWrite,
+        HabitFrequencyCreate,
+        HabitFrequencyFields,
+        HabitPauseCreate,
+        RelapseCreate,
+    )
+    from prumo.system.users.models import User
+
+    assert isinstance(user, User)
+
+    def local(value: str) -> datetime:
+        return datetime.fromisoformat(f"{value}-03:00")
+
+    def days(first: date, last: date) -> list[date]:
+        return [first + timedelta(days=i) for i in range((last - first).days + 1)]
+
+    weekly = HabitFrequencyFields(kind=HabitFrequencyKind.WEEKLY, times_per_week=3)
+    daily = HabitFrequencyFields(kind=HabitFrequencyKind.DAILY)
+    with time_machine.travel(local("2026-09-01T07:00:00")):
+        bible = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Ler a Bíblia",
+                kind="build",
+                color="amber",
+                icon="book-open",
+                started_on=date(2026, 9, 1),
+                frequency=daily,
+            ),
+        )
+        social = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Redes sociais antes de dormir",
+                kind="quit",
+                color="red",
+                icon="smartphone",
+                started_on=date(2026, 8, 1),
+            ),
+        )
+    with time_machine.travel(local("2026-10-05T07:00:00")):
+        gym = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Academia",
+                kind="build",
+                color="orange",
+                icon="dumbbell",
+                started_on=date(2026, 10, 5),
+                frequency=weekly,
+            ),
+        )
+        meditate = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Meditar",
+                kind="build",
+                color="violet",
+                icon="brain",
+                started_on=date(2026, 10, 5),
+            ),
+        )
+    with time_machine.travel(local("2026-10-15T07:00:00")):
+        anki = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Anki",
+                kind="build",
+                color="blue",
+                icon="graduation-cap",
+                started_on=date(2026, 10, 15),
+            ),
+        )
+        water = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Beber água",
+                kind="build",
+                color="cyan",
+                icon="droplet",
+                started_on=date(2026, 10, 15),
+                measure="quantity",
+                target_value=2000,
+                unit="ml",
+            ),
+        )
+        habits.create_pause(
+            session,
+            user,
+            bible,
+            HabitPauseCreate(starts_on=date(2026, 10, 20), ends_on=date(2026, 10, 24)),
+        )
+    with time_machine.travel(local("2026-11-01T07:00:00")):
+        habits.create_frequency(
+            session,
+            user,
+            anki,
+            HabitFrequencyCreate(
+                valid_from=date(2026, 11, 1),
+                kind=HabitFrequencyKind.WEEKDAYS,
+                weekdays=[0, 1, 2, 3, 4],
+            ),
+        )
+    with time_machine.travel(local("2026-11-17T14:30:00")):
+        check = HabitEntryWrite(value=1)
+        for day in days(date(2026, 9, 1), date(2026, 11, 16)):
+            if day == date(2026, 10, 2) or date(2026, 10, 20) <= day <= date(2026, 10, 24):
+                continue
+            habits.put_entry(session, user, bible, day, check)
+        for day in days(date(2026, 10, 15), date(2026, 11, 16)):
+            value = 2000 if day.day % 3 else 1500
+            habits.put_entry(session, user, water, day, HabitEntryWrite(value=value))
+        habits.put_entry(session, user, water, date(2026, 11, 17), HabitEntryWrite(value=1250))
+        gym_days = [5, 7, 9, 12, 14, 16, 20, 22, 26, 28, 30]
+        for day_of_month in gym_days:
+            habits.put_entry(session, user, gym, date(2026, 10, day_of_month), check)
+        for day_of_month in (2, 4, 6, 9, 11, 13, 16):
+            habits.put_entry(session, user, gym, date(2026, 11, day_of_month), check)
+        for day in days(date(2026, 10, 15), date(2026, 11, 16)):
+            if day.weekday() < 5 and day != date(2026, 11, 13):
+                habits.put_entry(session, user, anki, day, check)
+        for day in days(date(2026, 10, 5), date(2026, 10, 20)):
+            habits.put_entry(session, user, meditate, day, check)
+        habits.set_archived(session, meditate, True)
+        for moment, note in (
+            ("2026-09-12T23:00:00", None),
+            ("2026-10-03T22:30:00", "Noite de prova, fiquei ansioso."),
+            ("2026-11-08T23:30:00", "Domingo entediado."),
+        ):
+            habits.create_relapse(
+                session, user, social, RelapseCreate(occurred_at=local(moment), note=note)
             )
 
 

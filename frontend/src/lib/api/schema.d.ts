@@ -1417,6 +1417,283 @@ export interface paths {
     patch: operations['studies_update_session']
     trace?: never
   }
+  '/api/v1/habits/today': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Today
+     * @description The habits that ask something of today, with their entry and week (H2, H6).
+     */
+    get: operations['habits_read_today']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/entries': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Entries
+     * @description Every entry, newest day first (for the app's sync).
+     */
+    get: operations['habits_list_entries']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/frequencies/{frequency_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Frequency */
+    delete: operations['habits_delete_frequency']
+    options?: never
+    head?: never
+    /**
+     * Update Frequency
+     * @description Replaces a version that has not started yet.
+     */
+    patch: operations['habits_update_frequency']
+    trace?: never
+  }
+  '/api/v1/habits/pauses/{pause_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Pause */
+    delete: operations['habits_delete_pause']
+    options?: never
+    head?: never
+    /**
+     * Update Pause
+     * @description `ends_on` ends an open pause.
+     */
+    patch: operations['habits_update_pause']
+    trace?: never
+  }
+  '/api/v1/habits/relapses/{relapse_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Delete Relapse */
+    delete: operations['habits_delete_relapse']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Habits
+     * @description By name, with the derived values of each kind (H4-H7).
+     */
+    get: operations['habits_list_habits']
+    put?: never
+    /** Create Habit */
+    post: operations['habits_create_habit']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Habit */
+    get: operations['habits_read_habit']
+    put?: never
+    post?: never
+    /**
+     * Delete Habit
+     * @description Deletes the habit with its history.
+     */
+    delete: operations['habits_delete_habit']
+    options?: never
+    head?: never
+    /** Update Habit */
+    patch: operations['habits_update_habit']
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Habit */
+    post: operations['habits_archive_habit']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Habit */
+    post: operations['habits_unarchive_habit']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/calendar': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Calendar
+     * @description Each day of the month with its status; only habits to practice.
+     */
+    get: operations['habits_read_calendar']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/frequencies': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Frequency
+     * @description A new version from `valid_from` (today or later).
+     */
+    post: operations['habits_create_frequency']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/entries/{on}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Put Entry
+     * @description Marks a day or changes its value; repeating it is safe (D47). Answers the habit.
+     */
+    put: operations['habits_put_entry']
+    post?: never
+    /**
+     * Delete Entry
+     * @description Unmarks a day. Answers the habit.
+     */
+    delete: operations['habits_delete_entry']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/pauses': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Create Pause */
+    post: operations['habits_create_pause']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/{habit_id}/relapses': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Relapse
+     * @description Answers the habit, with its new time without (H7).
+     */
+    post: operations['habits_create_relapse']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -1917,6 +2194,12 @@ export interface components {
       /** Finished On */
       finished_on?: string | null
     }
+    /**
+     * CalendarStatus
+     * @description A day of a habit's calendar.
+     * @enum {string}
+     */
+    CalendarStatus: 'done' | 'partial' | 'missed' | 'pending' | 'paused' | 'unscheduled' | 'future'
     /** CardRef */
     CardRef: {
       /**
@@ -2194,6 +2477,7 @@ export interface components {
         | components['schemas']['GarageSummary']
         | components['schemas']['ReadingSummary']
         | components['schemas']['StudiesSummary']
+        | components['schemas']['HabitsSummary']
       )[]
       /**
        * Upcoming
@@ -2501,6 +2785,599 @@ export interface components {
       vehicles: components['schemas']['SummaryVehicle'][]
       /** Month Fuel Cents */
       month_fuel_cents: number
+    }
+    /** HabitCalendar */
+    HabitCalendar: {
+      /**
+       * Month
+       * @description `YYYY-MM`.
+       */
+      month: string
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /** Days */
+      days: components['schemas']['HabitCalendarDay'][]
+      /** Previous Month */
+      previous_month: string
+      /**
+       * Next Month
+       * @description Not beyond the current month.
+       */
+      next_month: string | null
+    }
+    /** HabitCalendarDay */
+    HabitCalendarDay: {
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      status: components['schemas']['CalendarStatus']
+      /**
+       * Value
+       * @description The day's entry, if any.
+       */
+      value: number | null
+    }
+    /** HabitCreate */
+    HabitCreate: {
+      /** Id */
+      id?: string | null
+      /** Name */
+      name: string
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: 'build' | 'quit'
+      /**
+       * Color
+       * @default amber
+       * @enum {string}
+       */
+      color?:
+        | 'green'
+        | 'teal'
+        | 'cyan'
+        | 'blue'
+        | 'indigo'
+        | 'violet'
+        | 'pink'
+        | 'red'
+        | 'orange'
+        | 'amber'
+        | 'gray'
+      /**
+       * Icon
+       * @description Interface icon name; clients fall back to a generic icon.
+       * @default sparkles
+       */
+      icon?: string
+      /**
+       * Started On
+       * @description Defaults to today.
+       */
+      started_on?: string | null
+      /**
+       * Measure
+       * @description Only in `build`; `check` by default.
+       */
+      measure?: ('check' | 'quantity') | null
+      /**
+       * Target Value
+       * @description In `quantity`.
+       */
+      target_value?: number | null
+      /**
+       * Unit
+       * @description In `quantity`: `ml`, `páginas`.
+       */
+      unit?: string | null
+      /** @description Only in `build`: the first version, from `started_on`. */
+      frequency?: components['schemas']['HabitFrequencyFields'] | null
+    }
+    /** HabitDetail */
+    HabitDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: 'build' | 'quit'
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /**
+       * Started On
+       * Format: date
+       */
+      started_on: string
+      /** Measure */
+      measure: ('check' | 'quantity') | null
+      /** Target Value */
+      target_value: number | null
+      /** Unit */
+      unit: string | null
+      /** Archived At */
+      archived_at: string | null
+      /** @description The version in force today. */
+      frequency: components['schemas']['HabitFrequencyRead'] | null
+      /**
+       * Paused
+       * @description Today is in a pause.
+       */
+      paused: boolean
+      /**
+       * Rate Percent
+       * @description H5; null with nothing scheduled.
+       */
+      rate_percent: number | null
+      /**
+       * Current Streak
+       * @description H4, in days or weeks (`streak_unit`).
+       */
+      current_streak: number | null
+      /** Best Streak */
+      best_streak: number | null
+      /** Streak Unit */
+      streak_unit: ('day' | 'week') | null
+      /** @description H6, in `weekly`. */
+      week: components['schemas']['HabitWeek'] | null
+      today: components['schemas']['HabitTodayState'] | null
+      /** Clean Since */
+      clean_since: string | null
+      /** Clean Days */
+      clean_days: number | null
+      /** Best Clean Days */
+      best_clean_days: number | null
+      /** Relapses 30D */
+      relapses_30d: number | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+      /**
+       * Frequencies
+       * @description Newest version first.
+       */
+      frequencies: components['schemas']['HabitFrequencyRead'][]
+      /**
+       * Pauses
+       * @description Newest first.
+       */
+      pauses: components['schemas']['HabitPauseRead'][]
+      /**
+       * Relapses
+       * @description The last 20, newest first.
+       */
+      relapses: components['schemas']['RelapseRead'][]
+    }
+    /** HabitEntryRead */
+    HabitEntryRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Habit Id
+       * Format: uuid
+       */
+      habit_id: string
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      /** Value */
+      value: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** HabitEntryWrite */
+    HabitEntryWrite: {
+      /**
+       * Value
+       * @description In `check`, always stored as 1.
+       * @default 1
+       */
+      value?: number
+    }
+    /**
+     * HabitFrequencyCreate
+     * @description A new version of the frequency, from `valid_from` (today or later).
+     */
+    HabitFrequencyCreate: {
+      kind: components['schemas']['HabitFrequencyKind']
+      /**
+       * Times Per Week
+       * @description In `weekly`.
+       */
+      times_per_week?: number | null
+      /**
+       * Weekdays
+       * @description In `weekdays`.
+       */
+      weekdays?: number[] | null
+      /** Id */
+      id?: string | null
+      /**
+       * Valid From
+       * Format: date
+       */
+      valid_from: string
+    }
+    /** HabitFrequencyFields */
+    HabitFrequencyFields: {
+      kind: components['schemas']['HabitFrequencyKind']
+      /**
+       * Times Per Week
+       * @description In `weekly`.
+       */
+      times_per_week?: number | null
+      /**
+       * Weekdays
+       * @description In `weekdays`.
+       */
+      weekdays?: number[] | null
+    }
+    /**
+     * HabitFrequencyKind
+     * @enum {string}
+     */
+    HabitFrequencyKind: 'daily' | 'weekly' | 'weekdays'
+    /** HabitFrequencyRead */
+    HabitFrequencyRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Valid From
+       * Format: date
+       */
+      valid_from: string
+      /**
+       * Valid Until
+       * @description The day before the next version, if any.
+       */
+      valid_until: string | null
+      /**
+       * State
+       * @enum {string}
+       */
+      state: 'past' | 'current' | 'future'
+      kind: components['schemas']['HabitFrequencyKind']
+      /** Times Per Week */
+      times_per_week: number | null
+      /** Weekdays */
+      weekdays: number[] | null
+    }
+    /**
+     * HabitFrequencyUpdate
+     * @description Replaces a version that has not started yet.
+     */
+    HabitFrequencyUpdate: {
+      kind: components['schemas']['HabitFrequencyKind']
+      /**
+       * Times Per Week
+       * @description In `weekly`.
+       */
+      times_per_week?: number | null
+      /**
+       * Weekdays
+       * @description In `weekdays`.
+       */
+      weekdays?: number[] | null
+    }
+    /** HabitPauseCreate */
+    HabitPauseCreate: {
+      /** Id */
+      id?: string | null
+      /**
+       * Starts On
+       * Format: date
+       */
+      starts_on: string
+      /**
+       * Ends On
+       * @description Open while null.
+       */
+      ends_on?: string | null
+    }
+    /** HabitPauseRead */
+    HabitPauseRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Starts On
+       * Format: date
+       */
+      starts_on: string
+      /** Ends On */
+      ends_on: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** HabitPauseUpdate */
+    HabitPauseUpdate: {
+      /** Starts On */
+      starts_on?: string | null
+      /**
+       * Ends On
+       * @description `null` reopens the pause.
+       */
+      ends_on?: string | null
+    }
+    /** HabitRead */
+    HabitRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: 'build' | 'quit'
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /**
+       * Started On
+       * Format: date
+       */
+      started_on: string
+      /** Measure */
+      measure: ('check' | 'quantity') | null
+      /** Target Value */
+      target_value: number | null
+      /** Unit */
+      unit: string | null
+      /** Archived At */
+      archived_at: string | null
+      /** @description The version in force today. */
+      frequency: components['schemas']['HabitFrequencyRead'] | null
+      /**
+       * Paused
+       * @description Today is in a pause.
+       */
+      paused: boolean
+      /**
+       * Rate Percent
+       * @description H5; null with nothing scheduled.
+       */
+      rate_percent: number | null
+      /**
+       * Current Streak
+       * @description H4, in days or weeks (`streak_unit`).
+       */
+      current_streak: number | null
+      /** Best Streak */
+      best_streak: number | null
+      /** Streak Unit */
+      streak_unit: ('day' | 'week') | null
+      /** @description H6, in `weekly`. */
+      week: components['schemas']['HabitWeek'] | null
+      today: components['schemas']['HabitTodayState'] | null
+      /** Clean Since */
+      clean_since: string | null
+      /** Clean Days */
+      clean_days: number | null
+      /** Best Clean Days */
+      best_clean_days: number | null
+      /** Relapses 30D */
+      relapses_30d: number | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** HabitRef */
+    HabitRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /** Measure */
+      measure: ('check' | 'quantity') | null
+      /** Target Value */
+      target_value: number | null
+      /** Unit */
+      unit: string | null
+    }
+    /** HabitTodayItem */
+    HabitTodayItem: {
+      habit: components['schemas']['HabitRef']
+      /**
+       * Done
+       * @description H1: today is met.
+       */
+      done: boolean
+      /** Value */
+      value: number | null
+      /** @description In `weekly`. */
+      week: components['schemas']['HabitWeek'] | null
+      /**
+       * Settled
+       * @description Nothing left for today: today met, or the week met.
+       */
+      settled: boolean
+    }
+    /** HabitTodayState */
+    HabitTodayState: {
+      /**
+       * Scheduled
+       * @description Today asks something: its day, or the week in progress.
+       */
+      scheduled: boolean
+      /**
+       * Done
+       * @description H1: today is met.
+       */
+      done: boolean
+      /**
+       * Value
+       * @description Today's entry, if any.
+       */
+      value: number | null
+    }
+    /**
+     * HabitUpdate
+     * @description The kind and the measure never change.
+     */
+    HabitUpdate: {
+      /** Name */
+      name?: string | null
+      /** Color */
+      color?:
+        | (
+            | 'green'
+            | 'teal'
+            | 'cyan'
+            | 'blue'
+            | 'indigo'
+            | 'violet'
+            | 'pink'
+            | 'red'
+            | 'orange'
+            | 'amber'
+            | 'gray'
+          )
+        | null
+      /** Icon */
+      icon?: string | null
+      /** Started On */
+      started_on?: string | null
+      /** Target Value */
+      target_value?: number | null
+      /** Unit */
+      unit?: string | null
+    }
+    /**
+     * HabitWeek
+     * @description H6: days met this week over what the week asks.
+     */
+    HabitWeek: {
+      /** Done */
+      done: number
+      /** Target */
+      target: number
+    }
+    /** HabitsSummary */
+    HabitsSummary: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      module: 'habits'
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /** Done Today */
+      done_today: number
+      /** Scheduled Today */
+      scheduled_today: number
+      /**
+       * Pending
+       * @description Up to 3 habits still open today.
+       */
+      pending: components['schemas']['HabitRef'][]
+      /**
+       * Pending More
+       * @description Open ones beyond `pending`.
+       */
+      pending_more: number
+      /** Quit */
+      quit: components['schemas']['HabitsSummaryQuit'][]
+    }
+    /** HabitsSummaryQuit */
+    HabitsSummaryQuit: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Color */
+      color: string
+      /** Icon */
+      icon: string
+      /** Clean Days */
+      clean_days: number
+    }
+    /** HabitsToday */
+    HabitsToday: {
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /**
+       * Items
+       * @description Without archived nor paused habits.
+       */
+      items: components['schemas']['HabitTodayItem'][]
+      /** Done */
+      done: number
+      /** Scheduled */
+      scheduled: number
     }
     /** Health */
     Health: {
@@ -3117,6 +3994,28 @@ export interface components {
       /** Offset */
       offset: number
     }
+    /** Page[HabitEntryRead] */
+    Page_HabitEntryRead_: {
+      /** Items */
+      items: components['schemas']['HabitEntryRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[HabitRead] */
+    Page_HabitRead_: {
+      /** Items */
+      items: components['schemas']['HabitRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
     /** Page[MaintenanceRead] */
     Page_MaintenanceRead_: {
       /** Items */
@@ -3404,6 +4303,43 @@ export interface components {
        * @description Last book read and next one to read.
        */
       shelf: components['schemas']['ShelfBook'][]
+    }
+    /** RelapseCreate */
+    RelapseCreate: {
+      /** Id */
+      id?: string | null
+      /**
+       * Occurred At
+       * Format: date-time
+       */
+      occurred_at: string
+      /** Note */
+      note?: string | null
+    }
+    /** RelapseRead */
+    RelapseRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Occurred At
+       * Format: date-time
+       */
+      occurred_at: string
+      /** Note */
+      note: string | null
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
     }
     /**
      * SessionClient
@@ -11470,6 +12406,1275 @@ export interface operations {
       }
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_read_today: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitsToday']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_list_entries: {
+    parameters: {
+      query?: {
+        habit_id?: string | null
+        from?: string | null
+        to?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_HabitEntryRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_delete_frequency: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        frequency_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_update_frequency: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        frequency_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitFrequencyUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitFrequencyRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_delete_pause: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        pause_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_update_pause: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        pause_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitPauseUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitPauseRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_delete_relapse: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        relapse_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_list_habits: {
+    parameters: {
+      query?: {
+        kind?: ('build' | 'quit') | null
+        /** @description Archived ones too (`all`) or only them (`true`). */
+        archived?: 'false' | 'true' | 'all'
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_HabitRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_create_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_read_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitDetail']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_delete_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_update_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_archive_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_unarchive_habit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_read_calendar: {
+    parameters: {
+      query?: {
+        /** @description `YYYY-MM`; this month by default. */
+        month?: string | null
+      }
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitCalendar']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_create_frequency: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitFrequencyCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitFrequencyRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitFrequencyRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_put_entry: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        on: string
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitEntryWrite']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_delete_entry: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        on: string
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_create_pause: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitPauseCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitPauseRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitPauseRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_create_relapse: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        habit_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RelapseCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
         headers: {
           [name: string]: unknown
         }

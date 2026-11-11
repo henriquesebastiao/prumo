@@ -1,6 +1,6 @@
 # Prumo
 
-Sistema open source e self-hosted de organização pessoal, dividido em módulos (Veículos, Finanças, Livros e outros no futuro). Este repositório contém a API (FastAPI) e o frontend web (Vue). O app Android fica em outro repositório (`prumo-android`) e consome a mesma API.
+Sistema open source e self-hosted de organização pessoal, dividido em módulos (Veículos, Finanças, Livros, Estudos, Hábitos e outros no futuro). Este repositório contém a API (FastAPI) e o frontend web (Vue). O app Android fica em outro repositório (`prumo-android`) e consome a mesma API.
 
 O estado atual e a próxima tarefa estão sempre no `ROADMAP.md`.
 
@@ -44,7 +44,7 @@ Criados na Fase 0. Mantenha esta lista em sincronia com o `Makefile`.
 
 ### Arquitetura
 - O frontend web é apenas um cliente da API, exatamente como o Android será. Toda regra de negócio, validação de domínio e valor derivado (próxima troca de óleo, consumo, saldos, faturas, progresso de leitura) fica no backend.
-- Módulos ficam em `backend/src/prumo/modules/<id>/` e `frontend/src/modules/<id>/`. IDs atuais, na ordem padrão da navegação: `finance` (Finanças), `garage` (Veículos), `reading` (Livros).
+- Módulos ficam em `backend/src/prumo/modules/<id>/` e `frontend/src/modules/<id>/`. IDs atuais, na ordem padrão da navegação: `finance` (Finanças), `garage` (Veículos), `reading` (Livros), `studies` (Estudos), `habits` (Hábitos).
 - Um módulo importa de `core` e `system`, nunca de outro módulo (exceto o `events.py` público dele). O `import-linter` verifica isso no `make lint`.
 - Routers são finos: HTTP, dependências, status code. Regras de negócio ficam em `service.py`.
 - Tabelas de módulo usam o id como prefixo: `garage_fuelings`, `finance_accounts`, `reading_books`.

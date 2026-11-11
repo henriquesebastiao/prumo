@@ -266,8 +266,25 @@ Itens do Início publicados pelo módulo:
 Erros do módulo: `studies.invalid_obsidian_uri`, `studies.plan_locked`, `studies.plan_date_taken` (409), `studies.subject_archived`, `studies.area_in_use`, `studies.topic_in_use`.
 
 ### Hábitos (`/habits`)
+| Rota | Descrição |
+|---|---|
+| `GET, POST /habits` | Lista paginada por nome (`kind`: `build` \| `quit`, `archived`) e cadastro. `POST`: `name`, `kind`, `color`, `icon`, `started_on` (padrão hoje, nunca futuro); em `build`, `measure` (`check` padrão \| `quantity` com `target_value` e `unit`) e a `frequency` inicial (`{kind, times_per_week?, weekdays?}`, padrão `daily`), que vale desde `started_on` |
+| `GET, PATCH, DELETE /habits/{id}`, `POST …/archive`, `POST …/unarchive` | `GET` é o `HabitDetail`: o `HabitRead` com `frequencies` (versões, a mais nova primeiro, com `valid_until` e `state`), `pauses` e as 20 últimas `relapses`. `PATCH` muda `name`, `color`, `icon`, `started_on` e, em `quantity`, `target_value` e `unit`; o tipo e a medida não mudam. A exclusão leva o histórico |
+| `GET /habits/{id}/calendar?month=YYYY-MM` | Os dias do mês (padrão o atual) com `status`: `done`, `partial`, `missed`, `pending` (hoje ainda aberto), `paused`, `unscheduled` (fora da frequência, antes do início ou um dia sem marcação em `weekly`) ou `future`, e `value`; `previous_month`, `next_month` (nulo no mês atual). Só `build` |
+| `POST /habits/{id}/frequencies`, `PATCH, DELETE /habits/frequencies/{id}` | Versão nova a partir de `valid_from` (hoje ou depois; `409 habits.frequency_date_taken` na mesma data); versão já vigente é imutável (`habits.frequency_locked`), e a primeira não sai |
+| `PUT, DELETE /habits/{id}/entries/{on}` | Marca o dia (`{value}`; em `check` guarda 1) ou o desmarca; repetir é seguro (D47). As duas respondem o `HabitRead` atualizado |
+| `GET /habits/entries` | Lista paginada das marcações (`habit_id`, `from`, `to`), o dia mais novo primeiro, para a sincronização |
+| `POST /habits/{id}/pauses`, `PATCH, DELETE /habits/pauses/{id}` | Pausa com `starts_on` e `ends_on` opcional (aberta); `PATCH` com `ends_on` encerra |
+| `POST /habits/{id}/relapses`, `DELETE /habits/relapses/{id}` | Recaída com `occurred_at` e `note` (até 500); responde o `HabitRead` com o tempo sem atualizado |
+| `GET /habits/today` | Os hábitos `build` ativos que pedem algo de hoje (o dia agendado, ou a semana `weekly` em andamento), sem os pausados: `items[{habit, done, value, week, settled}]`, `done` e `scheduled`. `settled`: hoje cumprido, ou a semana já cumprida |
 
-Planejado para a Fase 7 (D47): ainda sem rotas. Caminhos aprovados: `/habits` (lista e cadastro), `/habits/{id}` (com `archive`, `unarchive`, `calendar?month=`, `frequencies`, `entries/{on}` por `PUT` e `DELETE`, `pauses`, `relapses`), `/habits/today` e `/habits/entries` (paginada, para a sincronização).
+`HabitRead` traz, em `build`: `frequency` vigente, `paused` (hoje em pausa), `rate_percent` (H5, nulo sem nada agendado), `current_streak` e `best_streak` (H4) em `streak_unit` (`day` \| `week`), `week` (`{done, target}`, em `weekly`) e `today` (`{scheduled, done, value}`); em `quit`: `clean_since`, `clean_days`, `best_clean_days` e `relapses_30d` (H7). Os campos do outro tipo vêm nulos.
+
+Resumo do Início (`HabitsSummary`, H9): `today`, `done_today` e `scheduled_today` (os `settled` sobre os itens de `/habits/today`), `pending` (até 3, com `pending_more` além deles) e `quit[{id, name, color, icon, clean_days}]`.
+
+As listas paginadas aceitam `updated_since`. Respostas que dependem do dia trazem `today`. Hábitos não publica itens em "Vem aí" nem em "Atividade recente" (H9).
+
+Erros do módulo: `habits.future_date`, `habits.before_start`, `habits.not_build`, `habits.not_quit`, `habits.frequency_locked`, `habits.frequency_date_taken` (409), `habits.pause_overlap`, `habits.invalid_measure`.
 
 ## OpenAPI e clientes gerados
 

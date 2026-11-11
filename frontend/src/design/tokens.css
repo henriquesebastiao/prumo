@@ -69,6 +69,15 @@
   --p-cyan-700: #0f6273;
   --p-cyan-950: #10303a;
 
+  /* Amber: Hábitos */
+  --p-amber-50: #fbf0d6;
+  --p-amber-150: #ebc97a;
+  --p-amber-200: #f0cf85;
+  --p-amber-400: #e3aa3c;
+  --p-amber-650: #8a6214;
+  --p-amber-700: #7a5208;
+  --p-amber-950: #332508;
+
   /* Red: danger */
   --p-red-0: #fff;
   --p-red-50: #fbe4e1;

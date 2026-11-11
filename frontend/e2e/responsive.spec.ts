@@ -56,6 +56,19 @@ const screens: { name: string; path: string | ((page: Page) => Promise<string>);
         `/estudos/materias/${await firstId(page, '/api/v1/studies/subjects', 'FastAPI')}`,
       ready: 'Minutos por semana',
     },
+    { name: 'habits-today', path: '/habitos', ready: 'Beber água' },
+    { name: 'habits-list', path: '/habitos/lista', ready: 'Para abandonar' },
+    {
+      name: 'habits-habit',
+      path: async (page) => `/habitos/${await firstId(page, '/api/v1/habits', 'Ler a Bíblia')}`,
+      ready: 'Calendário',
+    },
+    {
+      name: 'habits-quit',
+      path: async (page) =>
+        `/habitos/${await firstId(page, '/api/v1/habits', 'Redes sociais antes de dormir')}`,
+      ready: 'Domingo entediado.',
+    },
     { name: 'settings', path: '/configuracoes', ready: 'Seus dados' },
   ]
 

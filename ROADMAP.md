@@ -101,9 +101,9 @@ Aprovado em 2026-11-10 (D46). Áreas, matérias com link do Obsidian, tópicos c
 
 ## Fase 7 — Hábitos (`habits`)
 Aprovado em 2026-11-10 (D47), para depois de alguns dias de uso de Estudos. Hábitos a praticar (`check` ou quantidade; diário, X por semana ou dias da semana, com vigência) e a abandonar (recaídas e dias sem).
-- [ ] Backend: models, migration, API (marcação por `PUT` por data), calendário do mês, resumo do Início, exportação e testes
-- [ ] Frontend: Hoje, Hábitos, detalhe com calendário, diálogos (hábito, frequência, pausa, recaída), widget e ação rápida "Marcar hábitos" (atalho H)
-- [ ] Dados no `e2e_server.py` e capturas
+- [x] Backend: models, migration, API (marcação por `PUT` por data), calendário do mês, resumo do Início, exportação e testes
+- [x] Frontend: Hoje, Hábitos, detalhe com calendário, diálogos (hábito, frequência, pausa, recaída), widget e ação rápida "Marcar hábitos" (atalho H)
+- [x] Dados no `e2e_server.py` e capturas em `frontend/e2e/` (`habits-*.png`, claro e escuro, e `responsive/habits-*`); `make check` verde em 2026-11-11
 
 ## Ideias (sem ordem definida)
 

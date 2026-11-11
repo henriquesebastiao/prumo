@@ -5,7 +5,7 @@
  */
 import { ref } from 'vue'
 
-import { iconNames, useToast } from '@/ui'
+import { iconNames, useToast, type CalendarStatus } from '@/ui'
 import {
   PAlert,
   PAvatar,
@@ -70,6 +70,7 @@ import {
   PThemePreview,
   PTile,
   PWeekdayPicker,
+  PMonthCalendar,
   PWeekNav,
 } from '@/ui'
 import { ApiError } from '@/lib/api/errors'
@@ -99,6 +100,26 @@ const bigCents = ref<number | null>(6430)
 const month = ref('2026-11')
 const week = ref('2026-11-16')
 const weekdays = ref([0, 2, 4])
+// A habit's November: done, partial, missed, a pause, today open and the days ahead.
+const calendarDays = Array.from({ length: 30 }, (_, index) => {
+  const day = index + 1
+  const on = `2026-11-${String(day).padStart(2, '0')}`
+  const status: CalendarStatus =
+    day > 17
+      ? 'future'
+      : day === 17
+        ? 'pending'
+        : day >= 5 && day <= 8
+          ? 'paused'
+          : day === 12
+            ? 'missed'
+            : day === 14
+              ? 'partial'
+              : day === 15
+                ? 'unscheduled'
+                : 'done'
+  return { on, status }
+})
 const chip = ref('food')
 const chips = [
   { value: 'food', label: 'Alimentação', icon: 'utensils' as const },
@@ -420,6 +441,9 @@ const networkError = ApiError.network(new Error('offline'))
         </PField>
         <PField label="Dias da semana" label-as="span">
           <PWeekdayPicker v-model="weekdays" tone="studies" />
+        </PField>
+        <PField label="Calendário do mês" label-as="span">
+          <PMonthCalendar :days="calendarDays" label="Novembro" tone="habits" today="2026-11-17" />
         </PField>
         <PField label="Página atual" label-as="span">
           <div class="showcase__inline">

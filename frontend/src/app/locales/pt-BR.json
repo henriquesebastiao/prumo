@@ -35,6 +35,15 @@
       "short": ["S", "T", "Q", "Q", "S", "S", "D"],
       "long": ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
       "label": "Dias da semana"
+    },
+    "calendar": {
+      "done": "Cumprido",
+      "partial": "Parcial",
+      "missed": "Perdido",
+      "pending": "Em aberto",
+      "paused": "Pausa",
+      "unscheduled": "Não agendado",
+      "future": "Ainda não chegou"
     }
   },
   "nav": {
@@ -227,6 +236,16 @@
     },
     "sync": {
       "since_too_old": "A sincronização ficou antiga demais: os dados serão recarregados."
+    },
+    "habits": {
+      "future_date": "Essa data ainda não chegou.",
+      "before_start": "O hábito ainda não tinha começado nessa data.",
+      "not_build": "Isso só vale para hábitos a praticar.",
+      "not_quit": "Recaídas só valem para hábitos a abandonar.",
+      "frequency_locked": "Essa frequência já está em vigor e não muda. Crie uma versão a partir de hoje ou de uma data futura.",
+      "frequency_date_taken": "Já existe uma versão da frequência começando nessa data.",
+      "pause_overlap": "Essa pausa encosta em outra. Ajuste as datas.",
+      "invalid_measure": "Uma quantidade precisa de meta e unidade."
     }
   },
   "fieldErrors": {
