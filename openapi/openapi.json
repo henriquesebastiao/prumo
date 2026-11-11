@@ -3,7 +3,7 @@
   "info": {
     "title": "Prumo API",
     "description": "API of Prumo. The web app and the Android app are clients of this contract.",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "paths": {
     "/api/health": {
