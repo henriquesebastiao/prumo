@@ -1063,6 +1063,360 @@ export interface paths {
     patch: operations['reading_update_note']
     trace?: never
   }
+  '/api/v1/studies/overview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Overview
+     * @description Active areas and subjects, and the sessions of this month.
+     */
+    get: operations['studies_read_overview']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/day': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Day
+     * @description E2-E5: each subject's goal, minutes done and status on a day.
+     */
+    get: operations['studies_read_day']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/week': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Week
+     * @description E6: the seven days, with the totals in all and by subject.
+     */
+    get: operations['studies_read_week']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/areas': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Areas */
+    get: operations['studies_list_areas']
+    put?: never
+    /** Create Area */
+    post: operations['studies_create_area']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/areas/{area_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Area */
+    get: operations['studies_read_area']
+    put?: never
+    post?: never
+    /**
+     * Delete Area
+     * @description E9: only an area without subjects.
+     */
+    delete: operations['studies_delete_area']
+    options?: never
+    head?: never
+    /** Update Area */
+    patch: operations['studies_update_area']
+    trace?: never
+  }
+  '/api/v1/studies/areas/{area_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Area */
+    post: operations['studies_archive_area']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/areas/{area_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Area */
+    post: operations['studies_unarchive_area']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/subjects': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Subjects */
+    get: operations['studies_list_subjects']
+    put?: never
+    /** Create Subject */
+    post: operations['studies_create_subject']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/subjects/{subject_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Subject
+     * @description With its topics, minutes per week (E7) and recent sessions.
+     */
+    get: operations['studies_read_subject']
+    put?: never
+    post?: never
+    /**
+     * Delete Subject
+     * @description E9: removes the subject with its topics, sessions and plan blocks.
+     */
+    delete: operations['studies_delete_subject']
+    options?: never
+    head?: never
+    /** Update Subject */
+    patch: operations['studies_update_subject']
+    trace?: never
+  }
+  '/api/v1/studies/subjects/{subject_id}/archive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Archive Subject */
+    post: operations['studies_archive_subject']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/subjects/{subject_id}/unarchive': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Unarchive Subject */
+    post: operations['studies_unarchive_subject']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/subjects/{subject_id}/topics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Topics */
+    get: operations['studies_list_topics']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/topics/{topic_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Delete Topic
+     * @description E10: only a topic without sessions.
+     */
+    delete: operations['studies_delete_topic']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/plans': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List Plans
+     * @description Every version, newest first.
+     */
+    get: operations['studies_list_plans']
+    put?: never
+    /**
+     * Create Plan
+     * @description A new version from `valid_from` (today or later).
+     */
+    post: operations['studies_create_plan']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/plan': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Plan In Force
+     * @description E1: the version in force on a day.
+     */
+    get: operations['studies_read_plan_in_force']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/plans/{plan_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Plan */
+    get: operations['studies_read_plan']
+    /**
+     * Update Plan
+     * @description Replaces the blocks of a version not yet in force.
+     */
+    put: operations['studies_update_plan']
+    post?: never
+    /** Delete Plan */
+    delete: operations['studies_delete_plan']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/sessions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Sessions */
+    get: operations['studies_list_sessions']
+    put?: never
+    /**
+     * Create Session
+     * @description E3, E10: a session; `topic_name` creates the topic.
+     */
+    post: operations['studies_create_session']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/studies/sessions/{session_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Read Session */
+    get: operations['studies_read_session']
+    put?: never
+    post?: never
+    /** Delete Session */
+    delete: operations['studies_delete_session']
+    options?: never
+    head?: never
+    /** Update Session */
+    patch: operations['studies_update_session']
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -1263,6 +1617,109 @@ export interface components {
        * @default
        */
       description?: string
+    }
+    /** AreaCreate */
+    AreaCreate: {
+      /** Id */
+      id?: string | null
+      /** Name */
+      name: string
+      /**
+       * Color
+       * @default blue
+       * @enum {string}
+       */
+      color?:
+        | 'green'
+        | 'teal'
+        | 'cyan'
+        | 'blue'
+        | 'indigo'
+        | 'violet'
+        | 'pink'
+        | 'red'
+        | 'orange'
+        | 'amber'
+        | 'gray'
+    }
+    /** AreaRead */
+    AreaRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Color */
+      color: string
+      /** Archived At */
+      archived_at: string | null
+      /** Subjects Count */
+      subjects_count: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** AreaUpdate */
+    AreaUpdate: {
+      /** Name */
+      name?: string | null
+      /** Color */
+      color?:
+        | (
+            | 'green'
+            | 'teal'
+            | 'cyan'
+            | 'blue'
+            | 'indigo'
+            | 'violet'
+            | 'pink'
+            | 'red'
+            | 'orange'
+            | 'amber'
+            | 'gray'
+          )
+        | null
+    }
+    /** BlockRead */
+    BlockRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      subject: components['schemas']['SubjectRef']
+      /** Weekdays */
+      weekdays: number[]
+      /** Starts At */
+      starts_at: string | null
+      /** Duration Minutes */
+      duration_minutes: number
+    }
+    /** BlockWrite */
+    BlockWrite: {
+      /**
+       * Subject Id
+       * Format: uuid
+       */
+      subject_id: string
+      /** Weekdays */
+      weekdays: number[]
+      /**
+       * Starts At
+       * @description Local time; only orders the day.
+       */
+      starts_at?: string | null
+      /** Duration Minutes */
+      duration_minutes: number
     }
     /** Body_reading_set_cover */
     Body_reading_set_cover: {
@@ -1736,6 +2193,7 @@ export interface components {
         | components['schemas']['FinanceSummary']
         | components['schemas']['GarageSummary']
         | components['schemas']['ReadingSummary']
+        | components['schemas']['StudiesSummary']
       )[]
       /**
        * Upcoming
@@ -1748,6 +2206,55 @@ export interface components {
        */
       activity: components['schemas']['ActivityItem'][]
     }
+    /** DayBlock */
+    DayBlock: {
+      /** Starts At */
+      starts_at: string | null
+      /** Duration Minutes */
+      duration_minutes: number
+    }
+    /** DayRead */
+    DayRead: {
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /** Is Today */
+      is_today: boolean
+      /** Rows */
+      rows: components['schemas']['DayRow'][]
+      /** Done Minutes */
+      done_minutes: number
+      /** Planned Minutes */
+      planned_minutes: number
+      /**
+       * Met
+       * @description E5; null for a day without goals.
+       */
+      met: boolean | null
+    }
+    /** DayRow */
+    DayRow: {
+      subject: components['schemas']['SubjectRef']
+      /** Goal Minutes */
+      goal_minutes: number
+      /** Done Minutes */
+      done_minutes: number
+      status: components['schemas']['DayStatus']
+      /** Blocks */
+      blocks: components['schemas']['DayBlock'][]
+    }
+    /**
+     * DayStatus
+     * @enum {string}
+     */
+    DayStatus: 'met' | 'partial' | 'missed' | 'in_progress' | 'extra'
     /** DeletionPage */
     DeletionPage: {
       /** Items */
@@ -2577,6 +3084,17 @@ export interface components {
       available_limit_cents: number
       invoice: components['schemas']['InvoiceRead']
     }
+    /** Page[AreaRead] */
+    Page_AreaRead_: {
+      /** Items */
+      items: components['schemas']['AreaRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
     /** Page[BookRead] */
     Page_BookRead_: {
       /** Items */
@@ -2632,6 +3150,28 @@ export interface components {
       /** Offset */
       offset: number
     }
+    /** Page[StudySessionRead] */
+    Page_StudySessionRead_: {
+      /** Items */
+      items: components['schemas']['StudySessionRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
+    /** Page[SubjectRead] */
+    Page_SubjectRead_: {
+      /** Items */
+      items: components['schemas']['SubjectRead'][]
+      /** Total */
+      total: number
+      /** Limit */
+      limit: number
+      /** Offset */
+      offset: number
+    }
     /** Page[VehicleRead] */
     Page_VehicleRead_: {
       /** Items */
@@ -2660,6 +3200,89 @@ export interface components {
       current_password: string
       /** New Password */
       new_password: string
+    }
+    /** PlanBlocksWrite */
+    PlanBlocksWrite: {
+      /** Blocks */
+      blocks: components['schemas']['BlockWrite'][]
+    }
+    /** PlanInForce */
+    PlanInForce: {
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      plan: components['schemas']['PlanRead'] | null
+    }
+    /** PlanList */
+    PlanList: {
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /**
+       * Items
+       * @description Newest version first.
+       */
+      items: components['schemas']['PlanRead'][]
+    }
+    /** PlanRead */
+    PlanRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Valid From
+       * Format: date
+       */
+      valid_from: string
+      /**
+       * Valid Until
+       * @description The day before the next version, if any.
+       */
+      valid_until: string | null
+      /**
+       * State
+       * @enum {string}
+       */
+      state: 'past' | 'current' | 'future'
+      /** Blocks */
+      blocks: components['schemas']['BlockRead'][]
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /**
+     * PlanWrite
+     * @description A version of the plan, in force from `valid_from` (E1).
+     */
+    PlanWrite: {
+      /** Id */
+      id?: string | null
+      /**
+       * Valid From
+       * Format: date
+       * @description Today or later; the suggestion is next Monday.
+       */
+      valid_from: string
+      /** Blocks */
+      blocks: components['schemas']['BlockWrite'][]
     }
     /** PreferencesRead */
     PreferencesRead: {
@@ -2837,6 +3460,255 @@ export interface components {
       /** Finished On */
       finished_on: string | null
     }
+    /** StudiesOverview */
+    StudiesOverview: {
+      /** Areas Count */
+      areas_count: number
+      /** Subjects Count */
+      subjects_count: number
+      /** Sessions This Month */
+      sessions_this_month: number
+      /** Minutes This Month */
+      minutes_this_month: number
+    }
+    /** StudiesSummary */
+    StudiesSummary: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      module: 'studies'
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /** Blocks Today */
+      blocks_today: components['schemas']['SummaryBlock'][]
+      /** Done Minutes Today */
+      done_minutes_today: number
+      /** Planned Minutes Today */
+      planned_minutes_today: number
+      week: components['schemas']['SummaryWeek']
+    }
+    /** StudySessionCreate */
+    StudySessionCreate: {
+      /** Id */
+      id?: string | null
+      /**
+       * Subject Id
+       * Format: uuid
+       */
+      subject_id: string
+      /** Topic Id */
+      topic_id?: string | null
+      /**
+       * Topic Name
+       * @description Creates the topic (E10).
+       */
+      topic_name?: string | null
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string
+      /** Duration Minutes */
+      duration_minutes: number
+    }
+    /** StudySessionRead */
+    StudySessionRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      subject: components['schemas']['SubjectRef']
+      topic: components['schemas']['TopicRef'] | null
+      /**
+       * Started At
+       * Format: date-time
+       */
+      started_at: string
+      /** Duration Minutes */
+      duration_minutes: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** StudySessionUpdate */
+    StudySessionUpdate: {
+      /** Subject Id */
+      subject_id?: string | null
+      /** Topic Id */
+      topic_id?: string | null
+      /** Topic Name */
+      topic_name?: string | null
+      /** Started At */
+      started_at?: string | null
+      /** Duration Minutes */
+      duration_minutes?: number | null
+    }
+    /** SubjectCreate */
+    SubjectCreate: {
+      /** Id */
+      id?: string | null
+      /**
+       * Area Id
+       * Format: uuid
+       */
+      area_id: string
+      /** Name */
+      name: string
+      /** Obsidian Uri */
+      obsidian_uri?: string | null
+    }
+    /** SubjectDetail */
+    SubjectDetail: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Area Id
+       * Format: uuid
+       */
+      area_id: string
+      /** Area Name */
+      area_name: string
+      /** Name */
+      name: string
+      /**
+       * Color
+       * @description Inherited from the area.
+       */
+      color: string
+      /** Obsidian Uri */
+      obsidian_uri: string | null
+      /** Archived At */
+      archived_at: string | null
+      /** Topics Count */
+      topics_count: number
+      /** Last Session At */
+      last_session_at: string | null
+      /**
+       * Minutes This Week
+       * @description E6: Monday to today.
+       */
+      minutes_this_week: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+      /** Topics */
+      topics: components['schemas']['TopicRead'][]
+      /**
+       * Weekly Minutes
+       * @description E7: the last 8 weeks.
+       */
+      weekly_minutes: components['schemas']['WeekMinutes'][]
+      /**
+       * Recent Sessions
+       * @description The last 10.
+       */
+      recent_sessions: components['schemas']['StudySessionRead'][]
+    }
+    /** SubjectRead */
+    SubjectRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Area Id
+       * Format: uuid
+       */
+      area_id: string
+      /** Area Name */
+      area_name: string
+      /** Name */
+      name: string
+      /**
+       * Color
+       * @description Inherited from the area.
+       */
+      color: string
+      /** Obsidian Uri */
+      obsidian_uri: string | null
+      /** Archived At */
+      archived_at: string | null
+      /** Topics Count */
+      topics_count: number
+      /** Last Session At */
+      last_session_at: string | null
+      /**
+       * Minutes This Week
+       * @description E6: Monday to today.
+       */
+      minutes_this_week: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string
+    }
+    /** SubjectRef */
+    SubjectRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /**
+       * Color
+       * @description The area's color.
+       */
+      color: string
+    }
+    /** SubjectUpdate */
+    SubjectUpdate: {
+      /** Area Id */
+      area_id?: string | null
+      /** Name */
+      name?: string | null
+      /**
+       * Obsidian Uri
+       * @description `null` clears it.
+       */
+      obsidian_uri?: string | null
+    }
+    /** SummaryBlock */
+    SummaryBlock: {
+      subject: components['schemas']['SubjectRef']
+      /** Starts At */
+      starts_at: string | null
+      /** Goal Minutes */
+      goal_minutes: number
+      /** Done Minutes */
+      done_minutes: number
+      status: components['schemas']['DayStatus']
+    }
     /** SummaryVehicle */
     SummaryVehicle: {
       vehicle: components['schemas']['VehicleRef']
@@ -2853,11 +3725,54 @@ export interface components {
       /** Used Percent */
       used_percent: number | null
     }
+    /** SummaryWeek */
+    SummaryWeek: {
+      /** Days Met */
+      days_met: number
+      /** Days Planned */
+      days_planned: number
+      /** Minutes Done */
+      minutes_done: number
+      /** Minutes Planned */
+      minutes_planned: number
+    }
     /**
      * Theme
      * @enum {string}
      */
     Theme: 'system' | 'light' | 'dark'
+    /** TopicList */
+    TopicList: {
+      /** Items */
+      items: components['schemas']['TopicRead'][]
+    }
+    /** TopicRead */
+    TopicRead: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+      /** Sessions Count */
+      sessions_count: number
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+    }
+    /** TopicRef */
+    TopicRef: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /** Name */
+      name: string
+    }
     /** TransactionCreate */
     TransactionCreate: {
       /** Id */
@@ -3206,6 +4121,17 @@ export interface components {
       /** Notes */
       notes?: string | null
     }
+    /** WeekMinutes */
+    WeekMinutes: {
+      /**
+       * Week Start
+       * Format: date
+       * @description Monday of the week.
+       */
+      week_start: string
+      /** Minutes */
+      minutes: number
+    }
     /** WeekPages */
     WeekPages: {
       /**
@@ -3216,6 +4142,57 @@ export interface components {
       week_start: string
       /** Pages */
       pages: number
+    }
+    /** WeekRead */
+    WeekRead: {
+      /**
+       * Start
+       * Format: date
+       */
+      start: string
+      /**
+       * End
+       * Format: date
+       */
+      end: string
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /** Days */
+      days: components['schemas']['DayRead'][]
+      /** Days Met */
+      days_met: number
+      /**
+       * Days Planned
+       * @description Only up to today in the current week (E6).
+       */
+      days_planned: number
+      /** Minutes Done */
+      minutes_done: number
+      /** Minutes Planned */
+      minutes_planned: number
+      /** By Subject */
+      by_subject: components['schemas']['WeekSubject'][]
+      /**
+       * Previous Start
+       * Format: date
+       */
+      previous_start: string
+      /**
+       * Next Start
+       * @description Not beyond the week after the current one.
+       */
+      next_start: string | null
+    }
+    /** WeekSubject */
+    WeekSubject: {
+      subject: components['schemas']['SubjectRef']
+      /** Minutes Done */
+      minutes_done: number
+      /** Minutes Planned */
+      minutes_planned: number
     }
     /** WorkshopCreate */
     WorkshopCreate: {
@@ -8623,6 +9600,1854 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['NoteRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_overview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['StudiesOverview']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_day: {
+    parameters: {
+      query?: {
+        /** @description Defaults to today. */
+        on?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DayRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_week: {
+    parameters: {
+      query?: {
+        /** @description Any day of the week; defaults to this week. */
+        start?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['WeekRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_list_areas: {
+    parameters: {
+      query?: {
+        /** @description Archived ones too (`all`) or only them (`true`). */
+        archived?: 'false' | 'true' | 'all'
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_AreaRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_create_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AreaCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        area_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_delete_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        area_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_update_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        area_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AreaUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_archive_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        area_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_unarchive_area: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        area_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AreaRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_list_subjects: {
+    parameters: {
+      query?: {
+        area_id?: string | null
+        /** @description Archived ones too (`all`) or only them (`true`). */
+        archived?: 'false' | 'true' | 'all'
+        /** @description Name. */
+        q?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -created_at, -name, created_at, name. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_SubjectRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_create_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SubjectCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectDetail']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_delete_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_update_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SubjectUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_archive_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_unarchive_subject: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SubjectRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_list_topics: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        subject_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TopicList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_delete_topic: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        topic_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_list_plans: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanList']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_create_plan: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PlanWrite']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_plan_in_force: {
+    parameters: {
+      query?: {
+        /** @description Defaults to today. */
+        on?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanInForce']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_plan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        plan_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_update_plan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        plan_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PlanBlocksWrite']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PlanRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_delete_plan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        plan_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_list_sessions: {
+    parameters: {
+      query?: {
+        subject_id?: string | null
+        from?: string | null
+        to?: string | null
+        /** @description Only records created or changed after this moment, archived ones included, oldest change first; `sort` is ignored (incremental sync, D41). */
+        updated_since?: string | null
+        limit?: number
+        offset?: number
+        /** @description One of: -started_at, started_at. A leading `-` sorts descending. */
+        sort?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Page_StudySessionRead_']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_create_session: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StudySessionCreate']
+      }
+    }
+    responses: {
+      /** @description Already created with this `id` (nothing changed). */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['StudySessionRead']
+        }
+      }
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['StudySessionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_read_session: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        session_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['StudySessionRead']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_delete_session: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        session_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  studies_update_session: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        session_id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StudySessionUpdate']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['StudySessionRead']
         }
       }
       /** @description Unauthorized */

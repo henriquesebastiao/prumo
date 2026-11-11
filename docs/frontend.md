@@ -101,7 +101,7 @@ Componentes base (`src/ui/`, exportados por `@/ui`):
 | Grupo | Componentes |
 |---|---|
 | Ações | `PButton` (primary, outline, tonal, ghost, danger, chip; md/lg), `PIconButton`, `PFab` (trilho ou flutuante), `PLink` |
-| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos; `lg` para o valor em destaque), `PTextarea`, `PSelect` (campo ou filtro em pílula), `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PChipChoice` (chips com ícone), `PStepper`, `PMonthNav` (‹ mês ›), `PSwatchPicker`, `PIconPicker`, `PFileButton`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
+| Formulário | `PField`, `PInput` (afixos, ícone, revelar senha, calculado), `PNumberInput`, `PMoneyInput` (centavos; `lg` para o valor em destaque), `PTextarea`, `PSelect` (campo ou filtro em pílula), `PCombobox` (com criação), `PDateInput` (data ou hora, nativo), `PCheckbox`, `PSwitch`, `PSegmented`, `PChipChoice` (chips com ícone), `PStepper`, `PMonthNav` (‹ mês ›), `PWeekNav` (‹ semana ›), `PWeekdayPicker` (dias da semana), `PSwatchPicker`, `PIconPicker`, `PFileButton`, `PSearchField`, `PChoiceCards`, `PThemePreview` |
 | Exibição | `PText`, `PCard`, `PPanel`, `PStatCard`, `PTile` (quadrado ou círculo), `PBadge`, `PStatus`, `PKbd`, `PAvatar`, `PProgress`, `PRing`, `PDateBadge`, `PDescriptionList`, `PDivider`, `PCardFace` (face do cartão de crédito), `PBookCover` (capa enviada ou desenhada; vira link), `PLogo` |
 | Navegação e listas | `PPageHeader`, `PTabs` + `PTabPanel`, `PNavList`, `PList` + `PListItem` (com destaque do item em edição), `PTable` (vira lista em contêiner estreito), `PSortableList` (arrastar ou setas) |
 | Sobreposições | `PDialog` (tela cheia no celular), `PConfirmDialog`, `PPopover`, `PMenu`, `PCommand`, `PDrawer`, `PToaster` + `useToast()` |
@@ -147,6 +147,7 @@ Cada módulo tem cinco tokens: principal, container, texto sobre o container, `-
 | Finanças (`finance`) | `#24A06B` · `#E1F3EA` · `#17643F` · `#7CCBA3` · `#BFE6D1` | `#4CC98F` · `#15301F` · `#8FE0B8` · `#2E8A62` · `#1F5C42` |
 | Veículos (`garage`) | `#E4672E` · `#FBE9DF` · `#8A3A12` · `#F3C2A6` · `#FBE9DF` | `#F08A55` · `#3A2418` · `#F6B892` · `#7A4127` · `#3A2418` |
 | Livros (`reading`) | `#6F57E8` · `#ECE8FD` · `#4A34B5` · `#C9BEF8` · `#ECE8FD` | `#9C8BFF` · `#262047` · `#C3B8FF` · `#4B3F8F` · `#262047` |
+| Estudos (`studies`) | `#1F9DB3` · `#DFF3F7` · `#0F6273` · `#B5E4EC` · `#DFF3F7` | `#4FC0D4` · `#10303A` · `#9BE0EC` · `#2A7A8C` · `#10303A` |
 
 Um módulo novo escolhe um matiz livre, gera os cinco tokens com a mesma luminosidade dos atuais nos dois temas e adiciona um bloco `[data-tone='<id>']` em `tones.css`. No Android, o trio vira primary / primaryContainer / onPrimaryContainer do esquema do módulo.
 

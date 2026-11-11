@@ -60,6 +60,15 @@
   --p-violet-750: #4b3f8f;
   --p-violet-950: #262047;
 
+  /* Cyan: Estudos */
+  --p-cyan-50: #dff3f7;
+  --p-cyan-150: #b5e4ec;
+  --p-cyan-200: #9be0ec;
+  --p-cyan-400: #4fc0d4;
+  --p-cyan-650: #2a7a8c;
+  --p-cyan-700: #0f6273;
+  --p-cyan-950: #10303a;
+
   /* Red: danger */
   --p-red-0: #fff;
   --p-red-50: #fbe4e1;

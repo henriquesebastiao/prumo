@@ -8,7 +8,7 @@ Database: PRUMO_E2E_DATABASE_URL, default prumo_e2e on the test container (port 
 
 import os
 import shutil
-from datetime import UTC, date, datetime, time
+from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 
 import psycopg
@@ -205,6 +205,7 @@ def seed() -> None:
         with time_machine.travel(at("2026-11-17T17:20:00")):
             seed_finance(session, user)
         seed_reading(session, user)
+        seed_studies(session, user)
         # Empty account for the end-to-end flows (e2e/flows.spec.ts), apart from the boards.
         create_user(
             session, username="teste", display_name="Teste Fluxos", password="prumo-teste-01"
@@ -303,6 +304,150 @@ def seed_reading(session: Session, user: object) -> None:
             user,
             BookCreate(title="O Hobbit", author="J.R.R. Tolkien", total_pages=336),
         )
+
+
+def seed_studies(session: Session, user: object) -> None:
+    """Estudos: three areas, five subjects, a plan that ended (from 05/10), the one in force (from
+    02/11) and a future one (from 23/11), and sessions since 27/10 with days met, partial and
+    missed (Thursday 12/11), an extra (Sunday 15/11), one at 23:30 (10/11, it counts on the 10th)
+    and today in progress: English done at 07:05, FastAPI still due at 20:00."""
+    from datetime import time as clock
+
+    from prumo.modules.studies import service as studies
+    from prumo.modules.studies.schemas import (
+        AreaCreate,
+        BlockWrite,
+        StudySessionCreate,
+        SubjectCreate,
+    )
+    from prumo.system.users.models import User
+
+    assert isinstance(user, User)
+
+    def local(value: str) -> datetime:
+        return datetime.fromisoformat(f"{value}-03:00")
+
+    with time_machine.travel(local("2026-09-28T20:00:00")):
+        college = studies.create_area(session, user, AreaCreate(name="Faculdade", color="blue"))
+        dev = studies.create_area(session, user, AreaCreate(name="Desenvolvimento", color="green"))
+        english_area = studies.create_area(session, user, AreaCreate(name="Inglês", color="orange"))
+        vault = "obsidian://open?vault=Estudos&file="
+        calculus = studies.create_subject(
+            session, user, SubjectCreate(area_id=college.id, name="Cálculo II")
+        )
+        structures = studies.create_subject(
+            session,
+            user,
+            SubjectCreate(
+                area_id=college.id,
+                name="Estruturas de Dados",
+                obsidian_uri=f"{vault}Faculdade%2FEstruturas%20de%20Dados",
+            ),
+        )
+        fastapi = studies.create_subject(
+            session,
+            user,
+            SubjectCreate(area_id=dev.id, name="FastAPI", obsidian_uri=f"{vault}Dev%2FFastAPI"),
+        )
+        kotlin = studies.create_subject(
+            session, user, SubjectCreate(area_id=dev.id, name="Kotlin e Compose")
+        )
+        english = studies.create_subject(
+            session,
+            user,
+            SubjectCreate(
+                area_id=english_area.id, name="Inglês", obsidian_uri=f"{vault}Ingl%C3%AAs"
+            ),
+        )
+
+    weekdays = [0, 1, 2, 3, 4]
+
+    def block(subject: object, days: list[int], minutes: int, at: str) -> BlockWrite:
+        return BlockWrite(
+            subject_id=subject.id,  # type: ignore[attr-defined]
+            weekdays=days,
+            starts_at=clock.fromisoformat(at),
+            duration_minutes=minutes,
+        )
+
+    with time_machine.travel(local("2026-10-01T20:00:00")):
+        studies.create_plan(
+            session,
+            user,
+            date(2026, 10, 5),
+            [
+                block(english, weekdays, 30, "07:00"),
+                block(calculus, [0, 2], 60, "19:00"),
+                block(structures, [5], 60, "09:00"),
+            ],
+        )
+    current = [
+        block(english, weekdays, 30, "07:00"),
+        block(calculus, [0, 2], 60, "19:00"),
+        block(fastapi, [1, 3], 45, "20:00"),
+        block(structures, [5], 90, "09:00"),
+    ]
+    with time_machine.travel(local("2026-11-01T18:00:00")):
+        studies.create_plan(session, user, date(2026, 11, 2), current)
+    with time_machine.travel(local("2026-11-16T21:00:00")):
+        studies.create_plan(
+            session,
+            user,
+            date(2026, 11, 23),
+            [
+                block(english, weekdays, 30, "07:00"),
+                block(calculus, [0, 2], 60, "19:00"),
+                block(kotlin, [1, 3], 45, "20:00"),
+                block(structures, [5], 90, "09:00"),
+            ],
+        )
+
+    sessions: tuple[tuple[object, str, int, str | None], ...] = (
+        # Week of 26/10, the plan of 05/10.
+        (english, "2026-10-27T07:05:00", 30, "Listening"),
+        (english, "2026-10-28T07:00:00", 30, "Vocabulário"),
+        (calculus, "2026-10-28T19:10:00", 60, "Integrais"),
+        (english, "2026-10-29T07:10:00", 15, "Listening"),
+        (structures, "2026-10-31T09:20:00", 60, "Árvores"),
+        # Week of 02/11, the plan in force.
+        (english, "2026-11-02T07:05:00", 30, "Listening"),
+        (calculus, "2026-11-02T19:10:00", 60, "Integrais"),
+        (english, "2026-11-03T07:00:00", 30, "Vocabulário"),
+        (fastapi, "2026-11-03T20:05:00", 45, "Dependências"),
+        (english, "2026-11-04T07:10:00", 20, "Listening"),
+        (calculus, "2026-11-04T19:00:00", 60, "Integrais"),
+        (english, "2026-11-05T07:00:00", 30, "Vocabulário"),
+        (fastapi, "2026-11-05T20:00:00", 30, "Dependências"),
+        (english, "2026-11-06T07:05:00", 30, "Listening"),
+        (structures, "2026-11-07T09:10:00", 90, "Árvores"),
+        # Week of 09/11: Thursday missed, Saturday partial, Sunday extra.
+        (english, "2026-11-09T07:00:00", 30, "Listening"),
+        (calculus, "2026-11-09T19:05:00", 60, "Séries"),
+        (english, "2026-11-10T07:05:00", 30, "Vocabulário"),
+        (fastapi, "2026-11-10T20:00:00", 45, "Testes"),
+        (calculus, "2026-11-10T23:30:00", 40, "Séries"),
+        (english, "2026-11-11T07:00:00", 30, "Listening"),
+        (calculus, "2026-11-11T19:00:00", 30, "Séries"),
+        (english, "2026-11-13T07:10:00", 30, "Vocabulário"),
+        (structures, "2026-11-14T09:30:00", 60, "Grafos"),
+        (structures, "2026-11-15T16:00:00", 45, "Grafos"),
+        # This week: Monday met, today with English done and FastAPI due.
+        (english, "2026-11-16T07:00:00", 30, "Listening"),
+        (calculus, "2026-11-16T19:00:00", 60, "Séries"),
+        (english, "2026-11-17T07:05:00", 30, "Listening"),
+    )
+    for subject, start, minutes, topic in sessions:
+        with time_machine.travel(local(start) + timedelta(minutes=minutes)):
+            studies.create_session(
+                session,
+                user,
+                StudySessionCreate(
+                    subject_id=subject.id,  # type: ignore[attr-defined]
+                    topic_name=topic,
+                    started_at=local(start),
+                    duration_minutes=minutes,
+                ),
+            )
 
 
 def seed_finance(session: Session, user: object) -> None:

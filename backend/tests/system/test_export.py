@@ -48,6 +48,8 @@ def test_export_has_json_csv_and_files(auth_client: TestClient, other_client: Te
         f"/api/v1/reading/books/{book['id']}/cover",
         files={"file": ("c.png", image(), "image/png")},
     )
+    area = auth_client.post("/api/v1/studies/areas", json={"name": "Faculdade"}).json()
+    auth_client.post("/api/v1/studies/subjects", json={"area_id": area["id"], "name": "Cálculo"})
     other_client.post("/api/v1/finance/accounts", json={"name": "Alheia", "kind": "cash"})
 
     files = archive(auth_client)
@@ -61,6 +63,9 @@ def test_export_has_json_csv_and_files(auth_client: TestClient, other_client: Te
         "garage/odometer_readings.csv",
         "reading/books.csv",
         "reading/notes.csv",
+        "studies/areas.csv",
+        "studies/subjects.csv",
+        "studies/sessions.csv",
         f"reading/covers/{book['id']}.webp",
     } <= names
 
@@ -68,7 +73,7 @@ def test_export_has_json_csv_and_files(auth_client: TestClient, other_client: Te
     assert data["format"] == "prumo-export"
     assert data["user"]["username"] == "ana"
     assert "password_hash" not in json.dumps(data)
-    assert data["preferences"]["enabled_modules"] == ["finance", "garage", "reading"]
+    assert data["preferences"]["enabled_modules"] == ["finance", "garage", "reading", "studies"]
     accounts = data["modules"]["finance"]["accounts"]
     assert [a["name"] for a in accounts] == ["Nubank"]  # never another user's data
     assert accounts[0]["id"] == account["id"]
@@ -76,6 +81,7 @@ def test_export_has_json_csv_and_files(auth_client: TestClient, other_client: Te
     assert len(data["modules"]["finance"]["categories"]) == 14
     assert data["modules"]["garage"]["vehicles"][0]["id"] == vehicle["id"]
     assert data["modules"]["reading"]["books"][0]["title"] == "Código Limpo"
+    assert data["modules"]["studies"]["subjects"][0]["name"] == "Cálculo"
 
     rows = list(csv.DictReader(io.StringIO(files.read("finance/accounts.csv").decode())))
     assert rows[0]["name"] == "Nubank"

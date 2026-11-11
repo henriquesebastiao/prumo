@@ -45,6 +45,11 @@
   --color-module-reading-on-container: var(--p-violet-200);
   --color-module-reading-soft: var(--p-violet-750);
   --color-module-reading-softer: var(--p-violet-950);
+  --color-module-studies: var(--p-cyan-400);
+  --color-module-studies-container: var(--p-cyan-950);
+  --color-module-studies-on-container: var(--p-cyan-200);
+  --color-module-studies-soft: var(--p-cyan-650);
+  --color-module-studies-softer: var(--p-cyan-950);
 
   /* User colors (accounts, categories, cards): rendered through the swatch-* tones */
   --color-swatch-green: var(--p-green-500);

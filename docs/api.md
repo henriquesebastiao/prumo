@@ -238,6 +238,37 @@ Itens do Início publicados pelo módulo:
 
 Erros do módulo: `reading.page_out_of_range`, `reading.invalid_cover` (tipo ou conteúdo), `reading.cover_too_large` (413), `reading.invalid_dates` (término antes do início).
 
+### Estudos (`/studies`)
+| Rota | Descrição |
+|---|---|
+| `GET, POST /studies/areas` | Lista paginada (`archived`: `false` \| `true` \| `all`) e cadastro; `AreaRead` traz `subjects_count` |
+| `GET, PATCH, DELETE /studies/areas/{id}`, `POST …/archive`, `POST …/unarchive` | Exclusão só sem matérias (`studies.area_in_use`) |
+| `GET, POST /studies/subjects` | Lista paginada (`area_id`, `archived`, `q`, `sort`) e cadastro; `SubjectRead` traz `color`, `topics_count`, `last_session_at`, `minutes_this_week` |
+| `GET, PATCH, DELETE /studies/subjects/{id}`, `archive`, `unarchive` | Detalhe com `topics`, `weekly_minutes` (E7) e `recent_sessions`; exclusão com tópicos, sessões e blocos |
+| `GET /studies/subjects/{id}/topics`, `DELETE /studies/topics/{id}` | `{items}`; exclusão só sem sessões (`studies.topic_in_use`) |
+| `GET, POST /studies/plans` | `{items}` das versões (`valid_from`, `valid_until`, `state`: `past` \| `current` \| `future`, `blocks`); `POST` com `valid_from` e `blocks[{subject_id, weekdays, starts_at, duration_minutes}]` |
+| `GET, PUT, DELETE /studies/plans/{id}` | `PUT` troca os blocos; versão passada é imutável (`studies.plan_locked`) |
+| `GET /studies/plan?on=` | O plano vigente na data (padrão hoje): `{on, plan}` com `plan` nulo sem plano |
+| `GET, POST /studies/sessions` | Lista paginada (`subject_id`, `from`, `to`, `sort` padrão `-started_at`); `POST` com `topic_id` ou `topic_name` (E10) |
+| `GET, PATCH, DELETE /studies/sessions/{id}` | `SessionRead` com `subject` e `topic` resumidos |
+| `GET /studies/day?on=` | O dia (padrão hoje): linhas por matéria com `goal_minutes`, `done_minutes`, `status` (E4) e os blocos; `done_minutes`, `planned_minutes`, `met` |
+| `GET /studies/week?start=` | A semana da segunda `start` (padrão a atual): os 7 dias, totais (E6), `by_subject`, `previous_start`, `next_start` |
+| `GET /studies/overview` | Contagens: áreas, matérias, sessões e minutos do mês |
+
+As listas paginadas aceitam `updated_since`. Respostas que dependem do dia trazem `today`.
+
+Itens do Início publicados pelo módulo:
+
+| `kind` | Onde | `subject` / `entity_id` | `data` |
+|---|---|---|---|
+| `studies.session` | `activity` | nome da matéria / matéria | `session_id`, `topic` (ou null), `duration_minutes`, `color` |
+
+Erros do módulo: `studies.invalid_obsidian_uri`, `studies.plan_locked`, `studies.plan_date_taken` (409), `studies.subject_archived`, `studies.area_in_use`, `studies.topic_in_use`.
+
+### Hábitos (`/habits`)
+
+Planejado para a Fase 7 (D47): ainda sem rotas. Caminhos aprovados: `/habits` (lista e cadastro), `/habits/{id}` (com `archive`, `unarchive`, `calendar?month=`, `frequencies`, `entries/{on}` por `PUT` e `DELETE`, `pauses`, `relapses`), `/habits/today` e `/habits/entries` (paginada, para a sincronização).
+
 ## OpenAPI e clientes gerados
 
 - `operation_id` estável no formato `{tag}_{nome_da_funcao}` (ex.: `garage_list_vehicles`), configurado via `generate_unique_id_function`. Renomear uma função de rota muda o contrato.

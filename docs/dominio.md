@@ -122,3 +122,56 @@ Regras:
 - R9. Páginas por semana (semanas de segunda a domingo, no fuso do usuário): avanço de cada semana, da semana do primeiro registro até a do último, no máximo as 8 últimas.
 - R10. Anotações são ordenadas por `noted_on` e, no mesmo dia, pela criação, das mais recentes para as mais antigas. A lista geral de anotações busca no texto.
 - R11. "Atividade recente" (Início): registros de progresso (com o avanço em páginas) e anotações. Livros não publicam itens em "Vem aí".
+
+## Estudos (`studies`)
+
+Todo estudo (faculdade, dev, inglês) é registrado aqui; Hábitos não registra estudo e os dois módulos não se integram.
+
+**StudyArea**: `name` (1–60), `color` (chave da paleta, como em Finanças), `archived_at?`.
+
+**Subject**: `area_id`, `name` (1–60), `obsidian_uri?` (≤ 512), `archived_at?`. A matéria herda a cor da área.
+
+**Topic**: `subject_id`, `name` (1–80), único na matéria sem diferenciar maiúsculas. É só uma etiqueta de sessão; o checklist fica no Obsidian.
+
+**StudyPlan**: `valid_from` (data), único por usuário. **PlanBlock**: `plan_id`, `subject_id`, `weekdays` (lista não vazia de 0 = segunda a 6 = domingo), `starts_at?` (hora local), `duration_minutes` (1–720).
+
+**StudySession**: `subject_id`, `topic_id?`, `started_at` (data e hora, guardada em UTC), `duration_minutes` (1–720).
+
+Regras:
+- E1. Plano vigente: numa data vale o plano de maior `valid_from` ≤ data. Mudar o plano é criar uma versão (`valid_from` ≥ hoje; padrão sugerido ao cliente: a próxima segunda). Uma versão com `valid_from` < hoje é imutável (`422 studies.plan_locked`); com `valid_from` ≥ hoje pode ser editada e excluída. Duas versões na mesma data: `409 studies.plan_date_taken`.
+- E2. Meta de uma matéria numa data = Σ `duration_minutes` dos blocos dela no plano vigente cujo `weekdays` contém o dia da semana da data. `starts_at` só ordena a agenda.
+- E3. Feito de uma matéria numa data = Σ `duration_minutes` das sessões dela iniciadas naquela data, no fuso do usuário (S3). Uma sessão que cruza a meia-noite conta no dia em que começou.
+- E4. Status por matéria e data: `met` (feito ≥ meta > 0), `partial` (0 < feito < meta), `missed` (meta > 0, feito 0, data passada), `in_progress` (hoje, meta > 0, feito < meta), `extra` (sem meta, feito > 0). Matéria sem meta e sem sessão não aparece no dia.
+- E5. Dia cumprido: dia com meta em que todas as matérias estão `met`. Dia sem meta não conta.
+- E6. Semana: segunda a domingo no fuso do usuário (como R9). Devolve dias cumpridos sobre dias com meta e minutos feitos sobre planejados, no total e por matéria. Na semana atual, os dias com meta contam só até hoje, inclusive.
+- E7. Minutos por semana de uma matéria: as 8 últimas semanas, a atual inclusive (como R9).
+- E8. `obsidian_uri` só é aceito com o esquema `obsidian://` (`422 studies.invalid_obsidian_uri`); a API não abre nem verifica o vault.
+- E9. Arquivamento: arquivar a área só a esconde da lista (as matérias ficam como estão). Matéria arquivada não aceita sessão nem bloco novos (`422 studies.subject_archived`); os blocos que já tem continuam nos planos, mas a matéria deixa de aparecer no dia e na semana. Área com matérias não pode ser excluída (`422 studies.area_in_use`); excluir uma matéria apaga tópicos, sessões e blocos dela (confirmação no cliente, como G11).
+- E10. Tópico nasce implícito: a sessão aceita `topic_id` ou `topic_name`, e um nome inexistente cria o tópico (como G10). Só pode ser excluído sem sessões (`422 studies.topic_in_use`).
+- E11. "Atividade recente" (Início): as sessões. Estudos não publica itens em "Vem aí".
+
+## Hábitos (`habits`)
+
+Planejado para a Fase 7 (D47); as regras abaixo foram aprovadas com o plano e entram na API quando o módulo for implementado.
+
+**Habit**: `name` (1–60), `kind` (`build` praticar | `quit` abandonar), `color`, `icon` (nome livre), `started_on` (data, padrão hoje), `archived_at?`; só em `build`: `measure` (`check` | `quantity`), `target_value` (> 0) e `unit` (1–12) quando `quantity`.
+
+**HabitFrequency** (só `build`): `habit_id`, `valid_from`, `kind` (`daily` | `weekly` | `weekdays`), `times_per_week` (1–7, em `weekly`), `weekdays` (em `weekdays`); única por hábito e data.
+
+**HabitEntry** (só `build`): `habit_id`, `on` (data), `value` (≥ 0; em `check` sempre 1); única por hábito e data. Desmarcar é excluir.
+
+**HabitPause** (só `build`): `habit_id`, `starts_on`, `ends_on?` (≥ `starts_on`); sem fim, em aberto. Pausas não se sobrepõem.
+
+**Relapse** (só `quit`): `habit_id`, `occurred_at`, `note?` (≤ 500).
+
+Regras:
+- H1. Dia cumprido: em `check`, existe marcação; em `quantity`, `value ≥ target_value`. Um dia parcial mostra valor e meta e não cumpre.
+- H2. Agendado: `daily` todo dia; `weekdays` os dias marcados; `weekly` a unidade é a semana (segunda a domingo, fuso do usuário), cumprida com `times_per_week` dias cumpridos. Não contam dias em pausa, antes de `started_on` nem futuros. A frequência vigente numa data é a de maior `valid_from` ≤ data; mudar cria uma versão (`valid_from` ≥ hoje; passada é imutável, `422 habits.frequency_locked`; repetida, `409 habits.frequency_date_taken`). Em `weekly`, a semana em que a frequência começa conta só os dias desde `valid_from` e exige o menor entre `times_per_week` e os dias restantes.
+- H3. Marcação só de `started_on` até hoje, no fuso do usuário: futuro `422 habits.future_date`, antes do início `422 habits.before_start`. Marcação, pausa e frequência só em `build` (`422 habits.not_build`); recaída só em `quit` (`422 habits.not_quit`).
+- H4. Sequência atual, estrita: unidades agendadas consecutivas e cumpridas, de hoje para trás. Hoje não cumprido e a semana `weekly` em andamento não quebram; se já cumpridos, contam. A pausa não quebra nem conta. `best_streak` é a maior já feita.
+- H5. Taxa: cumpridos ÷ agendados nos últimos 30 dias, hoje inclusive; em `weekly`, nas últimas 4 semanas completas. Sem nada agendado na janela, `null`.
+- H6. Semana atual em `weekly`: dias cumpridos sobre `times_per_week`.
+- H7. Maus hábitos: `clean_since` = última recaída ou `started_on` às 00:00 no fuso; `clean_days` = dias inteiros até agora; `best_clean_days` = maior intervalo entre início, recaídas e agora; `relapses_30d`. Recaída antes do início (`habits.before_start`) ou no futuro (`habits.future_date`) é recusada.
+- H8. Hábito arquivado sai das listas, do Hoje e do Início; o histórico fica.
+- H9. Início: cumpridos sobre agendados hoje, até 3 pendentes e os maus hábitos com os dias sem. Nada em "Atividade recente" nem em "Vem aí".
+

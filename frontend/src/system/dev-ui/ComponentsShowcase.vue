@@ -69,6 +69,8 @@ import {
   PTextarea,
   PThemePreview,
   PTile,
+  PWeekdayPicker,
+  PWeekNav,
 } from '@/ui'
 import { ApiError } from '@/lib/api/errors'
 import { moneyAmount } from '@/lib/format'
@@ -95,6 +97,8 @@ const color = ref('blue')
 const page = ref(212)
 const bigCents = ref<number | null>(6430)
 const month = ref('2026-11')
+const week = ref('2026-11-16')
+const weekdays = ref([0, 2, 4])
 const chip = ref('food')
 const chips = [
   { value: 'food', label: 'Alimentação', icon: 'utensils' as const },
@@ -410,6 +414,12 @@ const networkError = ApiError.network(new Error('offline'))
         </PField>
         <PField label="Mês" label-as="span">
           <PMonthNav v-model="month" label="Mês" />
+        </PField>
+        <PField label="Semana" label-as="span">
+          <PWeekNav v-model="week" label="Semana" current="2026-11-16" max="2026-11-23" />
+        </PField>
+        <PField label="Dias da semana" label-as="span">
+          <PWeekdayPicker v-model="weekdays" tone="studies" />
         </PField>
         <PField label="Página atual" label-as="span">
           <div class="showcase__inline">

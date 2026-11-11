@@ -93,6 +93,18 @@ As fases são executadas em ordem e cada uma termina com uma revisão antes da p
 - [x] Fluxo de trabalho conjunto com o app: seção "Servidor e app juntos" no `CLAUDE.md` e `commit-message.md` (D43)
 - [x] `service: "prumo"` no `GET /api/health`, para o app reconhecer um servidor Prumo (D44)
 
+## Fase 6 — Estudos (`studies`)
+Aprovado em 2026-11-10 (D46). Áreas, matérias com link do Obsidian, tópicos criados pelo nome, plano semanal versionado e sessões; dia, semana e Início calculados no servidor.
+- [x] Backend: models, migration com os gatilhos de exclusão, API, resumo do Início, "Atividade recente", exportação e testes
+- [x] Frontend: Hoje, Semana, Matérias, Plano, diálogos (área, matéria, plano, sessão), widget e ação rápida "Registrar estudo" (atalho E)
+- [x] Dados no `e2e_server.py` e capturas em `frontend/e2e/` (`studies-*.png`, claro e escuro, e `responsive/studies-*`); `make check` verde em 2026-11-11
+
+## Fase 7 — Hábitos (`habits`)
+Aprovado em 2026-11-10 (D47), para depois de alguns dias de uso de Estudos. Hábitos a praticar (`check` ou quantidade; diário, X por semana ou dias da semana, com vigência) e a abandonar (recaídas e dias sem).
+- [ ] Backend: models, migration, API (marcação por `PUT` por data), calendário do mês, resumo do Início, exportação e testes
+- [ ] Frontend: Hoje, Hábitos, detalhe com calendário, diálogos (hábito, frequência, pausa, recaída), widget e ação rápida "Marcar hábitos" (atalho H)
+- [ ] Dados no `e2e_server.py` e capturas
+
 ## Ideias (sem ordem definida)
 
 - Integração Veículos → Finanças: abastecimentos e manutenções geram despesas automaticamente (via eventos)

@@ -46,6 +46,16 @@ const screens: { name: string; path: string | ((page: Page) => Promise<string>);
       ready: 'Ritmo de leitura',
     },
     { name: 'reading-notes', path: '/livros/anotacoes', ready: 'Funções pequenas' },
+    { name: 'studies-today', path: '/estudos', ready: 'Em andamento' },
+    { name: 'studies-week', path: '/estudos/semana', ready: 'Esta semana' },
+    { name: 'studies-subjects', path: '/estudos/materias', ready: 'Estruturas de Dados' },
+    { name: 'studies-plan', path: '/estudos/plano', ready: 'Vigente desde' },
+    {
+      name: 'studies-subject',
+      path: async (page) =>
+        `/estudos/materias/${await firstId(page, '/api/v1/studies/subjects', 'FastAPI')}`,
+      ready: 'Minutos por semana',
+    },
     { name: 'settings', path: '/configuracoes', ready: 'Seus dados' },
   ]
 

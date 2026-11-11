@@ -70,6 +70,14 @@
   --tone-softer: var(--color-module-reading-softer);
 }
 
+[data-tone='studies'] {
+  --tone: var(--color-module-studies);
+  --tone-container: var(--color-module-studies-container);
+  --tone-on-container: var(--color-module-studies-on-container);
+  --tone-soft: var(--color-module-studies-soft);
+  --tone-softer: var(--color-module-studies-softer);
+}
+
 /*
  * User colors (`swatch-<color>`): accounts, categories and cards. The ramp is derived from the
  * swatch, mixed with the surface (backgrounds) and the text color (icons), so it adapts to the theme.

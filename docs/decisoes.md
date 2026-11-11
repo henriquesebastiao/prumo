@@ -274,6 +274,18 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 **Decisão:** 80 ícones de categoria em oito grupos (casa, alimentação, transporte, saúde e cuidado, lazer, pessoal e família, trabalho e estudo, dinheiro e contas), com nomes do Lucide da versão instalada (`shopping-cart`, `key`, `pill`, `square-parking`…). A web lista todos em `CATEGORY_ICONS`, na ordem dos grupos, e mapeia cada nome para um nome semântico de `src/ui/icons.ts`; o app Android mostra os mesmos nomes por grupo, com busca, e desenha cada um com o Material Symbol mais próximo (D23 do app). Os ícones de conta continuam os cinco de antes. O ícone `ticket` (Lazer) continua o mesmo nome.
 **Consequências:** um nome novo precisa entrar nos dois clientes (aqui: `icons.ts`, `ICONS`, `CATEGORY_ICONS` e o rótulo em `locales/pt-BR.json`); um cliente que não o conhece mostra o ícone genérico, como antes.
 
+## D46 — Estudos: plano versionado, tópico sem checklist, URI do Obsidian opaca
+**Status:** aceita · 2026-11
+**Contexto:** o mantenedor quer organizar o estudo (faculdade, dev, inglês) no Prumo: o que estudar em cada dia e horário, o que foi estudado e se o plano está sendo cumprido, mantendo as anotações no Obsidian. Um plano editado no lugar apagaria a referência do que valia nas semanas passadas, e um checklist de tópicos duplicaria o Obsidian.
+**Decisão:** o plano é versionado por `valid_from` (E1): editar cria uma versão a partir de uma data (padrão a próxima segunda), as versões passadas são imutáveis e a meta de cada dia é lida do plano que valia naquele dia. O tópico é só uma etiqueta da sessão, criado pelo nome (E10). A matéria guarda uma `obsidian_uri` opaca, só validada pelo esquema (E8): o cliente abre, o servidor não lê o vault. A sessão conta no dia em que começou (E3); o status E4 e a semana E6 (dias com meta só até hoje) são calculados no servidor. "Vem aí" fica de fora: o próximo bloco de hoje já está no resumo.
+**Consequências:** o módulo fica fora do MVP para provas e prazos, cronômetro, revisão espaçada e nota na sessão. Hábitos não registra estudo; os dois módulos não se integram.
+
+## D47 — Hábitos: marcação idempotente por data, sequência estrita e frequência versionada
+**Status:** aceita (plano) · 2026-11
+**Contexto:** aprovado junto com D46, para a Fase 7. A marcação de um hábito é uma por dia e o valor muda (`quantity`), o que não cabe na criação idempotente por `id` (D40).
+**Decisão:** a marcação é `PUT /habits/{id}/entries/{on}` com `{value}`: a chave natural (hábito e data) já é única e repetir a requisição devolve o mesmo estado; desmarcar é `DELETE`. A sequência é estrita (H4): hoje não cumprido e a semana `weekly` em andamento não quebram; a pausa não quebra nem conta. A taxa (H5) usa 30 dias ou as 4 últimas semanas completas. A frequência é versionada por `valid_from` como o plano de estudos (H2). `started_on` existe nos dois tipos (o `build` precisa dele para não contar dias anteriores). Hábitos não publica itens em "Atividade recente": as marcações diárias tirariam os outros módulos dos 10 itens.
+**Consequências:** o app marca e desmarca sem id do cliente. Hábito com teto, nota na marcação, lembretes e widget ficam fora do MVP.
+
 ---
 
 ## Modelo

@@ -26,7 +26,16 @@
       "moved": "{item} na posição {position} de {total}."
     },
     "previousMonth": "Mês anterior",
-    "nextMonth": "Próximo mês"
+    "nextMonth": "Próximo mês",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Próxima semana",
+    "weekOf": "Semana de {start} a {end}",
+    "thisWeek": "Esta semana",
+    "weekdays": {
+      "short": ["S", "T", "Q", "Q", "S", "S", "D"],
+      "long": ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
+      "label": "Dias da semana"
+    }
   },
   "nav": {
     "main": "Navegação principal",
@@ -207,6 +216,14 @@
       "invalid_cover": "Use uma imagem JPEG, PNG ou WebP.",
       "cover_too_large": "A imagem pode ter no máximo 5 MB.",
       "invalid_dates": "O término não pode ser antes do início."
+    },
+    "studies": {
+      "invalid_obsidian_uri": "Use um link do Obsidian, que começa com obsidian://.",
+      "plan_locked": "Essa versão do plano já está em vigor e não muda. Crie uma versão a partir de hoje ou de uma data futura.",
+      "plan_date_taken": "Já existe uma versão do plano começando nessa data.",
+      "subject_archived": "A matéria está arquivada. Desarquive para registrar estudo nela.",
+      "area_in_use": "A área ainda tem matérias. Mova ou exclua as matérias antes.",
+      "topic_in_use": "O tópico tem sessões registradas."
     },
     "sync": {
       "since_too_old": "A sincronização ficou antiga demais: os dados serão recarregados."

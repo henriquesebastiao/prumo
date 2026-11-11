@@ -62,6 +62,8 @@ export { default as PText } from './PText.vue'
 export { default as PTextarea } from './PTextarea.vue'
 export { default as PThemePreview } from './PThemePreview.vue'
 export { default as PTile } from './PTile.vue'
+export { default as PWeekNav } from './PWeekNav.vue'
+export { default as PWeekdayPicker } from './PWeekdayPicker.vue'
 export { default as PToaster } from './PToaster.vue'
 
 export { iconNames, type IconName } from './icons'
