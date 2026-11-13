@@ -30,6 +30,7 @@ dev = [
     "import-linter>=2.16",
     "mypy>=2.4.1",
     "pytest>=9.2.0",
+    "pytest-codspeed>=5.0.4",
     "ruff>=0.17.4",
     "time-machine>=3.6.0",
 ]
@@ -53,7 +54,7 @@ known-first-party = ["prumo"]
 python_version = "3.14"
 strict = true
 plugins = ["pydantic.mypy"]
-files = ["src", "tests", "migrations"]
+files = ["src", "tests", "benchmarks", "migrations"]
 
 [tool.pydantic-mypy]
 init_forbid_extra = true

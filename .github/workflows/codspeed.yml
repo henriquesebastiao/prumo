@@ -1,0 +1,33 @@
+# CodSpeed: backend performance benchmarks (backend/benchmarks), measured with CPU simulation.
+name: CodSpeed
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Allows CodSpeed to trigger backtest performance analysis to generate initial data.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.13.6"
+      - run: uv sync --frozen
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v5
+        with:
+          mode: simulation
+          working-directory: backend
+          run: uv run pytest benchmarks --codspeed
