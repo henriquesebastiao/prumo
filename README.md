@@ -1,5 +1,7 @@
 # Prumo
 
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/henriquesebastiao/prumo?utm_source=badge)
+
 Modular, self-hosted personal organization: vehicles, finances, books and whatever comes next, running on your own server.
 
 > In Portuguese, *estar no prumo* means to be in order, aligned (a *prumo* is a plumb line). That is what Prumo tries to do for everyday life: one place, under your control, to record and keep track of the things that matter.
