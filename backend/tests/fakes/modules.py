@@ -129,7 +129,7 @@ def notes_activity(session: Session, user: Any) -> list[ActivityItem]:
 
 notes = PrumoModule(
     id="notes",
-    version="0.3.0",
+    version="0.4.0",
     router=notes_router,
     summary=notes_summary,
     event_handlers={TaskCompleted: on_task_completed},

@@ -20,7 +20,7 @@ def test_installed_modules_in_default_order(make_app: AppFactory, db: Session) -
     items = _client(make_app, db).get("/api/v1/modules").json()["items"]
     assert items == [
         {"id": "tasks", "version": "1.0.0", "enabled": True, "position": 0},
-        {"id": "notes", "version": "0.3.0", "enabled": True, "position": 1},
+        {"id": "notes", "version": "0.4.0", "enabled": True, "position": 1},
         {"id": "plain", "version": "0.1.0", "enabled": True, "position": 2},
     ]
 
