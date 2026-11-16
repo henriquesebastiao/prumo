@@ -301,7 +301,7 @@ Registro curto das decisões que moldam o projeto. Para mudar uma decisão aceit
 - `next_due` em todo hábito: hoje se aberto; em `per_period`, o dia preferido do período ainda por vir; senão o próximo dia agendado, pulando pausas.
 - Os `quit` ficam numa faixa compacta no topo de Hoje: motiva sem ocupar a lista do que fazer.
 - Erros: as regras entre campos têm código próprio (`habits.times_exceed_period`, `habits.preferred_day_mismatch`); fora do intervalo é `validation_error` com o campo, como no resto da API.
-**Consequências:** web e app só desenham as seções que recebem. A prévia "próxima: …" antes de salvar uma frequência ficou de fora (seria regra no cliente ou um endpoint de prévia); o formulário explica a âncora e o detalhe mostra `next_due` depois de salvo. A web ganhou `PMonthDayPicker`, o rótulo do `PDivider` (a marca de "agora") e a ação do toast ("Desfazer"). Lembretes por horário (ntfy) continuam em "Ideias"; o widget Android depende de aprovação.
+**Consequências:** web e app só desenham as seções que recebem. A prévia "próxima: …" antes de salvar uma frequência ficou de fora (seria regra no cliente ou um endpoint de prévia); o formulário explica a âncora e o detalhe mostra `next_due` depois de salvo. A web ganhou `PMonthDayPicker`, o rótulo do `PDivider` (a marca de "agora") e a ação do toast ("Desfazer"). Lembretes por horário (ntfy) continuam em "Ideias". O widget Android (Glance, D27 do app) usa só `/habits/day` e a marcação de sempre: nada muda aqui.
 
 ---
 
