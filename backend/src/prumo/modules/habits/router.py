@@ -19,10 +19,12 @@ from prumo.modules.habits.schemas import (
     HabitFrequencyCreate,
     HabitFrequencyRead,
     HabitFrequencyUpdate,
+    HabitOrder,
     HabitPauseCreate,
     HabitPauseRead,
     HabitPauseUpdate,
     HabitRead,
+    HabitsDay,
     HabitsToday,
     HabitUpdate,
     Month,
@@ -71,10 +73,27 @@ def _frequency_read(
 # ---------------------------------------------------------------- fixed paths first
 
 
-@router.get("/today")
+@router.get("/day")
+def read_day(
+    session: SessionDep,
+    user: CurrentUser,
+    on: Annotated[date | None, Query(description="Today by default; never in the future.")] = None,
+) -> HabitsDay:
+    """The habits of a day, grouped and ordered (H9, H10): the timeline with times, the untimed
+    ones, the periods still open, the ones met on the day and the habits to quit."""
+    return service.day(session, user, on)
+
+
+@router.get("/today", deprecated=True)
 def read_today(session: SessionDep, user: CurrentUser) -> HabitsToday:
-    """The habits that ask something of today, with their entry and week (H2, H6)."""
+    """The habits that ask something of today, with their entry and week (H2, H6). Use `/day`."""
     return service.today(session, user)
+
+
+@router.put("/order", status_code=status.HTTP_204_NO_CONTENT)
+def reorder_habits(data: HabitOrder, session: SessionDep, user: CurrentUser) -> None:
+    """The listed habits take, in this order, the places they held (H10); repeating is safe."""
+    service.reorder(session, user, data)
 
 
 @router.get("/entries")
@@ -141,7 +160,7 @@ def list_habits(
     archived: Archived = "false",
     updated_since: UpdatedSince = None,
 ) -> Page[HabitRead]:
-    """By name, with the derived values of each kind (H4-H7)."""
+    """In the order of H10 (time, manual order, name), with the derived values (H4-H7)."""
     return service.list_habits(
         session, user, page, kind=kind, archived=archived, updated_since=updated_since
     )

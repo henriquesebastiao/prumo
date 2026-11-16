@@ -28,13 +28,6 @@
   max-width: 240px;
 }
 
-.form__switch {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-
 .form__switch-text {
   display: flex;
   min-width: 0;
@@ -60,4 +53,11 @@
   .form__split {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+.form__switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
 }

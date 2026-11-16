@@ -7,12 +7,15 @@ export interface ToastMessage {
   title: string
   description?: string
   tone?: Tone
+  /** One action in the toast ("Desfazer"); the toast closes when it runs. */
+  action?: { label: string; run: () => void }
 }
 
 const messages = ref<ToastMessage[]>([])
 let nextId = 1
 
-/** Short confirmation messages ("Alterações salvas"). Rendered by <PToaster>. */
+/** Short confirmation messages ("Alterações salvas"), with an optional action ("Desfazer").
+ * Rendered by <PToaster>. */
 export function useToast() {
   return {
     messages,

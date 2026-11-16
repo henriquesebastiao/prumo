@@ -268,23 +268,40 @@ Erros do módulo: `studies.invalid_obsidian_uri`, `studies.plan_locked`, `studie
 ### Hábitos (`/habits`)
 | Rota | Descrição |
 |---|---|
-| `GET, POST /habits` | Lista paginada por nome (`kind`: `build` \| `quit`, `archived`) e cadastro. `POST`: `name`, `kind`, `color`, `icon`, `started_on` (padrão hoje, nunca futuro); em `build`, `measure` (`check` padrão \| `quantity` com `target_value` e `unit`) e a `frequency` inicial (`{kind, times_per_week?, weekdays?}`, padrão `daily`), que vale desde `started_on` |
-| `GET, PATCH, DELETE /habits/{id}`, `POST …/archive`, `POST …/unarchive` | `GET` é o `HabitDetail`: o `HabitRead` com `frequencies` (versões, a mais nova primeiro, com `valid_until` e `state`), `pauses` e as 20 últimas `relapses`. `PATCH` muda `name`, `color`, `icon`, `started_on` e, em `quantity`, `target_value` e `unit`; o tipo e a medida não mudam. A exclusão leva o histórico |
-| `GET /habits/{id}/calendar?month=YYYY-MM` | Os dias do mês (padrão o atual) com `status`: `done`, `partial`, `missed`, `pending` (hoje ainda aberto), `paused`, `unscheduled` (fora da frequência, antes do início ou um dia sem marcação em `weekly`) ou `future`, e `value`; `previous_month`, `next_month` (nulo no mês atual). Só `build` |
-| `POST /habits/{id}/frequencies`, `PATCH, DELETE /habits/frequencies/{id}` | Versão nova a partir de `valid_from` (hoje ou depois; `409 habits.frequency_date_taken` na mesma data); versão já vigente é imutável (`habits.frequency_locked`), e a primeira não sai |
+| `GET, POST /habits` | Lista paginada na ordem de H10 (com horário por `time_of_day`, depois `position` e nome; `kind`: `build` \| `quit`, `archived`) e cadastro. `POST`: `name`, `kind`, `color`, `icon`, `started_on` (padrão hoje, nunca futuro), `time_of_day` opcional (`HH:MM`); em `build`, `measure` (`check` padrão \| `quantity` com `target_value` e `unit`) e a `frequency` inicial (padrão `daily`), que vale desde `started_on`. O hábito novo entra no fim da ordem manual |
+| `GET, PATCH, DELETE /habits/{id}`, `POST …/archive`, `POST …/unarchive` | `GET` é o `HabitDetail`: o `HabitRead` com `frequencies` (versões, a mais nova primeiro, com `valid_until` e `state`), `pauses` e as 20 últimas `relapses`. `PATCH` muda `name`, `color`, `icon`, `started_on`, `time_of_day` (`null` limpa) e, em `quantity`, `target_value` e `unit`; o tipo e a medida não mudam. A exclusão leva o histórico |
+| `PUT /habits/order` | `{ids}`: os hábitos listados ficam nessa ordem, nas posições que já ocupavam entre todos os do usuário; os outros não se mexem. Repetir é seguro; responde `204`. Id de outro usuário: `404` |
+| `GET /habits/{id}/calendar?month=YYYY-MM` | Os dias do mês (padrão o atual) com `status`: `done`, `partial`, `missed`, `pending` (hoje ainda aberto), `paused`, `unscheduled` (fora da frequência, antes do início ou um dia sem marcação em `per_period`) ou `future`, e `value`; `previous_month`, `next_month` (nulo no mês atual). Só `build` |
+| `POST /habits/{id}/frequencies`, `PATCH, DELETE /habits/frequencies/{id}` | Versão nova a partir de `valid_from` (hoje ou depois; `409 habits.frequency_date_taken` na mesma data); versão já vigente é imutável (`habits.frequency_locked`), e a primeira não sai. Campos da frequência abaixo |
 | `PUT, DELETE /habits/{id}/entries/{on}` | Marca o dia (`{value}`; em `check` guarda 1) ou o desmarca; repetir é seguro (D47). As duas respondem o `HabitRead` atualizado |
 | `GET /habits/entries` | Lista paginada das marcações (`habit_id`, `from`, `to`), o dia mais novo primeiro, para a sincronização |
 | `POST /habits/{id}/pauses`, `PATCH, DELETE /habits/pauses/{id}` | Pausa com `starts_on` e `ends_on` opcional (aberta); `PATCH` com `ends_on` encerra |
 | `POST /habits/{id}/relapses`, `DELETE /habits/relapses/{id}` | Recaída com `occurred_at` e `note` (até 500); responde o `HabitRead` com o tempo sem atualizado |
-| `GET /habits/today` | Os hábitos `build` ativos que pedem algo de hoje (o dia agendado, ou a semana `weekly` em andamento), sem os pausados: `items[{habit, done, value, week, settled}]`, `done` e `scheduled`. `settled`: hoje cumprido, ou a semana já cumprida |
+| `GET /habits/day?on=YYYY-MM-DD` | O dia (H9), hoje por padrão, nunca futuro (`habits.future_date`): `on`, `today`, `now` (`HH:MM` no fuso, só quando `on` é hoje), `done`, `scheduled` e as seções já ordenadas `timeline`, `untimed`, `period`, `done_items` (cada item é um `HabitDayItem`) e `quit[{id, name, color, icon, clean_days}]` |
+| `GET /habits/today` | **Obsoleto** (use `/habits/day`), mantido para os apps instalados: os hábitos `build` ativos que pedem algo de hoje (o dia agendado, ou o período `per_period` em andamento), sem os pausados, na ordem de H10: `items[{habit, done, value, week, settled}]`, `done` e `scheduled` |
 
-`HabitRead` traz, em `build`: `frequency` vigente, `paused` (hoje em pausa), `rate_percent` (H5, nulo sem nada agendado), `current_streak` e `best_streak` (H4) em `streak_unit` (`day` \| `week`), `week` (`{done, target}`, em `weekly`) e `today` (`{scheduled, done, value}`); em `quit`: `clean_since`, `clean_days`, `best_clean_days` e `relapses_30d` (H7). Os campos do outro tipo vêm nulos.
+**Frequência** (`HabitFrequencyFields` na entrada, D48). `kind` e os campos do tipo; os de outro tipo são ignorados:
 
-Resumo do Início (`HabitsSummary`, H9): `today`, `done_today` e `scheduled_today` (os `settled` sobre os itens de `/habits/today`), `pending` (até 3, com `pending_more` além deles) e `quit[{id, name, color, icon, clean_days}]`.
+| `kind` | Campos |
+|---|---|
+| `daily` | — |
+| `weekdays` | `weekdays` (0 = segunda … 6 = domingo, sem repetir), `every_n_weeks` (1–52, padrão 1) |
+| `month_days` | `month_days` (1–31) e/ou `month_last_day`, `every_n_months` (1–12, padrão 1) |
+| `month_weekday` | `week_of_month` (1, 2, 3, 4 ou −1 = último), `weekday`, `every_n_months` |
+| `per_period` | `times` (até 7 em `week`, 14 em `fortnight`, 28 em `month`; `habits.times_exceed_period`), `period` (`week` \| `fortnight` \| `month`), `preferred_day` opcional (0–6 em `week` e `fortnight`, 1–31 em `month`; `habits.preferred_day_mismatch`) |
+| `weekly` | **Obsoleto**, só na entrada: `times_per_week` (1–7) vira `per_period` com `period = week` |
+
+Na saída (`HabitFrequencyRead`), `kind` nunca é `weekly`; vêm todos os campos acima (nulos fora do tipo), `cadence` (`daily` \| `weekly` \| `fortnightly` \| `monthly` \| `longer`, para filtros e rótulos) e `times_per_week` (obsoleto: `times` quando `period = week`).
+
+`HabitRead` traz `time_of_day` e `position`; em `build`: `frequency` vigente, `paused` (hoje em pausa), `rate_percent` (H5, nulo sem nada agendado), `current_streak` e `best_streak` (H4) em `streak_unit` (`day` \| `occurrence` \| `week` \| `fortnight` \| `month`), `period` (H6, em `per_period`: `{period, starts_on, ends_on, done, target, days_left, neutral}`), `week` (obsoleto: `{done, target}` quando o período é a semana), `next_due` (H6a) e `today` (`{scheduled, done, value}`); em `quit`: `clean_since`, `clean_days`, `best_clean_days` e `relapses_30d` (H7). Os campos do outro tipo vêm nulos.
+
+`HabitDayItem`: `habit` (`HabitRef`, com `time_of_day`), `done`, `value`, `settled` (o dia ou o período já cumprido), `late` (aberto com horário passado, só hoje), `period` (a partir do dia da tela), `promoted` (`preferred_day` \| `due_soon` \| nulo), `due_in_days` (com `due_soon`) e `week` (obsoleto).
+
+Resumo do Início (`HabitsSummary`, H9): `today`, `done_today` e `scheduled_today` (os de `/habits/day`), `upcoming` (os 5 próximos abertos, `HabitDayItem`, na ordem do dia), `pending` (os 3 primeiros deles como `HabitRef`, com `pending_more` além) e `quit[{id, name, color, icon, clean_days}]`.
 
 As listas paginadas aceitam `updated_since`. Respostas que dependem do dia trazem `today`. Hábitos não publica itens em "Vem aí" nem em "Atividade recente" (H9).
 
-Erros do módulo: `habits.future_date`, `habits.before_start`, `habits.not_build`, `habits.not_quit`, `habits.frequency_locked`, `habits.frequency_date_taken` (409), `habits.pause_overlap`, `habits.invalid_measure`.
+Erros do módulo: `habits.future_date`, `habits.before_start`, `habits.not_build`, `habits.not_quit`, `habits.frequency_locked`, `habits.frequency_date_taken` (409), `habits.pause_overlap`, `habits.invalid_measure`, `habits.times_exceed_period`, `habits.preferred_day_mismatch`. Fora do intervalo (`every_n_*`, `week_of_month`, `time_of_day` mal formado) é `validation_error` com o campo em `fields`.
 
 ## OpenAPI e clientes gerados
 

@@ -161,7 +161,13 @@ def test_frequency_versions(auth_client: TestClient) -> None:
     changed = auth_client.patch(
         f"{BASE}/frequencies/{created.json()['id']}", json={"kind": "weekly", "times_per_week": 4}
     )
-    assert (changed.json()["kind"], changed.json()["times_per_week"]) == ("weekly", 4)
+    # `weekly` is still accepted from older apps and stored as a weekly period (D48).
+    assert (changed.json()["kind"], changed.json()["period"], changed.json()["times"]) == (
+        "per_period",
+        "week",
+        4,
+    )
+    assert changed.json()["times_per_week"] == 4
     assert auth_client.delete(f"{BASE}/frequencies/{created.json()['id']}").status_code == 204
     assert code(auth_client.delete(f"{BASE}/frequencies/{first_id}")) == "habits.frequency_locked"
 

@@ -42,7 +42,15 @@ import FrequencyDialog from '../forms/FrequencyDialog.vue'
 import HabitDialog from '../forms/HabitDialog.vue'
 import PauseDialog from '../forms/PauseDialog.vue'
 import RelapseDialog from '../forms/RelapseDialog.vue'
-import { amount, frequencyText, monthOf, streakText } from '../helpers'
+import {
+  amount,
+  dueText,
+  frequencyText,
+  monthOf,
+  periodText,
+  rateHint,
+  streakText,
+} from '../helpers'
 
 const props = defineProps<{ habitId: string }>()
 const { t, te } = useI18n()
@@ -161,11 +169,14 @@ function openFrequency(frequency?: HabitFrequency) {
   frequencyOpen.value = true
 }
 
-const rateHint = computed(() =>
-  habit.value?.streak_unit === 'week'
-    ? t('habits.detail.rateHintWeeks')
-    : t('habits.detail.rateHint'),
-)
+const rateCaption = computed(() => (habit.value ? rateHint(t, habit.value) : ''))
+const overline = computed(() => {
+  const value = habit.value
+  if (!value) return ''
+  if (value.kind !== 'build' || !value.frequency) return t(`habits.list.${value.kind}`)
+  const text = frequencyText(t, value.frequency)
+  return value.time_of_day ? `${value.time_of_day} · ${text}` : text
+})
 </script>
 
 <template>
@@ -176,11 +187,7 @@ const rateHint = computed(() =>
   >
     <div v-if="habit" class="habit">
       <PPageHeader
-        :overline="
-          build && habit.frequency
-            ? frequencyText(t, habit.frequency)
-            : t(`habits.list.${habit.kind}`)
-        "
+        :overline="overline"
         :title="habit.name"
         :back="{ label: t('habits.detail.back'), to: { name: 'habits.list' } }"
       >
@@ -200,7 +207,7 @@ const rateHint = computed(() =>
           <PStatCard
             :label="t('habits.detail.rate')"
             :value="habit.rate_percent === null ? '—' : percent(habit.rate_percent ?? 0)"
-            :caption="rateHint"
+            :caption="rateCaption"
           />
           <PStatCard :label="t('habits.detail.streak')" :value="streakText(t, habit)" />
           <PStatCard
@@ -210,9 +217,15 @@ const rateHint = computed(() =>
             "
           />
           <PStatCard
-            v-if="habit.week"
-            :label="t('habits.detail.week')"
-            :value="t('habits.today.week', { done: habit.week.done, target: habit.week.target })"
+            v-if="habit.period"
+            :label="t('habits.detail.period')"
+            :value="`${habit.period.done}/${habit.period.target}`"
+            :caption="periodText(t, habit.period)"
+          />
+          <PStatCard
+            v-if="habit.next_due"
+            :label="t('habits.detail.nextDue')"
+            :value="dueText(t, habit.next_due)"
           />
         </div>
 

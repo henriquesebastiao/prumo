@@ -31,10 +31,13 @@ for (const theme of ['light', 'dark'] as const) {
     await signIn(page, theme)
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto('/habitos')
-    await expect(page.getByText('0 de 4 hoje')).toBeVisible()
-    await expect(page.getByText('1 de 3 esta semana')).toBeVisible()
+    await expect(page.getByText('1 de 6 hoje')).toBeVisible()
+    await expect(page.getByText('agora · 14:30')).toBeVisible()
+    await expect(page.getByText('passou do horário')).toBeVisible()
+    await page.getByRole('button', { name: 'Neste período · 1' }).click()
+    await expect(page.getByText('1 de 3 nesta semana · faltam 6 dias')).toBeVisible()
     await settle(page)
-    await page.screenshot({ path: `${OUT}/habits-today-${theme}.png` })
+    await page.screenshot({ path: `${OUT}/habits-today-${theme}.png`, fullPage: true })
   })
 
   test(`habit ${theme}`, async ({ page }) => {
@@ -42,7 +45,7 @@ for (const theme of ['light', 'dark'] as const) {
     const id = await habitId(page, 'Ler a Bíblia')
     await page.setViewportSize({ width: 1440, height: 1200 })
     await page.goto(`/habitos/${id}`)
-    await expect(page.getByText('40 dias').first()).toBeVisible()
+    await expect(page.getByText('41 dias').first()).toBeVisible()
     await expect(page.getByRole('grid', { name: 'Calendário' })).toBeVisible()
     await settle(page)
     await page.screenshot({ path: `${OUT}/habits-habit-${theme}.png`, fullPage: true })
@@ -54,6 +57,9 @@ test('list and a habit to quit', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto('/habitos/lista')
   await expect(page.getByText('Para abandonar')).toBeVisible()
+  await expect(page.getByText(/Quinzenal · sábado .* próxima: sáb, 21\/11/)).toBeVisible()
+  await expect(page.getByText(/A cada 3 meses · Dia 5/)).toBeVisible()
+  await expect(page.getByText(/1º domingo do mês/)).toBeVisible()
   await settle(page)
   await page.screenshot({ path: `${OUT}/habits-list.png`, fullPage: true })
   await page.goto(`/habitos/${await habitId(page, 'Redes sociais antes de dormir')}`)
@@ -68,9 +74,16 @@ test('mark and unmark today', async ({ page }) => {
   await page.goto('/habitos')
   const anki = page.getByRole('checkbox', { name: 'Marcar Anki' })
   await anki.check()
-  await expect(page.getByText('1 de 4 hoje')).toBeVisible()
-  await page.getByRole('checkbox', { name: 'Desmarcar Anki' }).uncheck()
-  await expect(page.getByText('0 de 4 hoje')).toBeVisible()
+  await expect(page.getByText('2 de 6 hoje')).toBeVisible()
+  // Marked, it moves to "Feitos hoje"; the toast undoes it.
+  await expect(page.getByRole('button', { name: 'Feitos hoje · 2' })).toBeVisible()
+  await page.getByRole('button', { name: 'Desfazer' }).click()
+  await expect(page.getByText('1 de 6 hoje')).toBeVisible()
+  await expect(page.getByRole('checkbox', { name: 'Marcar Anki' })).toBeVisible()
+  // An earlier day.
+  await page.getByRole('button', { name: 'Dia anterior' }).click()
+  await expect(page.getByRole('button', { name: 'Voltar para hoje' })).toBeVisible()
+  await expect(page.getByText('agora · 14:30')).toBeHidden()
 })
 
 test('check in from the quick action', async ({ page }) => {
@@ -85,6 +98,9 @@ test('check in from the quick action', async ({ page }) => {
   await expect(page.getByText('Beber água').last()).toBeVisible()
   await settle(page)
   await page.screenshot({ path: `${OUT}/habits-dialog-check-in.png` })
+  await page.getByPlaceholder('Buscar hábito').fill('agua')
+  await expect(page.locator('.p-dialog--modal').getByText('Beber água')).toBeVisible()
+  await expect(page.locator('.p-dialog--modal').getByText('Anki')).toBeHidden()
 })
 
 test('new habit dialog', async ({ page }) => {

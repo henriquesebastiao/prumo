@@ -15,15 +15,15 @@ import {
   PInput,
   PNumberInput,
   PSegmented,
-  PStepper,
   PSwatchPicker,
   PText,
-  PWeekdayPicker,
   useToast,
 } from '@/ui'
 
-import { useSaveHabit, type FrequencyKind, type Habit, type HabitColor } from '../api'
+import { useSaveHabit, type Habit, type HabitColor } from '../api'
 import { iconOptions, swatchOptions } from '../helpers'
+import { draftOf, draftValid, fieldsOf } from './frequency'
+import FrequencyFields from './FrequencyFields.vue'
 import { today } from './today'
 
 const props = defineProps<{ habit?: Habit }>()
@@ -42,9 +42,8 @@ const measure = ref<'check' | 'quantity'>('check')
 const target = ref<number | null>(null)
 const unit = ref('')
 const startedOn = ref('')
-const frequency = ref<FrequencyKind>('daily')
-const times = ref(3)
-const weekdays = ref<number[]>([0, 1, 2, 3, 4])
+const frequency = ref(draftOf())
+const timeOfDay = ref('')
 const errors = ref<FieldErrors>({})
 const failure = ref<string | null>(null)
 
@@ -69,9 +68,8 @@ watch(
     target.value = habit?.target_value ?? null
     unit.value = habit?.unit ?? ''
     startedOn.value = habit?.started_on ?? today()
-    frequency.value = 'daily'
-    times.value = 3
-    weekdays.value = [0, 1, 2, 3, 4]
+    frequency.value = draftOf()
+    timeOfDay.value = habit?.time_of_day ?? ''
   },
   { immediate: true },
 )
@@ -84,21 +82,12 @@ const measureOptions = computed(() => [
   { value: 'check' as const, label: t('habits.measures.check') },
   { value: 'quantity' as const, label: t('habits.measures.quantity') },
 ])
-const frequencyOptions = computed(() =>
-  (['daily', 'weekly', 'weekdays'] as const).map((value) => ({
-    value,
-    label: t(`habits.frequency.kinds.${value}`),
-  })),
-)
 
 const valid = computed(
   () =>
     Boolean(name.value.trim()) &&
     (!isQuantity.value || (Boolean(target.value) && Boolean(unit.value.trim()))) &&
-    (editing.value ||
-      !isBuild.value ||
-      frequency.value !== 'weekdays' ||
-      weekdays.value.length > 0),
+    (editing.value || !isBuild.value || draftValid(frequency.value)),
 )
 
 async function submit() {
@@ -112,6 +101,7 @@ async function submit() {
     icon: icon.value,
     color: color.value as HabitColor,
     started_on: startedOn.value,
+    time_of_day: timeOfDay.value || null,
     ...quantity,
   }
   try {
@@ -125,11 +115,7 @@ async function submit() {
           ...(kind.value === 'build'
             ? {
                 measure: measure.value,
-                frequency: {
-                  kind: frequency.value,
-                  times_per_week: frequency.value === 'weekly' ? times.value : null,
-                  weekdays: frequency.value === 'weekdays' ? weekdays.value : null,
-                },
+                frequency: fieldsOf(frequency.value),
               }
             : {}),
         },
@@ -197,32 +183,20 @@ async function submit() {
           <PInput v-model="unit" :maxlength="12" />
         </PField>
       </div>
-      <template v-if="isBuild && !habit">
-        <PField :label="t('habits.form.frequency')" label-as="span">
-          <PSegmented
-            v-model="frequency"
-            :options="frequencyOptions"
-            :label="t('habits.form.frequency')"
-            block
-          />
-        </PField>
-        <PField
-          v-if="frequency === 'weekly'"
-          :label="t('habits.form.timesPerWeek')"
-          label-as="span"
-        >
-          <PStepper v-model="times" :min="1" :max="7" :label="t('habits.form.timesPerWeek')" />
-        </PField>
-        <PField v-if="frequency === 'weekdays'" :label="t('habits.form.weekdays')" label-as="span">
-          <PWeekdayPicker v-model="weekdays" tone="habits" />
-        </PField>
-      </template>
+      <FrequencyFields v-if="isBuild && !habit" v-model="frequency" />
       <PField
         :label="t('habits.form.startedOn')"
         :hint="t('habits.form.startedOnHint')"
         :error="errors.started_on"
       >
         <PDateInput v-model="startedOn" :max="today()" />
+      </PField>
+      <PField
+        :label="t('habits.form.timeOfDay')"
+        :hint="t('habits.form.timeOfDayHint')"
+        :error="errors.time_of_day"
+      >
+        <PDateInput v-model="timeOfDay" type="time" />
       </PField>
     </form>
     <template #footer>

@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, time
 from uuid import UUID
 
 from sqlalchemy import (
@@ -33,21 +33,43 @@ class Habit(Base, IdMixin, TimestampMixin, UserOwnedMixin):
     target_value: Mapped[int | None]
     unit: Mapped[str | None] = mapped_column(String(12))
     archived_at: Mapped[datetime | None]
+    # Wall-clock time in the user's zone, only for ordering and display (D48); null without one.
+    time_of_day: Mapped[time | None]
+    # The manual order of the user's habits (H10); a new habit goes last.
+    position: Mapped[int] = mapped_column(default=0, server_default="0")
 
 
 class HabitFrequency(Base, IdMixin, TimestampMixin, UserOwnedMixin):
     __tablename__ = "habits_frequencies"
     __table_args__ = (
         UniqueConstraint("habit_id", "valid_from", name="uq_habits_frequencies_valid_from"),
-        CheckConstraint("kind IN ('daily', 'weekly', 'weekdays')", name="kind"),
+        CheckConstraint(
+            "kind IN ('daily', 'weekdays', 'month_days', 'month_weekday', 'per_period')",
+            name="kind",
+        ),
+        CheckConstraint("every_n >= 1", name="every_n_positive"),
+        CheckConstraint(
+            "period IS NULL OR period IN ('week', 'fortnight', 'month')", name="period"
+        ),
     )
 
     habit_id: Mapped[UUID] = mapped_column(ForeignKey("habits_habits.id", ondelete="CASCADE"))
     valid_from: Mapped[date]
-    kind: Mapped[str] = mapped_column(String(10))
-    times_per_week: Mapped[int | None] = mapped_column(SmallInteger)
+    kind: Mapped[str] = mapped_column(String(16))
+    # `per_period`: `times` days met in each `period` (`week`, `fortnight`, `month`), with an
+    # optional `preferred_day` (a weekday, or a day of the month in `month`) for display only.
+    times: Mapped[int | None] = mapped_column(SmallInteger)
+    period: Mapped[str | None] = mapped_column(String(10))
+    preferred_day: Mapped[int | None] = mapped_column(SmallInteger)
     # 0 = Monday … 6 = Sunday, as `date.weekday()`.
     weekdays: Mapped[list[int] | None] = mapped_column(ARRAY(SmallInteger))
+    # Every N weeks in `weekdays`, every N months in `month_days` and `month_weekday`.
+    every_n: Mapped[int] = mapped_column(SmallInteger, default=1, server_default="1")
+    month_days: Mapped[list[int] | None] = mapped_column(ARRAY(SmallInteger))
+    month_last_day: Mapped[bool] = mapped_column(default=False, server_default="false")
+    # `month_weekday`: the 1st to 4th or the last (-1) `weekday` of the month.
+    week_of_month: Mapped[int | None] = mapped_column(SmallInteger)
+    weekday: Mapped[int | None] = mapped_column(SmallInteger)
 
 
 class HabitEntry(Base, IdMixin, TimestampMixin, UserOwnedMixin):

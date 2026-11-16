@@ -70,6 +70,7 @@ import {
   PThemePreview,
   PTile,
   PWeekdayPicker,
+  PMonthDayPicker,
   PMonthCalendar,
   PWeekNav,
 } from '@/ui'
@@ -82,6 +83,7 @@ import ShowcaseSection from './ShowcaseSection.vue'
 defineProps<{ theme: 'light' | 'dark' }>()
 
 const toast = useToast()
+const monthDays = ref([5, 20])
 const text = ref('Moto Peças Rocha')
 const password = ref('prumo-demo-01')
 const km = ref<number | null>(18300)
@@ -442,6 +444,9 @@ const networkError = ApiError.network(new Error('offline'))
         <PField label="Dias da semana" label-as="span">
           <PWeekdayPicker v-model="weekdays" tone="studies" />
         </PField>
+        <PField label="Dias do mês" label-as="span">
+          <PMonthDayPicker v-model="monthDays" label="Dias do mês" tone="habits" />
+        </PField>
         <PField label="Calendário do mês" label-as="span">
           <PMonthCalendar :days="calendarDays" label="Novembro" tone="habits" today="2026-11-17" />
         </PField>
@@ -707,6 +712,12 @@ const networkError = ApiError.network(new Error('offline'))
           <template #trigger><PIconButton icon="more" label="Menu" variant="outline" /></template>
         </PMenu>
         <PButton @click="toast.show({ title: 'Alterações salvas' })">Mostrar toast</PButton>
+        <PButton
+          @click="
+            toast.show({ title: 'Meditar marcado', action: { label: 'Desfazer', run: () => {} } })
+          "
+          >Toast com ação</PButton
+        >
       </ShowcaseRow>
       <PDialog v-model:open="dialogOpen" title="Atualizar km">
         <PField label="Km atual"><PNumberInput v-model="km" suffix="km" /></PField>
@@ -729,7 +740,7 @@ const networkError = ApiError.network(new Error('offline'))
       >
         <PButton variant="primary" icon="add">Cadastrar veículo</PButton>
       </PEmptyState>
-      <PDivider />
+      <PDivider label="agora · 14:30" tone="habits" />
       <PQueryState :loading="true" />
       <PDivider />
       <PQueryState

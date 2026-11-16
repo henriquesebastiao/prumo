@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
+import {
+  ToastAction,
+  ToastDescription,
+  ToastProvider,
+  ToastRoot,
+  ToastTitle,
+  ToastViewport,
+} from 'reka-ui'
 
 import { useToast } from './toast'
 
@@ -19,6 +26,13 @@ const { messages, dismiss } = useToast()
       <ToastDescription v-if="message.description" class="p-toast__description">{{
         message.description
       }}</ToastDescription>
+      <ToastAction
+        v-if="message.action"
+        class="p-toast__action"
+        :alt-text="message.action.label"
+        @click="message.action.run()"
+        >{{ message.action.label }}</ToastAction
+      >
     </ToastRoot>
     <ToastViewport class="p-toast__viewport" />
   </ToastProvider>
@@ -58,5 +72,22 @@ const { messages, dismiss } = useToast()
 
 .p-toast__description {
   font-size: var(--text-sm);
+}
+
+.p-toast__action {
+  align-self: flex-end;
+  min-height: var(--control-height-sm);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+
+.p-toast__action:hover {
+  background: color-mix(in sRGB, currentColor 10%, transparent);
 }
 </style>

@@ -105,10 +105,16 @@ Aprovado em 2026-11-10 (D47), para depois de alguns dias de uso de Estudos. Háb
 - [x] Frontend: Hoje, Hábitos, detalhe com calendário, diálogos (hábito, frequência, pausa, recaída), widget e ação rápida "Marcar hábitos" (atalho H)
 - [x] Dados no `e2e_server.py` e capturas em `frontend/e2e/` (`habits-*.png`, claro e escuro, e `responsive/habits-*`); `make check` verde em 2026-11-11
 
+### Frequências, tela Hoje e horários (D48)
+Aprovado em 2026-11-16. Quinzenal, mensal e "a cada N" com datas fixas ou X vezes no período; o dia agrupado pelo servidor; horário opcional e ordem manual.
+- [x] Backend: motor de recorrência (`recurrence.py`) com testes de tabela, período neutro, taxa por cadência, `next_due`, migration de `weekly` para `per_period`, `time_of_day` e `position`, `GET /habits/day`, `PUT /habits/order`, `upcoming` no resumo do Início
+- [x] Frontend: Hoje em seções (com horário e a marca de "agora", sem horário arrastável, neste período, feitos, faixa dos `quit`, dias anteriores), "Desfazer" no toast, card do Início que marca, busca em "Marcar hábitos", lista com busca, filtros, próxima ocorrência e reordenação, editor das frequências novas e horário
+- [x] Dados no `e2e_server.py` (quinzenal, trimestral, primeiro domingo, 1× por mês com dia preferido, diários com e sem horário) e capturas em `frontend/e2e/`; `make check` verde em 2026-11-16
+
 ## Ideias (sem ordem definida)
 
 - Integração Veículos → Finanças: abastecimentos e manutenções geram despesas automaticamente (via eventos)
-- Lembretes de troca de óleo e vencimento de fatura (e-mail ou ntfy)
+- Lembretes de troca de óleo, vencimento de fatura e horário de hábitos (e-mail ou ntfy; o horário já existe, D48)
 - Veículos: documentos e vencimentos (IPVA, licenciamento, seguro), pneus, posto no abastecimento, custo por km, consumo por tipo de combustível
 - Finanças: transações recorrentes, orçamento por categoria, subcategorias, importação OFX/CSV, metas, múltiplas moedas
 - Livros: busca por ISBN, estatísticas e meta anual de leitura, formato (físico ou e-book), empréstimos

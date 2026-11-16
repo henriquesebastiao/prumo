@@ -2,7 +2,7 @@
 
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from typing import Any, Literal
 from uuid import UUID, uuid7
 from zoneinfo import ZoneInfo
@@ -13,13 +13,14 @@ from sqlalchemy.orm import Session
 from prumo.core.clock import utcnow
 from prumo.core.errors import ConflictError, DomainError, NotFoundError
 from prumo.core.pagination import Page, PageParams, Sort, paginate
-from prumo.modules.habits import rules
+from prumo.modules.habits import recurrence, rules
 from prumo.modules.habits.models import Habit, HabitEntry, HabitFrequency, HabitPause, Relapse
 from prumo.modules.habits.schemas import (
     FrequencyState,
     HabitCalendar,
     HabitCalendarDay,
     HabitCreate,
+    HabitDayItem,
     HabitDetail,
     HabitEntryRead,
     HabitEntryWrite,
@@ -27,11 +28,14 @@ from prumo.modules.habits.schemas import (
     HabitFrequencyFields,
     HabitFrequencyRead,
     HabitFrequencyUpdate,
+    HabitOrder,
     HabitPauseCreate,
     HabitPauseRead,
     HabitPauseUpdate,
+    HabitPeriod,
     HabitRead,
     HabitRef,
+    HabitsDay,
     HabitsSummary,
     HabitsSummaryQuit,
     HabitsToday,
@@ -46,8 +50,16 @@ from prumo.system.preferences.service import timezone_for
 from prumo.system.users.models import User
 
 Archived = Literal["false", "true", "all"]
+# H10: with a time first, by time; then the manual order; the name breaks ties.
+ORDER = (
+    Habit.time_of_day.asc().nulls_last(),
+    Habit.position,
+    func.lower(Habit.name),
+    Habit.id,
+)
 RECENT_RELAPSES = 20
 SUMMARY_PENDING = 3
+SUMMARY_UPCOMING = 5
 
 
 def _today(tz: ZoneInfo) -> date:
@@ -109,9 +121,24 @@ def _rule_frequency(frequency: HabitFrequency) -> rules.Frequency:
     return rules.Frequency(
         valid_from=frequency.valid_from,
         kind=rules.HabitFrequencyKind(frequency.kind),
-        times_per_week=frequency.times_per_week,
+        times=frequency.times,
         weekdays=tuple(frequency.weekdays or ()),
+        every_n=frequency.every_n,
+        month_days=tuple(frequency.month_days or ()),
+        month_last_day=frequency.month_last_day,
+        week_of_month=frequency.week_of_month,
+        weekday=frequency.weekday,
+        period=rules.Period(frequency.period) if frequency.period else None,
+        preferred_day=frequency.preferred_day,
     )
+
+
+def _time_text(value: time | None) -> str | None:
+    return value.strftime("%H:%M") if value is not None else None
+
+
+def _parse_time(value: str | None) -> time | None:
+    return time.fromisoformat(value) if value is not None else None
 
 
 def _rule_habit(habit: Habit, records: _Records) -> rules.Habit:
@@ -147,12 +174,35 @@ def _frequency_reads(
                 valid_from=frequency.valid_from,
                 valid_until=following.valid_from - timedelta(days=1) if following else None,
                 state=state,
-                kind=rules.HabitFrequencyKind(frequency.kind),
-                times_per_week=frequency.times_per_week,
-                weekdays=frequency.weekdays,
+                **_frequency_fields(frequency),
             )
         )
     return list(reversed(reads))
+
+
+def _frequency_fields(frequency: HabitFrequency) -> dict[str, Any]:
+    """The fields of a version as the API shows them: each only in its kind."""
+    kind = rules.HabitFrequencyKind(frequency.kind)
+    weeks = kind == rules.HabitFrequencyKind.WEEKDAYS
+    months = kind in (rules.HabitFrequencyKind.MONTH_DAYS, rules.HabitFrequencyKind.MONTH_WEEKDAY)
+    per_period = kind == rules.HabitFrequencyKind.PER_PERIOD
+    return {
+        "kind": kind,
+        "cadence": recurrence.cadence(_rule_frequency(frequency)),
+        "weekdays": frequency.weekdays if weeks else None,
+        "every_n_weeks": frequency.every_n if weeks else None,
+        "month_days": frequency.month_days if kind == rules.HabitFrequencyKind.MONTH_DAYS else None,
+        "month_last_day": (
+            frequency.month_last_day if kind == rules.HabitFrequencyKind.MONTH_DAYS else None
+        ),
+        "week_of_month": frequency.week_of_month,
+        "weekday": frequency.weekday,
+        "every_n_months": frequency.every_n if months else None,
+        "times": frequency.times,
+        "period": frequency.period,
+        "preferred_day": frequency.preferred_day,
+        "times_per_week": frequency.times if per_period and frequency.period == "week" else None,
+    }
 
 
 @dataclass(frozen=True)
@@ -180,6 +230,8 @@ def _habit_read(habit: Habit, records: _Records, moment: _Moment) -> HabitRead:
         "target_value": habit.target_value,
         "unit": habit.unit,
         "archived_at": habit.archived_at,
+        "time_of_day": _time_text(habit.time_of_day),
+        "position": habit.position,
         "created_at": habit.created_at,
         "updated_at": habit.updated_at,
         "frequency": None,
@@ -189,6 +241,8 @@ def _habit_read(habit: Habit, records: _Records, moment: _Moment) -> HabitRead:
         "best_streak": None,
         "streak_unit": None,
         "week": None,
+        "period": None,
+        "next_due": None,
         "today": None,
         "clean_since": None,
         "clean_days": None,
@@ -214,23 +268,45 @@ def _habit_read(habit: Habit, records: _Records, moment: _Moment) -> HabitRead:
     current, best = rules.streaks(found)
     frequency = rules.frequency_for(rule.frequencies, moment.today)
     reads = _frequency_reads(records.frequencies.get(habit.id, ()), moment.today)
-    week = rules.current_week(found, moment.today)
-    weekly = frequency is not None and frequency.kind == rules.HabitFrequencyKind.WEEKLY
+    period = rules.current_period(found, moment.today)
     values.update(
         frequency=next((f for f in reads if f.state == "current"), None),
         paused=rules.paused(rule.pauses, moment.today),
         rate_percent=rules.rate_percent(found, frequency, moment.today),
         current_streak=current,
         best_streak=best,
-        streak_unit="week" if weekly else "day",
-        week=HabitWeek(done=week.done, target=week.required) if week and weekly else None,
+        streak_unit=rules.streak_unit(frequency),
+        week=_week(period),
+        period=_period(period, moment.today),
+        next_due=None if habit.archived_at else rules.next_due(rule, found, moment.today),
         today=HabitTodayState(
-            scheduled=rules.scheduled_today(found, moment.today) is not None,
+            scheduled=rules.unit_on(found, moment.today) is not None,
             done=rules.day_met(rule, moment.today),
             value=rule.entries.get(moment.today),
         ),
     )
     return HabitRead.model_validate(values)
+
+
+def _week(unit: rules.Unit | None) -> HabitWeek | None:
+    """The deprecated `week`: the period in progress when it is a week."""
+    if unit is None or unit.period != rules.Period.WEEK:
+        return None
+    return HabitWeek(done=unit.done, target=unit.required)
+
+
+def _period(unit: rules.Unit | None, day: date) -> HabitPeriod | None:
+    if unit is None or not unit.periodic or unit.start is None or unit.end is None:
+        return None
+    return HabitPeriod(
+        period=unit.period or rules.Period.WEEK,
+        starts_on=unit.start,
+        ends_on=unit.end,
+        done=unit.done,
+        target=unit.required,
+        days_left=max(0, (unit.last - day).days + 1),
+        neutral=unit.neutral,
+    )
 
 
 def habit_reads(session: Session, user: User, habits: Sequence[Habit]) -> list[HabitRead]:
@@ -279,15 +355,7 @@ def list_habits(
     if kind is not None:
         stmt = stmt.where(Habit.kind == kind)
     stmt = _archived_filter(stmt, archived, updated_since)
-    result = paginate(
-        session,
-        stmt,
-        page,
-        sort=Sort("name", False),
-        sort_columns={"name": func.lower(Habit.name)},
-        tiebreaker=(Habit.id,),
-        updated_since=updated_since,
-    )
+    result = paginate(session, stmt, page, tiebreaker=ORDER, updated_since=updated_since)
     return Page[HabitRead](
         items=habit_reads(session, user, result.items),
         total=result.total,
@@ -299,6 +367,11 @@ def list_habits(
 def _check_measure(measure: str | None, target_value: int | None, unit: str | None) -> None:
     if measure == "quantity" and (target_value is None or unit is None):
         raise _error("A quantity needs a target and a unit.", "habits.invalid_measure")
+
+
+def _next_position(session: Session, user: User) -> int:
+    last = session.scalar(select(func.max(Habit.position)).where(Habit.user_id == user.id))
+    return 0 if last is None else last + 1
 
 
 def create_habit(session: Session, user: User, data: HabitCreate) -> Habit:
@@ -314,6 +387,8 @@ def create_habit(session: Session, user: User, data: HabitCreate) -> Habit:
         color=data.color,
         icon=data.icon,
         started_on=started_on,
+        time_of_day=_parse_time(data.time_of_day),
+        position=_next_position(session, user),
     )
     if data.kind == "build":
         habit.measure = data.measure or "check"
@@ -321,10 +396,12 @@ def create_habit(session: Session, user: User, data: HabitCreate) -> Habit:
             _check_measure(habit.measure, data.target_value, data.unit)
             habit.target_value = data.target_value
             habit.unit = data.unit
+    if data.kind == "build":
+        frequency = data.frequency or HabitFrequencyFields(kind=rules.HabitFrequencyKind.DAILY)
+        _check_frequency(frequency)
     session.add(habit)
     session.flush()
     if data.kind == "build":
-        frequency = data.frequency or HabitFrequencyFields(kind=rules.HabitFrequencyKind.DAILY)
         session.add(_frequency(user, habit, started_on, frequency))
     session.commit()
     return habit
@@ -348,10 +425,30 @@ def update_habit(session: Session, user: User, habit: Habit, data: HabitUpdate) 
             # The first version follows an earlier start: every day from the start is covered.
             if first is not None and started_on < first.valid_from:
                 first.valid_from = started_on
+    if "time_of_day" in values:
+        values["time_of_day"] = _parse_time(values["time_of_day"])
     for name, value in values.items():
         setattr(habit, name, value)
     session.commit()
     return habit
+
+
+def reorder(session: Session, user: User, data: HabitOrder) -> None:
+    """H10: the listed habits take, in the new order, the places they held among all the user's
+    habits; the others keep theirs. Every position is renumbered from 0, so repeating is safe."""
+    habits = list(
+        session.scalars(select(Habit).where(Habit.user_id == user.id).order_by(*ORDER[1:]))
+    )
+    by_id = {h.id: h for h in habits}
+    if any(habit_id not in by_id for habit_id in data.ids):
+        raise NotFoundError()
+    listed = set(data.ids)
+    moved = iter(by_id[habit_id] for habit_id in data.ids)
+    ordered = [next(moved) if h.id in listed else h for h in habits]
+    for index, habit in enumerate(ordered):
+        if habit.position != index:
+            habit.position = index
+    session.commit()
 
 
 def set_archived(session: Session, habit: Habit, archived: bool) -> Habit:
@@ -428,15 +525,41 @@ def _frequency(
     data: HabitFrequencyFields,
     frequency_id: UUID | None = None,
 ) -> HabitFrequency:
-    return HabitFrequency(
-        id=frequency_id or uuid7(),
-        user_id=user.id,
-        habit_id=habit.id,
-        valid_from=valid_from,
-        kind=data.kind.value,
-        times_per_week=data.times_per_week,
-        weekdays=data.weekdays,
+    frequency = HabitFrequency(
+        id=frequency_id or uuid7(), user_id=user.id, habit_id=habit.id, valid_from=valid_from
     )
+    _apply_frequency(frequency, data)
+    return frequency
+
+
+def _check_frequency(data: HabitFrequencyFields) -> None:
+    """H2: `times` fits in its period; the preferred day matches the period."""
+    if data.kind != rules.HabitFrequencyKind.PER_PERIOD or data.period is None:
+        return
+    if (data.times or 1) > recurrence.PERIOD_DAYS[data.period]:
+        raise _error("More times than the period has days.", "habits.times_exceed_period")
+    preferred = data.preferred_day
+    if preferred is not None and (
+        (data.period == rules.Period.MONTH and preferred < 1)
+        or (data.period != rules.Period.MONTH and preferred > 6)
+    ):
+        raise _error(
+            "A weekday (0-6) in weeks and fortnights, a day (1-31) in months.",
+            "habits.preferred_day_mismatch",
+        )
+
+
+def _apply_frequency(frequency: HabitFrequency, data: HabitFrequencyFields) -> None:
+    frequency.kind = data.kind.value
+    frequency.times = data.times
+    frequency.period = data.period.value if data.period else None
+    frequency.preferred_day = data.preferred_day
+    frequency.weekdays = data.weekdays
+    frequency.every_n = data.every_n_weeks or data.every_n_months or 1
+    frequency.month_days = data.month_days
+    frequency.month_last_day = bool(data.month_last_day)
+    frequency.week_of_month = data.week_of_month
+    frequency.weekday = data.weekday
 
 
 def get_frequency(session: Session, user: User, frequency_id: UUID) -> HabitFrequency:
@@ -461,6 +584,7 @@ def create_frequency(
     _require_build(habit)
     if data.valid_from < _today(timezone_for(session, user.id)):
         raise _locked("A frequency starts today or later.")
+    _check_frequency(data)
     taken = session.scalar(
         select(HabitFrequency.id).where(
             HabitFrequency.habit_id == habit.id, HabitFrequency.valid_from == data.valid_from
@@ -481,9 +605,8 @@ def update_frequency(
 ) -> HabitFrequency:
     if frequency.valid_from < _today(timezone_for(session, user.id)):
         raise _locked("A version already in force cannot change.")
-    frequency.kind = data.kind.value
-    frequency.times_per_week = data.times_per_week
-    frequency.weekdays = data.weekdays
+    _check_frequency(data)
+    _apply_frequency(frequency, data)
     session.commit()
     return frequency
 
@@ -705,7 +828,7 @@ def delete_relapse(session: Session, relapse: Relapse) -> None:
     session.commit()
 
 
-# ---------------------------------------------------------------- today and Início (H9)
+# ---------------------------------------------------------------- the day and Início (H9)
 
 
 def _ref(habit: Habit) -> HabitRef:
@@ -718,41 +841,161 @@ def _ref(habit: Habit) -> HabitRef:
             "measure": habit.measure,
             "target_value": habit.target_value,
             "unit": habit.unit,
+            "time_of_day": _time_text(habit.time_of_day),
         }
     )
 
 
 def _active(session: Session, user: User, kind: str) -> list[Habit]:
+    """Active habits of a kind in the order of H10."""
     return list(
         session.scalars(
             select(Habit)
             .where(Habit.user_id == user.id, Habit.kind == kind, Habit.archived_at.is_(None))
-            .order_by(func.lower(Habit.name), Habit.id)
+            .order_by(*ORDER)
         )
     )
 
 
+Section = Literal["timeline", "untimed", "period", "done"]
+
+
+@dataclass(frozen=True)
+class _DayEntry:
+    section: Section
+    item: HabitDayItem
+
+
+def _promotion(
+    rule: rules.Habit, unit: rules.Unit, on: date
+) -> tuple[Literal["preferred_day", "due_soon"] | None, int | None]:
+    """H9: a `per_period` habit rises to the day on its preferred day or after it, or when the
+    days left are at most the times still missing plus one."""
+    preferred = rules.unit_preferred(rule, unit)
+    if preferred is not None and on >= preferred:
+        return "preferred_day", None
+    days_left = (unit.last - on).days + 1
+    if days_left <= unit.required - unit.done + 1:
+        return "due_soon", (unit.last - on).days
+    return None, None
+
+
+def _day_entry(
+    habit: Habit, records: _Records, on: date, today: date, now: time | None
+) -> _DayEntry | None:
+    """Where a `build` habit goes in the day `on` (H9), or None when the day asks nothing."""
+    rule = _rule_habit(habit, records)
+    found = rules.units(rule, today)
+    unit = rules.unit_on(found, on)
+    if unit is None:
+        return None
+    done = rules.day_met(rule, on)
+    promoted: Literal["preferred_day", "due_soon"] | None = None
+    due_in_days = None
+    section: Section
+    if done:
+        section = "done"
+    elif unit.periodic and unit.met:
+        # The period was met on other days: nothing left for this day.
+        return None
+    else:
+        if unit.periodic:
+            promoted, due_in_days = _promotion(rule, unit, on)
+        if unit.periodic and promoted is None:
+            section = "period"
+        else:
+            section = "untimed" if habit.time_of_day is None else "timeline"
+    late = (
+        section == "timeline"
+        and now is not None
+        and habit.time_of_day is not None
+        and habit.time_of_day < now
+    )
+    item = HabitDayItem(
+        habit=_ref(habit),
+        done=done,
+        value=rule.entries.get(on),
+        week=_week(unit),
+        settled=done or (unit.periodic and unit.met),
+        late=late,
+        period=_period(unit, on),
+        promoted=promoted,
+        due_in_days=due_in_days,
+    )
+    return _DayEntry(section, item)
+
+
+def _quit_items(session: Session, user: User) -> list[HabitsSummaryQuit]:
+    reads = habit_reads(session, user, _active(session, user, "quit"))
+    return [
+        HabitsSummaryQuit(
+            id=read.id,
+            name=read.name,
+            color=read.color,
+            icon=read.icon,
+            clean_days=read.clean_days or 0,
+        )
+        for read in reads
+    ]
+
+
+def day(session: Session, user: User, on: date | None = None) -> HabitsDay:
+    """H9: the habits of a day (today by default), grouped and ordered (H10)."""
+    moment = _moment(session, user)
+    on = on or moment.today
+    if on > moment.today:
+        raise _error("A day in the future has nothing to mark yet.", "habits.future_date")
+    habits = _active(session, user, "build")
+    records = _records(session, habits)
+    now = moment.now.time().replace(second=0, microsecond=0) if on == moment.today else None
+    sections: dict[Section, list[HabitDayItem]] = {
+        "timeline": [],
+        "untimed": [],
+        "period": [],
+        "done": [],
+    }
+    for habit in habits:
+        if habit.started_on > on:
+            continue
+        entry = _day_entry(habit, records, on, moment.today, now)
+        if entry is not None:
+            sections[entry.section].append(entry.item)
+    done_items = sections["done"]
+    open_items = len(sections["timeline"]) + len(sections["untimed"])
+    return HabitsDay(
+        on=on,
+        today=moment.today,
+        now=now.strftime("%H:%M") if now is not None else None,
+        done=len(done_items),
+        scheduled=open_items + len(done_items),
+        timeline=sections["timeline"],
+        untimed=sections["untimed"],
+        period=sections["period"],
+        done_items=done_items,
+        quit=_quit_items(session, user),
+    )
+
+
 def today(session: Session, user: User) -> HabitsToday:
-    """The `build` habits that ask something of today (H2): their day, or the week in progress."""
+    """Deprecated shape of today (before D48): every habit that asks something of today, its day
+    or its period in progress, in the order of H10."""
     habits = _active(session, user, "build")
     records = _records(session, habits)
     moment = _moment(session, user)
     items = []
     for habit in habits:
         rule = _rule_habit(habit, records)
-        found = rules.units(rule, moment.today)
-        unit = rules.scheduled_today(found, moment.today)
+        unit = rules.unit_on(rules.units(rule, moment.today), moment.today)
         if unit is None:
             continue
         done = rules.day_met(rule, moment.today)
-        week = HabitWeek(done=unit.done, target=unit.required) if unit.weekly else None
         items.append(
             HabitTodayItem(
                 habit=_ref(habit),
                 done=done,
                 value=rule.entries.get(moment.today),
-                week=week,
-                settled=done or (unit.weekly and unit.met),
+                week=_week(unit),
+                settled=done or (unit.periodic and unit.met),
             )
         )
     return HabitsToday(
@@ -764,24 +1007,14 @@ def today(session: Session, user: User) -> HabitsToday:
 
 
 def build_summary(session: Session, user: User) -> HabitsSummary:
-    day = today(session, user)
-    pending = [item.habit for item in day.items if not item.settled]
-    quit_habits = _active(session, user, "quit")
-    reads = habit_reads(session, user, quit_habits)
+    current = day(session, user)
+    upcoming = current.timeline + current.untimed
     return HabitsSummary(
-        today=day.today,
-        done_today=day.done,
-        scheduled_today=day.scheduled,
-        pending=pending[:SUMMARY_PENDING],
-        pending_more=max(0, len(pending) - SUMMARY_PENDING),
-        quit=[
-            HabitsSummaryQuit(
-                id=read.id,
-                name=read.name,
-                color=read.color,
-                icon=read.icon,
-                clean_days=read.clean_days or 0,
-            )
-            for read in reads
-        ],
+        today=current.today,
+        done_today=current.done,
+        scheduled_today=current.scheduled,
+        pending=[item.habit for item in upcoming[:SUMMARY_PENDING]],
+        pending_more=max(0, len(upcoming) - SUMMARY_PENDING),
+        upcoming=upcoming[:SUMMARY_UPCOMING],
+        quit=current.quit,
     )

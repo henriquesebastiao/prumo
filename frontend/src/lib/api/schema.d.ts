@@ -1417,6 +1417,27 @@ export interface paths {
     patch: operations['studies_update_session']
     trace?: never
   }
+  '/api/v1/habits/day': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Read Day
+     * @description The habits of a day, grouped and ordered (H9, H10): the timeline with times, the untimed
+     *     ones, the periods still open, the ones met on the day and the habits to quit.
+     */
+    get: operations['habits_read_day']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/v1/habits/today': {
     parameters: {
       query?: never
@@ -1426,10 +1447,31 @@ export interface paths {
     }
     /**
      * Read Today
-     * @description The habits that ask something of today, with their entry and week (H2, H6).
+     * @deprecated
+     * @description The habits that ask something of today, with their entry and week (H2, H6). Use `/day`.
      */
     get: operations['habits_read_today']
     put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/v1/habits/order': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Reorder Habits
+     * @description The listed habits take, in this order, the places they held (H10); repeating is safe.
+     */
+    put: operations['habits_reorder_habits']
     post?: never
     delete?: never
     options?: never
@@ -1525,7 +1567,7 @@ export interface paths {
     }
     /**
      * List Habits
-     * @description By name, with the derived values of each kind (H4-H7).
+     * @description In the order of H10 (time, manual order, name), with the derived values (H4-H7).
      */
     get: operations['habits_list_habits']
     put?: never
@@ -2194,6 +2236,12 @@ export interface components {
       /** Finished On */
       finished_on?: string | null
     }
+    /**
+     * Cadence
+     * @description How often a frequency comes back, for filters and labels.
+     * @enum {string}
+     */
+    Cadence: 'daily' | 'weekly' | 'fortnightly' | 'monthly' | 'longer'
     /**
      * CalendarStatus
      * @description A day of a habit's calendar.
@@ -2878,6 +2926,49 @@ export interface components {
       unit?: string | null
       /** @description Only in `build`: the first version, from `started_on`. */
       frequency?: components['schemas']['HabitFrequencyFields'] | null
+      /**
+       * Time Of Day
+       * @description Optional time (H10).
+       */
+      time_of_day?: string | null
+    }
+    /**
+     * HabitDayItem
+     * @description A habit of a day (H9), with its time, its period and why a period rose to the day.
+     */
+    HabitDayItem: {
+      habit: components['schemas']['HabitRef']
+      /**
+       * Done
+       * @description H1: today is met.
+       */
+      done: boolean
+      /** Value */
+      value: number | null
+      /** @description In `weekly`. */
+      week: components['schemas']['HabitWeek'] | null
+      /**
+       * Settled
+       * @description Nothing left for today: today met, or the week met.
+       */
+      settled: boolean
+      /**
+       * Late
+       * @description Open with a time already past (only today).
+       */
+      late: boolean
+      /** @description In `per_period`, from the day of the view. */
+      period: components['schemas']['HabitPeriod'] | null
+      /**
+       * Promoted
+       * @description Why a `per_period` habit is in the day: its preferred day came, or few days are left.
+       */
+      promoted: ('preferred_day' | 'due_soon') | null
+      /**
+       * Due In Days
+       * @description With `due_soon`: days until the period ends.
+       */
+      due_in_days: number | null
     }
     /** HabitDetail */
     HabitDetail: {
@@ -2910,6 +3001,16 @@ export interface components {
       unit: string | null
       /** Archived At */
       archived_at: string | null
+      /**
+       * Time Of Day
+       * @description `HH:MM` in the user's zone, or null.
+       */
+      time_of_day: string | null
+      /**
+       * Position
+       * @description Manual order (H10).
+       */
+      position: number
       /** @description The version in force today. */
       frequency: components['schemas']['HabitFrequencyRead'] | null
       /**
@@ -2929,10 +3030,20 @@ export interface components {
       current_streak: number | null
       /** Best Streak */
       best_streak: number | null
-      /** Streak Unit */
-      streak_unit: ('day' | 'week') | null
-      /** @description H6, in `weekly`. */
+      /**
+       * Streak Unit
+       * @description `day` (daily or weekly fixed dates), `occurrence` (sparser fixed dates) or the period of `per_period`.
+       */
+      streak_unit: ('day' | 'occurrence' | 'week' | 'fortnight' | 'month') | null
+      /** @description Deprecated: H6 when the period is a week. */
       week: components['schemas']['HabitWeek'] | null
+      /** @description H6, in `per_period`. */
+      period: components['schemas']['HabitPeriod'] | null
+      /**
+       * Next Due
+       * @description The next day that asks something; null if none.
+       */
+      next_due: string | null
       today: components['schemas']['HabitTodayState'] | null
       /** Clean Since */
       clean_since: string | null
@@ -3014,15 +3125,57 @@ export interface components {
     HabitFrequencyCreate: {
       kind: components['schemas']['HabitFrequencyKind']
       /**
-       * Times Per Week
-       * @description In `weekly`.
-       */
-      times_per_week?: number | null
-      /**
        * Weekdays
        * @description In `weekdays`.
        */
       weekdays?: number[] | null
+      /**
+       * Every N Weeks
+       * @description In `weekdays`: every N weeks; 1 by default.
+       */
+      every_n_weeks?: number | null
+      /**
+       * Month Days
+       * @description In `month_days`; a day the month lacks falls on its last day.
+       */
+      month_days?: number[] | null
+      /**
+       * Month Last Day
+       * @description In `month_days`: the last day of the month too.
+       */
+      month_last_day?: boolean | null
+      /**
+       * Week Of Month
+       * @description In `month_weekday`: 1 to 4, or -1 for the last.
+       */
+      week_of_month?: (1 | 2 | 3 | 4 | -1) | null
+      /**
+       * Weekday
+       * @description In `month_weekday`.
+       */
+      weekday?: number | null
+      /**
+       * Every N Months
+       * @description In `month_days` and `month_weekday`: every N months; 1 by default.
+       */
+      every_n_months?: number | null
+      /**
+       * Times
+       * @description In `per_period`: days met in each period.
+       */
+      times?: number | null
+      /** @description In `per_period`. */
+      period?: components['schemas']['Period'] | null
+      /**
+       * Preferred Day
+       * @description In `per_period`, display only: a weekday (0-6) in `week` and `fortnight`, a day of the month (1-31) in `month`.
+       */
+      preferred_day?: number | null
+      /**
+       * Times Per Week
+       * @description Deprecated: `weekly` only; use `per_period`.
+       */
+      times_per_week?: number | null
       /** Id */
       id?: string | null
       /**
@@ -3031,25 +3184,72 @@ export interface components {
        */
       valid_from: string
     }
-    /** HabitFrequencyFields */
+    /**
+     * HabitFrequencyFields
+     * @description The shape of each kind (H2). `weekly` with `times_per_week` is still accepted from apps
+     *     before D48 and becomes `per_period` with `period = week`.
+     */
     HabitFrequencyFields: {
       kind: components['schemas']['HabitFrequencyKind']
-      /**
-       * Times Per Week
-       * @description In `weekly`.
-       */
-      times_per_week?: number | null
       /**
        * Weekdays
        * @description In `weekdays`.
        */
       weekdays?: number[] | null
+      /**
+       * Every N Weeks
+       * @description In `weekdays`: every N weeks; 1 by default.
+       */
+      every_n_weeks?: number | null
+      /**
+       * Month Days
+       * @description In `month_days`; a day the month lacks falls on its last day.
+       */
+      month_days?: number[] | null
+      /**
+       * Month Last Day
+       * @description In `month_days`: the last day of the month too.
+       */
+      month_last_day?: boolean | null
+      /**
+       * Week Of Month
+       * @description In `month_weekday`: 1 to 4, or -1 for the last.
+       */
+      week_of_month?: (1 | 2 | 3 | 4 | -1) | null
+      /**
+       * Weekday
+       * @description In `month_weekday`.
+       */
+      weekday?: number | null
+      /**
+       * Every N Months
+       * @description In `month_days` and `month_weekday`: every N months; 1 by default.
+       */
+      every_n_months?: number | null
+      /**
+       * Times
+       * @description In `per_period`: days met in each period.
+       */
+      times?: number | null
+      /** @description In `per_period`. */
+      period?: components['schemas']['Period'] | null
+      /**
+       * Preferred Day
+       * @description In `per_period`, display only: a weekday (0-6) in `week` and `fortnight`, a day of the month (1-31) in `month`.
+       */
+      preferred_day?: number | null
+      /**
+       * Times Per Week
+       * @description Deprecated: `weekly` only; use `per_period`.
+       */
+      times_per_week?: number | null
     }
     /**
      * HabitFrequencyKind
      * @enum {string}
      */
-    HabitFrequencyKind: 'daily' | 'weekly' | 'weekdays'
+    HabitFrequencyKind:
+      'daily' | 'weekly' | 'weekdays' | 'month_days' | 'month_weekday' | 'per_period'
     /** HabitFrequencyRead */
     HabitFrequencyRead: {
       /**
@@ -3072,11 +3272,34 @@ export interface components {
        * @enum {string}
        */
       state: 'past' | 'current' | 'future'
+      /** @description Never `weekly` (input only, deprecated). */
       kind: components['schemas']['HabitFrequencyKind']
-      /** Times Per Week */
-      times_per_week: number | null
+      /** @description How often it comes back, for filters and labels. */
+      cadence: components['schemas']['Cadence']
       /** Weekdays */
       weekdays: number[] | null
+      /** Every N Weeks */
+      every_n_weeks: number | null
+      /** Month Days */
+      month_days: number[] | null
+      /** Month Last Day */
+      month_last_day: boolean | null
+      /** Week Of Month */
+      week_of_month: number | null
+      /** Weekday */
+      weekday: number | null
+      /** Every N Months */
+      every_n_months: number | null
+      /** Times */
+      times: number | null
+      period: components['schemas']['Period'] | null
+      /** Preferred Day */
+      preferred_day: number | null
+      /**
+       * Times Per Week
+       * @description Deprecated: `times` when `period` is `week`.
+       */
+      times_per_week: number | null
     }
     /**
      * HabitFrequencyUpdate
@@ -3085,15 +3308,65 @@ export interface components {
     HabitFrequencyUpdate: {
       kind: components['schemas']['HabitFrequencyKind']
       /**
-       * Times Per Week
-       * @description In `weekly`.
-       */
-      times_per_week?: number | null
-      /**
        * Weekdays
        * @description In `weekdays`.
        */
       weekdays?: number[] | null
+      /**
+       * Every N Weeks
+       * @description In `weekdays`: every N weeks; 1 by default.
+       */
+      every_n_weeks?: number | null
+      /**
+       * Month Days
+       * @description In `month_days`; a day the month lacks falls on its last day.
+       */
+      month_days?: number[] | null
+      /**
+       * Month Last Day
+       * @description In `month_days`: the last day of the month too.
+       */
+      month_last_day?: boolean | null
+      /**
+       * Week Of Month
+       * @description In `month_weekday`: 1 to 4, or -1 for the last.
+       */
+      week_of_month?: (1 | 2 | 3 | 4 | -1) | null
+      /**
+       * Weekday
+       * @description In `month_weekday`.
+       */
+      weekday?: number | null
+      /**
+       * Every N Months
+       * @description In `month_days` and `month_weekday`: every N months; 1 by default.
+       */
+      every_n_months?: number | null
+      /**
+       * Times
+       * @description In `per_period`: days met in each period.
+       */
+      times?: number | null
+      /** @description In `per_period`. */
+      period?: components['schemas']['Period'] | null
+      /**
+       * Preferred Day
+       * @description In `per_period`, display only: a weekday (0-6) in `week` and `fortnight`, a day of the month (1-31) in `month`.
+       */
+      preferred_day?: number | null
+      /**
+       * Times Per Week
+       * @description Deprecated: `weekly` only; use `per_period`.
+       */
+      times_per_week?: number | null
+    }
+    /**
+     * HabitOrder
+     * @description The new order of some habits: they take, in this order, the places they held (H10).
+     */
+    HabitOrder: {
+      /** Ids */
+      ids: string[]
     }
     /** HabitPauseCreate */
     HabitPauseCreate: {
@@ -3145,6 +3418,43 @@ export interface components {
        */
       ends_on?: string | null
     }
+    /**
+     * HabitPeriod
+     * @description H6: the `per_period` period in progress.
+     */
+    HabitPeriod: {
+      period: components['schemas']['Period']
+      /**
+       * Starts On
+       * Format: date
+       */
+      starts_on: string
+      /**
+       * Ends On
+       * Format: date
+       */
+      ends_on: string
+      /**
+       * Done
+       * @description Days met in the period.
+       */
+      done: number
+      /**
+       * Target
+       * @description Days the period asks (H2).
+       */
+      target: number
+      /**
+       * Days Left
+       * @description Days from the reference day to the end, both included.
+       */
+      days_left: number
+      /**
+       * Neutral
+       * @description H2a: out of the rate; breaks no streak.
+       */
+      neutral: boolean
+    }
     /** HabitRead */
     HabitRead: {
       /**
@@ -3176,6 +3486,16 @@ export interface components {
       unit: string | null
       /** Archived At */
       archived_at: string | null
+      /**
+       * Time Of Day
+       * @description `HH:MM` in the user's zone, or null.
+       */
+      time_of_day: string | null
+      /**
+       * Position
+       * @description Manual order (H10).
+       */
+      position: number
       /** @description The version in force today. */
       frequency: components['schemas']['HabitFrequencyRead'] | null
       /**
@@ -3195,10 +3515,20 @@ export interface components {
       current_streak: number | null
       /** Best Streak */
       best_streak: number | null
-      /** Streak Unit */
-      streak_unit: ('day' | 'week') | null
-      /** @description H6, in `weekly`. */
+      /**
+       * Streak Unit
+       * @description `day` (daily or weekly fixed dates), `occurrence` (sparser fixed dates) or the period of `per_period`.
+       */
+      streak_unit: ('day' | 'occurrence' | 'week' | 'fortnight' | 'month') | null
+      /** @description Deprecated: H6 when the period is a week. */
       week: components['schemas']['HabitWeek'] | null
+      /** @description H6, in `per_period`. */
+      period: components['schemas']['HabitPeriod'] | null
+      /**
+       * Next Due
+       * @description The next day that asks something; null if none.
+       */
+      next_due: string | null
       today: components['schemas']['HabitTodayState'] | null
       /** Clean Since */
       clean_since: string | null
@@ -3238,6 +3568,11 @@ export interface components {
       target_value: number | null
       /** Unit */
       unit: string | null
+      /**
+       * Time Of Day
+       * @description `HH:MM`, or null.
+       */
+      time_of_day: string | null
     }
     /** HabitTodayItem */
     HabitTodayItem: {
@@ -3306,6 +3641,11 @@ export interface components {
       target_value?: number | null
       /** Unit */
       unit?: string | null
+      /**
+       * Time Of Day
+       * @description `null` clears it.
+       */
+      time_of_day?: string | null
     }
     /**
      * HabitWeek
@@ -3316,6 +3656,62 @@ export interface components {
       done: number
       /** Target */
       target: number
+    }
+    /**
+     * HabitsDay
+     * @description A day of habits (H9), grouped and ordered by the server (H10).
+     */
+    HabitsDay: {
+      /**
+       * On
+       * Format: date
+       */
+      on: string
+      /**
+       * Today
+       * Format: date
+       */
+      today: string
+      /**
+       * Now
+       * @description `HH:MM` in the user's zone, only when `on` is today.
+       */
+      now: string | null
+      /**
+       * Done
+       * @description Met on the day: `done_items`.
+       */
+      done: number
+      /**
+       * Scheduled
+       * @description `timeline`, `untimed` and `done_items`.
+       */
+      scheduled: number
+      /**
+       * Timeline
+       * @description Open, with a time, by time.
+       */
+      timeline: components['schemas']['HabitDayItem'][]
+      /**
+       * Untimed
+       * @description Open, without a time, in the manual order.
+       */
+      untimed: components['schemas']['HabitDayItem'][]
+      /**
+       * Period
+       * @description `per_period` still open in their period and not promoted to the day.
+       */
+      period: components['schemas']['HabitDayItem'][]
+      /**
+       * Done Items
+       * @description Met on the day, in the same order.
+       */
+      done_items: components['schemas']['HabitDayItem'][]
+      /**
+       * Quit
+       * @description Habits to quit, with the days without.
+       */
+      quit: components['schemas']['HabitsSummaryQuit'][]
     }
     /** HabitsSummary */
     HabitsSummary: {
@@ -3338,6 +3734,11 @@ export interface components {
        * @description Up to 3 habits still open today.
        */
       pending: components['schemas']['HabitRef'][]
+      /**
+       * Upcoming
+       * @description Up to 5 open today, in the order of the day (timeline, then untimed).
+       */
+      upcoming: components['schemas']['HabitDayItem'][]
       /**
        * Pending More
        * @description Open ones beyond `pending`.
@@ -3362,7 +3763,10 @@ export interface components {
       /** Clean Days */
       clean_days: number
     }
-    /** HabitsToday */
+    /**
+     * HabitsToday
+     * @description Deprecated: `GET /habits/day` groups and orders the day (H9).
+     */
     HabitsToday: {
       /**
        * Today
@@ -4100,6 +4504,11 @@ export interface components {
       /** New Password */
       new_password: string
     }
+    /**
+     * Period
+     * @enum {string}
+     */
+    Period: 'week' | 'fortnight' | 'month'
     /** PlanBlocksWrite */
     PlanBlocksWrite: {
       /** Blocks */
@@ -12424,6 +12833,65 @@ export interface operations {
       }
     }
   }
+  habits_read_day: {
+    parameters: {
+      query?: {
+        /** @description Today by default; never in the future. */
+        on?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HabitsDay']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   habits_read_today: {
     parameters: {
       query?: never
@@ -12441,6 +12909,64 @@ export interface operations {
         content: {
           'application/json': components['schemas']['HabitsToday']
         }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  habits_reorder_habits: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['HabitOrder']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorized */
       401: {

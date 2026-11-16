@@ -44,7 +44,8 @@
       "paused": "Pausa",
       "unscheduled": "Não agendado",
       "future": "Ainda não chegou"
-    }
+    },
+    "undo": "Desfazer"
   },
   "nav": {
     "main": "Navegação principal",
@@ -245,7 +246,9 @@
       "frequency_locked": "Essa frequência já está em vigor e não muda. Crie uma versão a partir de hoje ou de uma data futura.",
       "frequency_date_taken": "Já existe uma versão da frequência começando nessa data.",
       "pause_overlap": "Essa pausa encosta em outra. Ajuste as datas.",
-      "invalid_measure": "Uma quantidade precisa de meta e unidade."
+      "invalid_measure": "Uma quantidade precisa de meta e unidade.",
+      "times_exceed_period": "Mais vezes do que o período tem dias: até 7 por semana, 14 por quinzena e 28 por mês.",
+      "preferred_day_mismatch": "O dia preferido não combina com o período: um dia da semana em semanas e quinzenas, um dia do mês em meses."
     }
   },
   "fieldErrors": {

@@ -5,19 +5,11 @@ import { useI18n } from 'vue-i18n'
 
 import { errorMessage } from '@/lib/errors'
 import { apiFieldErrors, type FieldErrors } from '@/lib/forms'
-import {
-  PAlert,
-  PButton,
-  PDateInput,
-  PDialog,
-  PField,
-  PSegmented,
-  PStepper,
-  PWeekdayPicker,
-  useToast,
-} from '@/ui'
+import { PAlert, PButton, PDateInput, PDialog, PField, useToast } from '@/ui'
 
-import { useSaveFrequency, type FrequencyKind, type HabitFrequency } from '../api'
+import { useSaveFrequency, type HabitFrequency } from '../api'
+import { draftOf, draftValid, fieldsOf } from './frequency'
+import FrequencyFields from './FrequencyFields.vue'
 import { today as deviceToday } from './today'
 
 const props = defineProps<{ habitId: string; frequency?: HabitFrequency; today?: string }>()
@@ -27,9 +19,7 @@ const toast = useToast()
 const save = useSaveFrequency()
 const saving = save.isPending
 
-const kind = ref<FrequencyKind>('daily')
-const times = ref(3)
-const weekdays = ref<number[]>([])
+const draft = ref(draftOf())
 const validFrom = ref('')
 const errors = ref<FieldErrors>({})
 const failure = ref<string | null>(null)
@@ -41,19 +31,10 @@ watch(
     if (!value) return
     errors.value = {}
     failure.value = null
-    kind.value = props.frequency?.kind ?? 'daily'
-    times.value = props.frequency?.times_per_week ?? 3
-    weekdays.value = props.frequency?.weekdays ?? [0, 1, 2, 3, 4]
+    draft.value = draftOf(props.frequency)
     validFrom.value = props.frequency?.valid_from ?? first.value
   },
   { immediate: true },
-)
-
-const options = computed(() =>
-  (['daily', 'weekly', 'weekdays'] as const).map((value) => ({
-    value,
-    label: t(`habits.frequency.kinds.${value}`),
-  })),
 )
 
 async function submit() {
@@ -63,12 +44,7 @@ async function submit() {
     await save.mutateAsync({
       habitId: props.habitId,
       id: props.frequency?.id,
-      body: {
-        valid_from: validFrom.value,
-        kind: kind.value,
-        times_per_week: kind.value === 'weekly' ? times.value : null,
-        weekdays: kind.value === 'weekdays' ? weekdays.value : null,
-      },
+      body: { valid_from: validFrom.value, ...fieldsOf(draft.value) },
     })
     toast.show({ title: t('habits.form.saved.frequency') })
     open.value = false
@@ -85,17 +61,10 @@ async function submit() {
     :title="t(frequency ? 'habits.form.titles.editFrequency' : 'habits.form.titles.newFrequency')"
     icon="repeat"
     tone="habits"
-    size="s"
   >
     <form id="frequency-form" class="form" novalidate @submit.prevent="submit">
       <PAlert v-if="failure" :title="failure" />
-      <PSegmented v-model="kind" :options="options" :label="t('habits.form.frequency')" block />
-      <PField v-if="kind === 'weekly'" :label="t('habits.form.timesPerWeek')" label-as="span">
-        <PStepper v-model="times" :min="1" :max="7" :label="t('habits.form.timesPerWeek')" />
-      </PField>
-      <PField v-if="kind === 'weekdays'" :label="t('habits.form.weekdays')" label-as="span">
-        <PWeekdayPicker v-model="weekdays" tone="habits" />
-      </PField>
+      <FrequencyFields v-model="draft" />
       <PField
         v-if="!frequency"
         :label="t('habits.form.validFrom')"
@@ -112,7 +81,7 @@ async function submit() {
         form="frequency-form"
         variant="primary"
         :loading="saving"
-        :disabled="!validFrom || (kind === 'weekdays' && !weekdays.length)"
+        :disabled="!validFrom || !draftValid(draft)"
         >{{ t('habits.actions.save') }}</PButton
       >
     </template>

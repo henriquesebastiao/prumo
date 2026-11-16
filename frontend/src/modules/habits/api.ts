@@ -11,10 +11,14 @@ export type HabitFrequency = Schemas['HabitFrequencyRead']
 export type HabitPause = Schemas['HabitPauseRead']
 export type Relapse = Schemas['RelapseRead']
 export type HabitCalendar = Schemas['HabitCalendar']
-export type HabitsToday = Schemas['HabitsToday']
-export type HabitTodayItem = Schemas['HabitTodayItem']
+export type HabitsDay = Schemas['HabitsDay']
+export type HabitDayItem = Schemas['HabitDayItem']
+export type HabitPeriod = Schemas['HabitPeriod']
 export type HabitsSummary = Schemas['HabitsSummary']
 export type FrequencyKind = Schemas['HabitFrequencyKind']
+export type FrequencyFields = Schemas['HabitFrequencyFields']
+export type Cadence = Schemas['Cadence']
+export type Period = Schemas['Period']
 export type HabitColor = NonNullable<Schemas['HabitCreate']['color']>
 
 const ALL = 200
@@ -25,7 +29,7 @@ export const habitsKeys = {
   habit: (id: string) => ['habits', 'habit', id] as const,
   calendar: (id: string, month: string | undefined) =>
     ['habits', 'calendar', id, month ?? 'current'] as const,
-  today: ['habits', 'today'] as const,
+  day: (on: string | undefined) => ['habits', 'day', on ?? 'today'] as const,
 }
 
 /** Every habits write changes derived values (streaks, rates, today) and Início. */
@@ -81,10 +85,17 @@ export function useCalendar(
   })
 }
 
-export function useToday() {
+/** H9: a day of habits (today by default), grouped and ordered by the server. */
+export function useDay(on: MaybeRefOrGetter<string | undefined> = undefined) {
   return useQuery({
-    queryKey: habitsKeys.today,
-    queryFn: () => unwrap(api.GET('/api/v1/habits/today')),
+    queryKey: computed(() => habitsKeys.day(toValue(on))),
+    queryFn: () => {
+      const value = toValue(on)
+      return unwrap(
+        api.GET('/api/v1/habits/day', { params: { query: value ? { on: value } : {} } }),
+      )
+    },
+    placeholderData: (previous) => previous,
   })
 }
 
@@ -175,11 +186,7 @@ export function useSaveFrequency() {
         ? unwrap(
             api.PATCH('/api/v1/habits/frequencies/{frequency_id}', {
               params: { path: { frequency_id: id } },
-              body: {
-                kind: body.kind,
-                times_per_week: body.times_per_week,
-                weekdays: body.weekdays,
-              },
+              body: frequencyFields(body),
             }),
           )
         : unwrap(
@@ -188,6 +195,23 @@ export function useSaveFrequency() {
               body,
             }),
           ),
+    onSuccess: invalidate,
+  })
+}
+
+/** The fields of a version, without its date nor its id. */
+function frequencyFields(body: Schemas['HabitFrequencyCreate']): FrequencyFields {
+  const fields: Partial<Schemas['HabitFrequencyCreate']> = { ...body }
+  delete fields.valid_from
+  delete fields.id
+  return fields as FrequencyFields
+}
+
+/** H10: the habits in `ids` take, in this order, the places they held. */
+export function useReorder() {
+  const invalidate = useInvalidateHabits()
+  return useMutation({
+    mutationFn: (ids: string[]) => unwrap(api.PUT('/api/v1/habits/order', { body: { ids } })),
     onSuccess: invalidate,
   })
 }

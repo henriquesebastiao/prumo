@@ -48,7 +48,6 @@
   "frequency": {
     "title": "Frequência",
     "daily": "Todo dia",
-    "weekly": "{n}× por semana",
     "workdays": "Dias úteis",
     "weekdayNames": "Seg,Ter,Qua,Qui,Sex,Sáb,Dom",
     "list": "{first} e {last}",
@@ -57,25 +56,95 @@
     "past": "{from} a {until}",
     "kinds": {
       "daily": "Todo dia",
-      "weekly": "X por semana",
-      "weekdays": "Dias da semana"
+      "weekdays": "Dias da semana",
+      "month_days": "Dias do mês",
+      "month_weekday": "Semana do mês",
+      "per_period": "Vezes por período"
     },
     "locked": "A frequência em vigor não muda: mudar cria uma versão a partir de hoje ou de uma data futura.",
     "deleteTitle": "Excluir esta versão?",
     "deleteBody": "A versão que começa em {date} será apagada.",
-    "deleted": "Versão excluída"
+    "deleted": "Versão excluída",
+    "weekdayLong": "segunda,terça,quarta,quinta,sexta,sábado,domingo",
+    "fortnightly": "Quinzenal",
+    "every": {
+      "weeks": "A cada {n} semanas",
+      "months": "A cada {n} meses"
+    },
+    "lastDay": "último dia",
+    "lastDayOfMonth": "Último dia do mês",
+    "monthDays": "Dia {days} | Dias {days}",
+    "monthWeekday": "{nth} {weekday} do mês",
+    "nth": {
+      "f": {
+        "1": "1ª",
+        "2": "2ª",
+        "3": "3ª",
+        "4": "4ª",
+        "last": "Última"
+      },
+      "m": {
+        "1": "1º",
+        "2": "2º",
+        "3": "3º",
+        "4": "4º",
+        "last": "Último"
+      }
+    },
+    "perPeriod": {
+      "week": "{n}× por semana",
+      "fortnight": "{n}× por quinzena",
+      "month": "{n}× por mês"
+    },
+    "dayOfMonth": "dia {day}",
+    "preferred": "de preferência {day}",
+    "periods": {
+      "week": "Semana",
+      "fortnight": "Quinzena",
+      "month": "Mês"
+    },
+    "cadences": {
+      "daily": "Diário",
+      "weekly": "Semanal",
+      "fortnightly": "Quinzenal",
+      "monthly": "Mensal",
+      "longer": "Mais espaçado"
+    }
   },
   "streak": {
-    "days": "nenhum dia | {n} dia | {n} dias",
-    "weeks": "nenhuma semana | {n} semana | {n} semanas"
+    "day": "nenhum dia | {n} dia | {n} dias",
+    "occurrence": "nenhuma vez | {n} vez | {n} vezes",
+    "week": "nenhuma semana | {n} semana | {n} semanas",
+    "fortnight": "nenhuma quinzena | {n} quinzena | {n} quinzenas",
+    "month": "nenhum mês | {n} mês | {n} meses"
   },
   "today": {
     "empty": "Nada para hoje",
     "emptyHint": "Os hábitos agendados para hoje aparecem aqui. Crie um em Hábitos.",
-    "allDone": "Tudo feito hoje.",
+    "allDone": "Tudo feito por hoje.",
     "progress": "{done} de {scheduled} hoje",
-    "week": "{done} de {target} esta semana",
-    "weekDone": "Semana cumprida"
+    "periodDone": "Período cumprido",
+    "sections": {
+      "timeline": "Com horário",
+      "untimed": "Sem horário",
+      "period": "Neste período · {n}",
+      "done": "Feitos hoje · {n}",
+      "donePast": "Feitos · {n}",
+      "quit": "Hábitos a abandonar"
+    },
+    "now": "agora · {time}",
+    "late": "passou do horário",
+    "preferredDay": "dia preferido",
+    "dueSoon": "vence hoje | vence amanhã | vence em {n} dias",
+    "marked": "{name} marcado",
+    "day": "Dia",
+    "previousDay": "Dia anterior",
+    "nextDay": "Próximo dia",
+    "backToToday": "Voltar para hoje",
+    "reorder": "Ordem dos hábitos sem horário",
+    "searchPlaceholder": "Buscar hábito",
+    "noResults": "Nenhum hábito com esse nome hoje.",
+    "progressPast": "{done} de {scheduled} no dia"
   },
   "list": {
     "build": "Para praticar",
@@ -88,13 +157,23 @@
     "paused": "Pausado",
     "archived": "Arquivado",
     "clean": "{days} sem",
-    "relapses": "nenhuma recaída em 30 dias | 1 recaída em 30 dias | {n} recaídas em 30 dias"
+    "relapses": "nenhuma recaída em 30 dias | 1 recaída em 30 dias | {n} recaídas em 30 dias",
+    "next": "próxima: {date}",
+    "search": "Buscar hábito",
+    "filters": {
+      "label": "Filtros",
+      "kind": "Tipo",
+      "cadence": "Frequência",
+      "allKinds": "Todos os tipos",
+      "allCadences": "Todas as frequências"
+    },
+    "noMatch": "Nenhum hábito com esses filtros.",
+    "reorder": "Ordem dos hábitos",
+    "reorderHint": "Arraste pela alça para ordenar os hábitos sem horário; os com horário seguem o relógio."
   },
   "detail": {
     "back": "Hábitos",
     "rate": "Taxa",
-    "rateHint": "últimos 30 dias",
-    "rateHintWeeks": "últimas 4 semanas",
     "streak": "Sequência",
     "best": "Melhor",
     "week": "Esta semana",
@@ -116,7 +195,17 @@
     "deleteTitle": "Excluir o hábito?",
     "deleteBody": "{name} será apagado com todo o histórico. Isso não pode ser desfeito.",
     "deleted": "Hábito excluído",
-    "days": "nenhum dia | {n} dia | {n} dias"
+    "days": "nenhum dia | {n} dia | {n} dias",
+    "rateWindow": {
+      "day": "últimos 30 dias",
+      "week": "últimas 4 semanas",
+      "occurrence": "últimas 6 vezes",
+      "fortnight": "últimas 6 quinzenas",
+      "month": "últimos 6 meses"
+    },
+    "period": "Este período",
+    "nextDue": "Próxima",
+    "time": "Horário"
   },
   "form": {
     "name": "Nome",
@@ -130,7 +219,6 @@
     "startedOn": "Começa em",
     "startedOnHint": "Hoje ou uma data passada.",
     "frequency": "Frequência",
-    "timesPerWeek": "Vezes por semana",
     "weekdays": "Dias da semana",
     "validFrom": "Vale a partir de",
     "validFromHint": "Hoje ou uma data futura.",
@@ -157,13 +245,29 @@
       "relapse": "Recaída registrada"
     },
     "time": "Hora",
-    "value": "Quanto em {day}"
+    "value": "Quanto em {day}",
+    "timeOfDay": "Horário",
+    "timeOfDayHint": "Opcional, no seu fuso. Ordena o dia.",
+    "everyNWeeks": "A cada quantas semanas",
+    "everyNMonths": "A cada quantos meses",
+    "monthDays": "Dias do mês",
+    "monthLastDay": "Último dia do mês",
+    "monthDaysHint": "Um dia que o mês não tem cai no último dia.",
+    "weekOfMonth": "Qual",
+    "weekday": "Dia da semana",
+    "times": "Vezes",
+    "period": "Período",
+    "preferredDay": "Dia preferido",
+    "preferredHint": "Opcional. Só muda quando o hábito aparece em Hoje.",
+    "anchorHint": "A contagem começa na semana (ou no mês) em que esta versão vale.",
+    "noPreferred": "Nenhum"
   },
   "widget": {
     "today": "{done} de {scheduled} hoje",
     "empty": "Crie um hábito para acompanhar aqui.",
     "more": "+{n}",
-    "none": "Nada agendado para hoje"
+    "none": "Nada agendado para hoje",
+    "seeAll": "Ver todos"
   },
   "colors": {
     "green": "Verde",
@@ -209,5 +313,11 @@
     "moon": "Sono",
     "sun": "Manhã",
     "trophy": "Conquista"
+  },
+  "period": {
+    "week": "{done} de {target} nesta semana",
+    "fortnight": "{done} de {target} nesta quinzena",
+    "month": "{done} de {target} neste mês",
+    "daysLeft": "termina hoje | falta 1 dia | faltam {n} dias"
   }
 }

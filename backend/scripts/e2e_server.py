@@ -452,13 +452,17 @@ def seed_studies(session: Session, user: object) -> None:
 
 
 def seed_habits(session: Session, user: object) -> None:
-    """Hábitos: "Ler a Bíblia" every day since 01/09 (a missed 02/10, a pause from 20 to 24/10,
-    then a 40-day streak), "Beber água" 2000 ml (today 1250), "Academia" 3x a week since 05/10
-    (one week short, this week 1 of 3), "Anki" daily from 15/10 and Monday to Friday from 01/11
-    (13/11 missed), "Meditar" archived, and "Redes sociais antes de dormir" to quit since 01/08,
-    with three relapses and their notes."""
+    """Hábitos: "Ler a Bíblia" at 05:15 every day since 01/09 (a missed 02/10, a pause from 20 to
+    24/10, then a streak up to today, done), "Alongar" at 07:00 (open and late at 14:30), "Regar
+    as plantas" at 18:00, "Beber água" 2000 ml (today 1250), "Academia" 3x a week since 05/10 (one
+    week short, this week 1 of 3), "Anki" daily from 15/10 and Monday to Friday from 01/11 (13/11
+    missed), "Trocar roupa de cama" every other Saturday (next 21/11), "Limpar caixa d'água" on
+    the 5th every 3 months (next 05/02), "Revisão mensal" on the first Sunday (next 06/12),
+    "Tarefa do mês" once a month preferably on the 15th (open, so it rises to the day),
+    "Meditar" archived, and "Redes sociais antes de dormir" to quit since 01/08, with three
+    relapses and their notes (D48)."""
     from prumo.modules.habits import service as habits
-    from prumo.modules.habits.rules import HabitFrequencyKind
+    from prumo.modules.habits.rules import HabitFrequencyKind, Period
     from prumo.modules.habits.schemas import (
         HabitCreate,
         HabitEntryWrite,
@@ -477,7 +481,7 @@ def seed_habits(session: Session, user: object) -> None:
     def days(first: date, last: date) -> list[date]:
         return [first + timedelta(days=i) for i in range((last - first).days + 1)]
 
-    weekly = HabitFrequencyFields(kind=HabitFrequencyKind.WEEKLY, times_per_week=3)
+    weekly = HabitFrequencyFields(kind=HabitFrequencyKind.PER_PERIOD, times=3, period=Period.WEEK)
     daily = HabitFrequencyFields(kind=HabitFrequencyKind.DAILY)
     with time_machine.travel(local("2026-09-01T07:00:00")):
         bible = habits.create_habit(
@@ -490,6 +494,52 @@ def seed_habits(session: Session, user: object) -> None:
                 icon="book-open",
                 started_on=date(2026, 9, 1),
                 frequency=daily,
+                time_of_day="05:15",
+            ),
+        )
+        review = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Revisão mensal",
+                kind="build",
+                color="indigo",
+                icon="briefcase",
+                started_on=date(2026, 9, 1),
+                frequency=HabitFrequencyFields(
+                    kind=HabitFrequencyKind.MONTH_WEEKDAY, week_of_month=1, weekday=6
+                ),
+            ),
+        )
+        chore = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Tarefa do mês",
+                kind="build",
+                color="green",
+                icon="sparkles",
+                started_on=date(2026, 9, 1),
+                frequency=HabitFrequencyFields(
+                    kind=HabitFrequencyKind.PER_PERIOD,
+                    times=1,
+                    period=Period.MONTH,
+                    preferred_day=15,
+                ),
+            ),
+        )
+        tank = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Limpar caixa d'água",
+                kind="build",
+                color="cyan",
+                icon="droplet",
+                started_on=date(2026, 8, 1),
+                frequency=HabitFrequencyFields(
+                    kind=HabitFrequencyKind.MONTH_DAYS, month_days=[5], every_n_months=3
+                ),
             ),
         )
         social = habits.create_habit(
@@ -559,7 +609,46 @@ def seed_habits(session: Session, user: object) -> None:
             bible,
             HabitPauseCreate(starts_on=date(2026, 10, 20), ends_on=date(2026, 10, 24)),
         )
+    with time_machine.travel(local("2026-10-10T07:00:00")):
+        sheets = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Trocar roupa de cama",
+                kind="build",
+                color="pink",
+                icon="moon",
+                started_on=date(2026, 10, 10),
+                frequency=HabitFrequencyFields(
+                    kind=HabitFrequencyKind.WEEKDAYS, weekdays=[5], every_n_weeks=2
+                ),
+            ),
+        )
     with time_machine.travel(local("2026-11-01T07:00:00")):
+        stretch = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Alongar",
+                kind="build",
+                color="teal",
+                icon="heart-pulse",
+                started_on=date(2026, 11, 1),
+                time_of_day="07:00",
+            ),
+        )
+        plants = habits.create_habit(
+            session,
+            user,
+            HabitCreate(
+                name="Regar as plantas",
+                kind="build",
+                color="green",
+                icon="sun",
+                started_on=date(2026, 11, 1),
+                time_of_day="18:00",
+            ),
+        )
         habits.create_frequency(
             session,
             user,
@@ -572,10 +661,22 @@ def seed_habits(session: Session, user: object) -> None:
         )
     with time_machine.travel(local("2026-11-17T14:30:00")):
         check = HabitEntryWrite(value=1)
-        for day in days(date(2026, 9, 1), date(2026, 11, 16)):
+        for day in days(date(2026, 9, 1), date(2026, 11, 17)):
             if day == date(2026, 10, 2) or date(2026, 10, 20) <= day <= date(2026, 10, 24):
                 continue
             habits.put_entry(session, user, bible, day, check)
+        for day in days(date(2026, 11, 1), date(2026, 11, 16)):
+            habits.put_entry(session, user, plants, day, check)
+            if day != date(2026, 11, 10):
+                habits.put_entry(session, user, stretch, day, check)
+        for on in (date(2026, 10, 10), date(2026, 10, 24), date(2026, 11, 7)):
+            habits.put_entry(session, user, sheets, on, check)
+        for on in (date(2026, 9, 6), date(2026, 10, 4), date(2026, 11, 1)):
+            habits.put_entry(session, user, review, on, check)
+        for on in (date(2026, 9, 14), date(2026, 10, 17)):
+            habits.put_entry(session, user, chore, on, check)
+        habits.put_entry(session, user, tank, date(2026, 8, 5), check)
+        habits.put_entry(session, user, tank, date(2026, 11, 5), check)
         for day in days(date(2026, 10, 15), date(2026, 11, 16)):
             value = 2000 if day.day % 3 else 1500
             habits.put_entry(session, user, water, day, HabitEntryWrite(value=value))

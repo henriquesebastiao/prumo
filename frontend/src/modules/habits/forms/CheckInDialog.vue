@@ -1,17 +1,43 @@
 <script setup lang="ts">
-/** "Marcar hábitos" (quick action, shortcut H): today's habits, to tap or count. */
-import { computed } from 'vue'
+/**
+ * "Marcar hábitos" (quick action, shortcut H in the N menu): every habit of today, the periods
+ * still open included, with a search by name that ignores accents and case.
+ */
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-import { PButton, PDialog, PEmptyState, PQueryState } from '@/ui'
+import { PButton, PDialog, PEmptyState, PQueryState, PSearchField, PText } from '@/ui'
 
-import { useToday } from '../api'
-import TodayList from '../components/TodayList.vue'
+import { useDay } from '../api'
+import DayList from '../components/DayList.vue'
+import { searchable } from '../helpers'
 
 const open = defineModel<boolean>('open', { default: false })
 const { t } = useI18n()
-const query = useToday()
-const today = computed(() => query.data.value)
+const query = useDay()
+const day = computed(() => query.data.value)
+const search = ref('')
+
+watch(open, (value) => {
+  if (value) search.value = ''
+})
+
+const items = computed(() => {
+  const value = day.value
+  if (!value) return []
+  const all = [...value.timeline, ...value.untimed, ...value.period, ...value.done_items]
+  const wanted = searchable(search.value)
+  return wanted ? all.filter((item) => searchable(item.habit.name).includes(wanted)) : all
+})
+const hasAny = computed(
+  () =>
+    !!day.value &&
+    day.value.timeline.length +
+      day.value.untimed.length +
+      day.value.period.length +
+      day.value.done_items.length >
+      0,
+)
 </script>
 
 <template>
@@ -26,7 +52,11 @@ const today = computed(() => query.data.value)
       :error="query.error.value"
       :error-title="t('ui.loadFailed')"
     >
-      <TodayList v-if="today?.items.length" :items="today.items" :today="today.today" />
+      <div v-if="day && hasAny" class="check-in">
+        <PSearchField v-model="search" :placeholder="t('habits.today.searchPlaceholder')" />
+        <DayList v-if="items.length" :items="items" :on="day.on" />
+        <PText v-else tone="secondary">{{ t('habits.today.noResults') }}</PText>
+      </div>
       <PEmptyState
         v-else
         :title="t('habits.today.empty')"
@@ -40,3 +70,11 @@ const today = computed(() => query.data.value)
     </template>
   </PDialog>
 </template>
+
+<style scoped>
+.check-in {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+</style>

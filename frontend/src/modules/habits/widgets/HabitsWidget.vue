@@ -1,5 +1,6 @@
 <script setup lang="ts">
-/** Hábitos on Início (H9): today done over scheduled, the first open habits and the time without. */
+/** Hábitos on Início (H9): today done over scheduled, the next open habits to mark right here, and
+ * the time without of the habits to quit. */
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -7,12 +8,18 @@ import { PButton, PCard, PEmptyState, PList, PListItem, PProgress, PText, PTile 
 
 import type { HabitsSummary } from '../api'
 import CheckInDialog from '../forms/CheckInDialog.vue'
-import { amount, colorTone, habitIcon } from '../helpers'
+import DayList from '../components/DayList.vue'
+import { colorTone, habitIcon } from '../helpers'
 
 const props = defineProps<{ summary?: HabitsSummary }>()
 const { t } = useI18n()
 const checking = ref(false)
 const scheduled = computed(() => props.summary?.scheduled_today ?? 0)
+const more = computed(() =>
+  props.summary
+    ? Math.max(0, scheduled.value - props.summary.done_today - props.summary.upcoming.length)
+    : 0,
+)
 const empty = computed(
   () => !props.summary || (scheduled.value === 0 && props.summary.quit.length === 0),
 )
@@ -24,7 +31,7 @@ const empty = computed(
     :title="t('habits.nav')"
     icon="list-checks"
     tone="habits"
-    :link-label="t('habits.actions.open')"
+    :link-label="t('habits.widget.seeAll')"
     :to="{ name: 'habits.home' }"
   >
     <template v-if="summary && !empty">
@@ -42,18 +49,8 @@ const empty = computed(
           :label="t('habits.titles.today')"
         />
       </div>
-      <PList v-if="summary.pending.length || summary.quit.length">
-        <PListItem
-          v-for="habit in summary.pending"
-          :key="habit.id"
-          :title="habit.name"
-          :subtitle="habit.measure === 'quantity' ? amount(habit, null) : undefined"
-          :to="{ name: 'habits.habit', params: { habitId: habit.id } }"
-        >
-          <template #leading>
-            <PTile :icon="habitIcon(habit.icon)" :tone="colorTone(habit.color)" />
-          </template>
-        </PListItem>
+      <DayList v-if="summary.upcoming.length" :items="summary.upcoming" :on="summary.today" />
+      <PList v-if="summary.quit.length">
         <PListItem
           v-for="habit in summary.quit"
           :key="habit.id"
@@ -66,8 +63,8 @@ const empty = computed(
           </template>
         </PListItem>
       </PList>
-      <PText v-if="summary.pending_more" variant="sm" tone="secondary">{{
-        t('habits.widget.more', { n: summary.pending_more })
+      <PText v-if="more" variant="sm" tone="secondary">{{
+        t('habits.widget.more', { n: more })
       }}</PText>
       <div v-if="scheduled" class="widget__actions">
         <PButton variant="tonal" icon="list-checks" @click="checking = true">{{
