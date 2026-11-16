@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.4.0](https://github.com/henriquesebastiao/prumo/tree/0.4.0) (2026-11-16)
+
+[Full Changelog](https://github.com/henriquesebastiao/prumo/compare/0.3.0...0.4.0)
+
+**Merged pull requests:**
+
+- ci: add CodSpeed performance benchmarks for the backend [\#28](https://github.com/henriquesebastiao/prumo/pull/28) ([codspeed[bot]](https://github.com/apps/codspeed))
+
+## [0.3.0](https://github.com/henriquesebastiao/prumo/tree/0.3.0) (2026-11-11)
+
+[Full Changelog](https://github.com/henriquesebastiao/prumo/compare/0.2.0...0.3.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump fastapi from 0.162.0 to 0.162.2 in /backend [\#27](https://github.com/henriquesebastiao/prumo/pull/27) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump vue-i18n from 11.4.17 to 11.4.18 in /frontend [\#26](https://github.com/henriquesebastiao/prumo/pull/26) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump vite from 8.3.5 to 8.3.6 in /frontend [\#25](https://github.com/henriquesebastiao/prumo/pull/25) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump import-linter from 2.15 to 2.16 in /backend [\#24](https://github.com/henriquesebastiao/prumo/pull/24) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps-dev\): bump jsdom from 30.1.3 to 31.0.0 in /frontend [\#20](https://github.com/henriquesebastiao/prumo/pull/20) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [0.2.0](https://github.com/henriquesebastiao/prumo/tree/0.2.0) (2026-11-10)
 
 [Full Changelog](https://github.com/henriquesebastiao/prumo/compare/0.1.0...0.2.0)
